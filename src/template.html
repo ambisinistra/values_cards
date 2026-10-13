@@ -15,7 +15,7 @@
   --accent-soft: #DDEDE8;
   --warn: #8F5600;
   --warn-soft: #F6E8D2;
-  --p0: #A3ADB8; --p1: #93BDB0; --p2: #5DA08D; --p3: #2F8069; --p4: #165A4A;
+  --p0: #A3ADB8; --p1: #93BDB0; --p2: #5DA08D; --p3: #2F8069; --p4: #165A4A; --pu: #C2974B;
   --shadow: 0 1px 2px rgba(23, 32, 42, .06), 0 8px 28px rgba(23, 32, 42, .08);
   --serif: Georgia, "PT Serif", "Noto Serif", "Times New Roman", serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
@@ -25,7 +25,7 @@
   :root:not([data-theme="light"]) {
     --bg: #10151A; --surface: #182029; --surface-2: #1D2630; --ink: #E4E9EF; --muted: #97A3B2; --line: #2B3540;
     --accent: #5DC3A6; --accent-ink: #0B1915; --accent-soft: #1C3530; --warn: #E3AA52; --warn-soft: #3A2D18;
-    --p0: #4A5563; --p1: #3C6A5E; --p2: #3E8D77; --p3: #4FB195; --p4: #86DCC3;
+    --p0: #4A5563; --p1: #3C6A5E; --p2: #3E8D77; --p3: #4FB195; --p4: #86DCC3; --pu: #CFA65E;
     --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .35);
     color-scheme: dark;
   }
@@ -33,7 +33,7 @@
 :root[data-theme="dark"] {
   --bg: #10151A; --surface: #182029; --surface-2: #1D2630; --ink: #E4E9EF; --muted: #97A3B2; --line: #2B3540;
   --accent: #5DC3A6; --accent-ink: #0B1915; --accent-soft: #1C3530; --warn: #E3AA52; --warn-soft: #3A2D18;
-  --p0: #4A5563; --p1: #3C6A5E; --p2: #3E8D77; --p3: #4FB195; --p4: #86DCC3;
+  --p0: #4A5563; --p1: #3C6A5E; --p2: #3E8D77; --p3: #4FB195; --p4: #86DCC3; --pu: #CFA65E;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .35);
   color-scheme: dark;
 }
@@ -108,20 +108,21 @@ ol.how li::before { content: counter(s); width: 24px; height: 24px; border-radiu
 .progress .meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .track { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
 .track i { display: block; height: 100%; background: var(--accent); border-radius: inherit; transition: width .2s; }
-.scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.scale { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .pile-btn {
   display: grid; gap: 8px; align-content: start; text-align: left; padding: 12px; border-radius: 12px; cursor: pointer;
   background: var(--surface); border: 1px solid var(--line); min-height: 92px; transition: transform .08s, border-color .1s;
 }
 .pile-btn:hover { border-color: var(--pc); }
 .pile-btn:active { transform: translateY(1px); }
-.pile-btn .lvl { display: flex; gap: 3px; }
+.pile-btn .lvl { display: flex; gap: 3px; align-items: center; min-height: 12px; }
+.pile-btn .lvl b { font-size: 14px; line-height: 1; color: var(--pc); }
 .pile-btn .lvl i { width: 10px; height: 4px; border-radius: 2px; background: var(--line); }
 .pile-btn .lvl i.f { background: var(--pc); }
 .pile-btn .t { font-weight: 600; font-size: 14px; line-height: 1.25; }
 .pile-btn .k { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .pile-btn .k kbd { font: inherit; border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
-.counts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: center; }
+.counts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: center; }
 
 /* review */
 .piles { display: grid; gap: 14px; }
@@ -205,7 +206,7 @@ footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px
   .steps { display: none; }
   .scale { grid-template-columns: 1fr; }
   .scale .pile-btn { min-height: 0; grid-template-columns: auto 1fr auto; align-items: center; padding: 12px 14px; }
-  .scale { display: flex; flex-direction: column-reverse; }
+  .scale { display: flex; flex-direction: column; }
   .counts { display: none; }
   .copy-grid { grid-template-columns: 1fr; }
   .pole { grid-template-columns: 1fr 3.5rem; }
@@ -230,10 +231,13 @@ footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px
 const CARDS = /*__CARDS__*/[];
 const PROMPTS = /*__PROMPTS__*/{};
 const BY_KEY = Object.fromEntries(CARDS.map(c => [c.key, c]));
-const PILES = [4, 3, 2, 1, 0];             // display order: most → not important
-const PC = ["--p0", "--p1", "--p2", "--p3", "--p4"];
+const PILES = [3, 2, 1, 0];                // display order = deck 1..4: very important, important, unsure, not important
+const TOP = 3, UNSURE = 1;
+const SCORE = { 0: 0, 2: 1, 3: 2 };        // "unsure" has no score
+const LEVEL = { 0: 1, 2: 2, 3: 3 };
+const PC = ["--p0", "--pu", "--p2", "--p4"];
 const POLES = ["OPENNESS", "CONSERVATION", "SELF_ENHANCEMENT", "SELF_TRANSCENDENCE"];
-const STORE = "psychomirror.v1";
+const STORE = "psychomirror.v2";
 
 const L = {
   en: {
@@ -242,25 +246,25 @@ const L = {
     lede: "Sort 100 value cards by how important each one is to you. Then copy the result with a ready-made prompt into Claude and get a professional psychological profile.",
     example: "Example card",
     howTitle: "How it works",
-    how: ["Sort the cards into five piles. It takes about 10–15 minutes.", "Check the piles and move any card that feels out of place.", "Rank the values in your Most important pile.", "Copy your sort and the analysis prompt."],
+    how: ["Sort the cards into four decks. It takes about 10–15 minutes.", "Check the decks and move any card that feels out of place.", "Rank the values in your Very important deck.", "Copy your sort and the analysis prompt."],
     privacy: "Everything stays in this browser. The page sends nothing anywhere. When you paste your sort into Claude, you share it with Anthropic.",
     start: "Start sorting", resume: "Continue", restart: "Start over",
     resumeInfo: n => `${n} of 100 cards sorted`,
     attribution: "Cards: Personal Values Card Sort by W. R. Miller, J. C'de Baca, D. B. Matthews and P. L. Wilbourne, University of New Mexico, 2011. Public domain. Russian and Hungarian versions are adaptations.",
     nav: ["Sort", "Review", "Rank", "Result"],
-    piles: ["Not important", "Somewhat important", "Important", "Very important", "Most important"],
+    piles: ["Not important", "Unsure", "Important", "Very important"],
     progress: i => `Card ${i} of 100`,
-    back: "← Back", sortHint: "Keys 1–5 work too. 5 is most important.",
-    reviewTitle: "Check your piles",
-    reviewText: "Tap a card to read its definition and move it to another pile.",
-    topCount: n => `Most important: ${n}`, toTop: "Move to top",
+    back: "← Back", sortHint: "Keys 1–4 work too, in the order of the buttons.",
+    reviewTitle: "Check your decks",
+    reviewText: "Tap a card to read its definition and move it to another deck.",
+    topCount: n => `Very important: ${n}`, toTop: "Move to top",
     toRank: "Rank top values →", moveTo: "Move to", close: "Close", current: "here now", emptyPile: "No cards",
     rankTitle: "Rank your most important values",
     rankText: "Put the value that matters most at number 1. Use the arrows to change the order.",
-    up: "Move up", down: "Move down", toResult: "Show result →", backToReview: "← Back to piles",
-    resultTitle: "Your values map", topTitle: "Your top values", distTitle: "Cards per pile",
+    up: "Move up", down: "Move down", toResult: "Show result →", backToReview: "← Back to decks",
+    resultTitle: "Your values map", topTitle: "Your top values", distTitle: "Cards per deck",
     polesTitle: "Schwartz value poles",
-    polesNote: "Above zero means the pole matters more to you than your average card. Differences under 0.3 are small.",
+    polesNote: "Above zero means the pole matters more to you than your average card. Differences under 0.2 are small. Unsure cards are not counted.",
     poles: { OPENNESS: "Openness to change", CONSERVATION: "Conservation", SELF_ENHANCEMENT: "Self-enhancement", SELF_TRANSCENDENCE: "Self-transcendence" },
     copyTitle: "Get the profile in Claude",
     copyText: "Copy the sort with the prompt, paste it into a new Claude chat and send it. We recommend Opus, the most capable Claude model.",
@@ -269,19 +273,19 @@ const L = {
     promptText: "The instructions Claude follows to build the profile. Copy them on their own here, or after sorting copy them together with your data.",
     copyPromptBtn: "Copy prompt",
     copyBoth: "Copy sort + prompt", copyBothSub: "Ready to paste. Recommended.",
-    copyCards: "Copy sort only", copyCardsSub: "A plain list of your cards by pile.",
+    copyCards: "Copy sort only", copyCardsSub: "A plain list of your cards by deck.",
     copyPrompt: "Copy prompt only", copyPromptSub: "The analysis instructions without your data.",
     copied: "Copied to clipboard.", copyFail: "Your browser blocked copying. The text below is selected: press Ctrl+C or ⌘C.",
-    preview: "What gets copied", editPiles: "Edit piles", restartQ: "Delete this sort and start again?", yesRestart: "Yes, start over", cancel: "Cancel",
+    preview: "What gets copied", editPiles: "Edit decks", restartQ: "Delete this sort and start again?", yesRestart: "Yes, start over", cancel: "Cancel",
     d: {
       head: "=== VALUES CARD SORT ===",
       method: "Method: Personal Values Card Sort (Miller et al., 2011), 100 cards",
-      date: "Date", top: "TOP VALUES (1 = most important)", piles: "PILES",
+      date: "Date", top: "TOP VALUES (1 = most important)", piles: "DECKS",
       poles: "SCHWARTZ POLE INDICES",
-      polesMethod: (p, m) => `Method: pile scores are "${p[0]}" 0, "${p[1]}" 1, "${p[2]}" 2, "${p[3]}" 3, "${p[4]}" 4. Your mean score across all 100 cards: ${m}. Pole index = mean score of the pole's cards minus your overall mean (positive = this pole matters more to you than your average card). Border values are split equally between two poles, cards with an ambiguous mapping count with weight 0.5, cards outside the Schwartz model are not counted.`,
+      polesMethod: (p, m, u) => `Method: deck scores are "${p[0]}" 0, "${p[2]}" 1, "${p[3]}" 2. Cards in the "${p[1]}" deck get no score (cards: ${u}). Mean score across the scored cards: ${m}. Pole index = mean score of the pole's cards minus this mean (positive = this pole matters more to the person than their average card). Border values are split equally between two poles, cards with an ambiguous mapping count with weight 0.5, cards outside the Schwartz model are not counted.`,
       cards: "cards",
       axes: "Axes: Openness to change ↔ Conservation; Self-enhancement ↔ Self-transcendence.",
-      polesTop: p => `CARDS BY POLE IN THE UPPER PILES ("${p[4]}" and "${p[3]}")`,
+      polesTop: p => `CARDS BY POLE IN THE "${p[3]}" DECK`,
       plain: d => `My values sort — Personal Values Card Sort (100 cards), ${d}`,
       plainTop: "Top values (1 = most important):",
       placeholder: "[PASTE YOUR SORTING DATA HERE]"
@@ -293,25 +297,25 @@ const L = {
     lede: "Разложите 100 карточек ценностей по тому, насколько каждая важна для вас. Потом скопируйте результат вместе с готовым промптом в Claude и получите профессиональный психологический профиль.",
     example: "Пример карточки",
     howTitle: "Как это устроено",
-    how: ["Разложите карточки по пяти стопкам. Это займёт 10–15 минут.", "Проверьте стопки и переложите карточки, если что-то лежит не там.", "Расставьте по порядку ценности из стопки «Самое важное».", "Скопируйте расклад и промпт для анализа."],
+    how: ["Разложите карточки по четырём колодам. Это займёт 10–15 минут.", "Проверьте колоды и переложите карточки, если что-то лежит не там.", "Расставьте по порядку ценности из колоды «Очень важно».", "Скопируйте расклад и промпт для анализа."],
     privacy: "Всё хранится только в этом браузере, страница ничего никуда не отправляет. Когда вы вставляете расклад в Claude, вы передаёте его Anthropic.",
     start: "Начать раскладку", resume: "Продолжить", restart: "Начать заново",
     resumeInfo: n => `Разложено ${n} из 100 карточек`,
     attribution: "Карточки: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Общественное достояние. Русская и венгерская версии — адаптация.",
     nav: ["Раскладка", "Проверка", "Топ", "Результат"],
-    piles: ["Не важно", "Немного важно", "Важно", "Очень важно", "Самое важное"],
+    piles: ["Не важно", "Сложно сказать", "Важно", "Очень важно"],
     progress: i => `Карточка ${i} из 100`,
-    back: "← Назад", sortHint: "Можно нажимать клавиши 1–5. 5 — самое важное.",
-    reviewTitle: "Проверьте стопки",
+    back: "← Назад", sortHint: "Можно нажимать клавиши 1–4 — в порядке кнопок.",
+    reviewTitle: "Проверьте колоды",
     reviewText: "Нажмите на карточку, чтобы прочитать определение и переложить её.",
-    topCount: n => `Самое важное: ${n}`, toTop: "В начало",
+    topCount: n => `Очень важно: ${n}`, toTop: "В начало",
     toRank: "Ранжировать топ →", moveTo: "Переложить в", close: "Закрыть", current: "сейчас здесь", emptyPile: "Пусто",
     rankTitle: "Расставьте самые важные ценности по порядку",
     rankText: "Самая важная — под номером 1. Меняйте порядок стрелками.",
-    up: "Выше", down: "Ниже", toResult: "Показать результат →", backToReview: "← К стопкам",
-    resultTitle: "Ваша карта ценностей", topTitle: "Ваш топ", distTitle: "Карточек в стопках",
+    up: "Выше", down: "Ниже", toResult: "Показать результат →", backToReview: "← К колодам",
+    resultTitle: "Ваша карта ценностей", topTitle: "Ваш топ", distTitle: "Карточек в колодах",
     polesTitle: "Полюса ценностей по Шварцу",
-    polesNote: "Больше нуля — полюс для вас важнее, чем ваша средняя карточка. Разница меньше 0,3 невелика.",
+    polesNote: "Больше нуля — полюс для вас важнее, чем ваша средняя карточка. Разница меньше 0,2 невелика. Карточки «Сложно сказать» не учитываются.",
     poles: { OPENNESS: "Открытость изменениям", CONSERVATION: "Сохранение", SELF_ENHANCEMENT: "Самоутверждение", SELF_TRANSCENDENCE: "Самопреодоление" },
     copyTitle: "Получите профиль в Claude",
     copyText: "Скопируйте расклад с промптом, вставьте в новый чат Claude и отправьте. Рекомендуем Opus — самую мощную модель Claude.",
@@ -320,19 +324,19 @@ const L = {
     promptText: "Инструкция, по которой Claude составляет профиль. Здесь её можно скопировать отдельно, а после раскладки — вместе с вашими данными.",
     copyPromptBtn: "Копировать промпт",
     copyBoth: "Копировать расклад + промпт", copyBothSub: "Готово к вставке. Рекомендуем.",
-    copyCards: "Копировать только расклад", copyCardsSub: "Список ваших карточек по стопкам.",
+    copyCards: "Копировать только расклад", copyCardsSub: "Список ваших карточек по колодам.",
     copyPrompt: "Копировать только промпт", copyPromptSub: "Инструкция для анализа без ваших данных.",
     copied: "Скопировано в буфер обмена.", copyFail: "Браузер не дал скопировать. Текст ниже выделен: нажмите Ctrl+C или ⌘C.",
-    preview: "Что будет скопировано", editPiles: "Изменить стопки", restartQ: "Удалить этот расклад и начать заново?", yesRestart: "Да, начать заново", cancel: "Отмена",
+    preview: "Что будет скопировано", editPiles: "Изменить колоды", restartQ: "Удалить этот расклад и начать заново?", yesRestart: "Да, начать заново", cancel: "Отмена",
     d: {
       head: "=== РАСКЛАД ЦЕННОСТЕЙ ===",
       method: "Методика: Personal Values Card Sort (Miller et al., 2011), 100 карточек",
-      date: "Дата", top: "ТОП ЦЕННОСТЕЙ (1 — самая важная)", piles: "СТОПКИ",
+      date: "Дата", top: "ТОП ЦЕННОСТЕЙ (1 — самая важная)", piles: "КОЛОДЫ",
       poles: "ИНДЕКСЫ ПОЛЮСОВ ШВАРЦА",
-      polesMethod: (p, m) => `Метод: баллы стопок — «${p[0]}» 0, «${p[1]}» 1, «${p[2]}» 2, «${p[3]}» 3, «${p[4]}» 4. Средний балл по всем 100 карточкам: ${m}. Индекс полюса = средний балл его карточек минус этот общий средний (больше нуля — полюс важнее, чем средняя карточка этого человека). Пограничные ценности делятся между двумя полюсами поровну, карточки с неоднозначной привязкой учитываются с весом 0,5, карточки вне модели Шварца не учитываются.`,
+      polesMethod: (p, m, u) => `Метод: баллы колод — «${p[0]}» 0, «${p[2]}» 1, «${p[3]}» 2. Карточки колоды «${p[1]}» баллов не получают (карточек: ${u}). Средний балл по оценённым карточкам: ${m}. Индекс полюса = средний балл его карточек минус этот общий средний (больше нуля — полюс важнее, чем средняя карточка этого человека). Пограничные ценности делятся между двумя полюсами поровну, карточки с неоднозначной привязкой учитываются с весом 0,5, карточки вне модели Шварца не учитываются.`,
       cards: "карточек",
       axes: "Оси: Открытость изменениям ↔ Сохранение; Самоутверждение ↔ Самопреодоление.",
-      polesTop: p => `КАРТОЧКИ ПОЛЮСОВ В ВЕРХНИХ СТОПКАХ («${p[4]}» и «${p[3]}»)`,
+      polesTop: p => `КАРТОЧКИ ПОЛЮСОВ В КОЛОДЕ «${p[3]}»`,
       plain: d => `Мой расклад ценностей — Personal Values Card Sort (100 карточек), ${d}`,
       plainTop: "Топ (1 — самая важная):",
       placeholder: "[ВСТАВЬТЕ СЮДА ДАННЫЕ РАСКЛАДА]"
@@ -344,25 +348,25 @@ const L = {
     lede: "Válogasd szét a 100 értékkártyát aszerint, mennyire fontosak neked. Utána másold az eredményt egy kész prompttal együtt a Claude-ba, és szakmai pszichológiai profilt kapsz.",
     example: "Példakártya",
     howTitle: "Hogyan működik",
-    how: ["Válogasd a kártyákat öt kupacba. Körülbelül 10–15 perc.", "Nézd át a kupacokat, és tedd át, ami nem jó helyen van.", "Rangsorold „A legfontosabb” kupac értékeit.", "Másold ki a válogatást és az elemző promptot."],
+    how: ["Válogasd a kártyákat négy kupacba. Körülbelül 10–15 perc.", "Nézd át a kupacokat, és tedd át, ami nem jó helyen van.", "Rangsorold a „Nagyon fontos” kupac értékeit.", "Másold ki a válogatást és az elemző promptot."],
     privacy: "Minden csak ebben a böngészőben marad, az oldal semmit nem küld el. Ha beilleszted a válogatást a Claude-ba, azzal átadod az Anthropicnak.",
     start: "Kezdés", resume: "Folytatás", restart: "Újrakezdés",
     resumeInfo: n => `${n} / 100 kártya kész`,
     attribution: "Kártyák: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Közkincs. Az orosz és a magyar változat adaptáció.",
     nav: ["Válogatás", "Átnézés", "Rangsor", "Eredmény"],
-    piles: ["Nem fontos", "Kicsit fontos", "Fontos", "Nagyon fontos", "A legfontosabb"],
+    piles: ["Nem fontos", "Bizonytalan", "Fontos", "Nagyon fontos"],
     progress: i => `${i}. kártya / 100`,
-    back: "← Vissza", sortHint: "Az 1–5 billentyűk is működnek. Az 5 a legfontosabb.",
+    back: "← Vissza", sortHint: "Az 1–4 billentyűk is működnek, a gombok sorrendjében.",
     reviewTitle: "Nézd át a kupacokat",
     reviewText: "Koppints egy kártyára, hogy elolvasd a meghatározását, és áttedd egy másik kupacba.",
-    topCount: n => `A legfontosabb: ${n}`, toTop: "Az elejére",
+    topCount: n => `Nagyon fontos: ${n}`, toTop: "Az elejére",
     toRank: "Rangsorolás →", moveTo: "Áthelyezés ide", close: "Bezárás", current: "most itt van", emptyPile: "Üres",
     rankTitle: "Rangsorold a legfontosabb értékeidet",
     rankText: "A legfontosabb legyen az 1-es. A sorrendet a nyilakkal módosíthatod.",
     up: "Feljebb", down: "Lejjebb", toResult: "Eredmény →", backToReview: "← Vissza a kupacokhoz",
     resultTitle: "Az értéktérképed", topTitle: "A legfontosabb értékeid", distTitle: "Kártyák kupaconként",
     polesTitle: "Schwartz értékpólusai",
-    polesNote: "A nulla fölötti érték azt jelenti, hogy ez a pólus fontosabb neked, mint az átlagos kártyáid. A 0,3 alatti különbség kicsi.",
+    polesNote: "A nulla fölötti érték azt jelenti, hogy ez a pólus fontosabb neked, mint az átlagos kártyáid. A 0,2 alatti különbség kicsi. A „Bizonytalan” kártyák nem számítanak.",
     poles: { OPENNESS: "Nyitottság a változásra", CONSERVATION: "Megőrzés", SELF_ENHANCEMENT: "Önérvényesítés", SELF_TRANSCENDENCE: "Önmeghaladás" },
     copyTitle: "Kérd le a profilt a Claude-ban",
     copyText: "Másold ki a válogatást a prompttal együtt, illeszd be egy új Claude-csevegésbe, és küldd el. Az Opust ajánljuk, a Claude legerősebb modelljét.",
@@ -380,10 +384,10 @@ const L = {
       method: "Módszer: Personal Values Card Sort (Miller és mtsai, 2011), 100 kártya",
       date: "Dátum", top: "LEGFONTOSABB ÉRTÉKEK (1 = a legfontosabb)", piles: "KUPACOK",
       poles: "SCHWARTZ-PÓLUSOK INDEXEI",
-      polesMethod: (p, m) => `Módszer: a kupacok pontszáma „${p[0]}” 0, „${p[1]}” 1, „${p[2]}” 2, „${p[3]}” 3, „${p[4]}” 4. Az összes 100 kártya átlagpontszáma: ${m}. Pólusindex = a pólus kártyáinak átlagpontszáma mínusz ez az összesített átlag (nulla fölött = a pólus fontosabb, mint az illető átlagos kártyája). A határértékek egyenlően oszlanak meg két pólus között, a nem egyértelmű besorolású kártyák 0,5-ös súllyal számítanak, a Schwartz-modellen kívüli kártyák nem számítanak.`,
+      polesMethod: (p, m, u) => `Módszer: a kupacok pontszáma „${p[0]}” 0, „${p[2]}” 1, „${p[3]}” 2. A „${p[1]}” kupac kártyái nem kapnak pontot (kártyák: ${u}). A pontozott kártyák átlagpontszáma: ${m}. Pólusindex = a pólus kártyáinak átlagpontszáma mínusz ez az összesített átlag (nulla fölött = a pólus fontosabb, mint az illető átlagos kártyája). A határértékek egyenlően oszlanak meg két pólus között, a nem egyértelmű besorolású kártyák 0,5-ös súllyal számítanak, a Schwartz-modellen kívüli kártyák nem számítanak.`,
       cards: "kártya",
       axes: "Tengelyek: Nyitottság a változásra ↔ Megőrzés; Önérvényesítés ↔ Önmeghaladás.",
-      polesTop: p => `A PÓLUSOK KÁRTYÁI A FELSŐ KUPACOKBAN („${p[4]}” és „${p[3]}”)`,
+      polesTop: p => `A PÓLUSOK KÁRTYÁI A „${p[3]}” KUPACBAN`,
       plain: d => `Az értékválogatásom — Personal Values Card Sort (100 kártya), ${d}`,
       plainTop: "Legfontosabb értékek (1 = a legfontosabb):",
       placeholder: "[IDE ILLESZD BE A VÁLOGATÁS ADATAIT]"
@@ -394,7 +398,7 @@ const L = {
 /* ---------- state ---------- */
 function fresh(lang) {
   const seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-  return { v: 1, lang, step: "intro", seed, order: shuffled(CARDS.map(c => c.key), seed), idx: 0, piles: {}, hist: [], top: [], date: today() };
+  return { v: 2, lang, step: "intro", seed, order: shuffled(CARDS.map(c => c.key), seed), idx: 0, piles: {}, hist: [], top: [], date: today() };
 }
 function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
 function shuffled(arr, seed) {
@@ -407,7 +411,7 @@ function shuffled(arr, seed) {
 function load() {
   try {
     const s = JSON.parse(localStorage.getItem(STORE) || "null");
-    if (s && s.v === 1 && Array.isArray(s.order) && s.order.length === CARDS.length && s.order.every(k => BY_KEY[k])) return s;
+    if (s && s.v === 2 && Array.isArray(s.order) && s.order.length === CARDS.length && s.order.every(k => BY_KEY[k])) return s;
   } catch (e) { /* storage unavailable */ }
   return null;
 }
@@ -430,21 +434,21 @@ const df = k => BY_KEY[k][S.lang][1];
 
 /* ---------- scoring (Schwartz higher-order poles) ---------- */
 function poleScores() {
-  const keys = CARDS.map(c => c.key);
-  const mean = keys.reduce((a, k) => a + S.piles[k], 0) / keys.length;
+  const scored = CARDS.filter(c => SCORE[S.piles[c.key]] !== undefined);
+  const mean = scored.length ? scored.reduce((a, c) => a + SCORE[S.piles[c.key]], 0) / scored.length : 0;
   const P = Object.fromEntries(POLES.map(p => [p, { w: 0, s: 0, n: 0, top: [] }]));
-  for (const c of CARDS) {
+  for (const c of scored) {
     if (!c.ho) continue;
     const parts = c.ho.split("/");
     const w = (c.conf === "low" ? 0.5 : 1) / parts.length;
-    const score = S.piles[c.key];
+    const score = SCORE[S.piles[c.key]];
     for (const p of parts) {
       P[p].w += w; P[p].s += w * score; P[p].n += 1;
-      if (score >= 3) P[p].top.push(c.key);
+      if (S.piles[c.key] === TOP) P[p].top.push(c.key);
     }
   }
   const out = {};
-  for (const p of POLES) out[p] = { index: P[p].s / P[p].w - mean, n: P[p].n, top: P[p].top };
+  for (const p of POLES) out[p] = { index: P[p].w ? P[p].s / P[p].w - mean : 0, n: P[p].n, top: P[p].top };
   return { mean, poles: out };
 }
 function num(x, signed) {
@@ -455,7 +459,7 @@ function num(x, signed) {
 }
 
 /* ---------- texts to copy ---------- */
-function rankedTop() { return S.top.filter(k => S.piles[k] === 4); }
+function rankedTop() { return S.top.filter(k => S.piles[k] === TOP); }
 function cardLine(k) {
   const c = BY_KEY[k];
   const en = S.lang === "en" ? "" : ` (${c.en[0]})`;
@@ -472,7 +476,7 @@ function dataBlock() {
     lines.push("", `[${T.piles[p]} — ${ks.length}]`);
     ks.forEach(k => lines.push(`- ${cardLine(k)}`));
   }
-  lines.push("", D.poles, D.polesMethod(T.piles, num(mean)));
+  lines.push("", D.poles, D.polesMethod(T.piles, num(mean), inPile(UNSURE).length));
   for (const p of POLES) lines.push(`- ${T.poles[p]}: ${num(poles[p].index, true)} (${D.cards}: ${poles[p].n})`);
   lines.push(D.axes, "", D.polesTop(T.piles));
   for (const p of POLES) lines.push(`- ${T.poles[p]}: ${poles[p].top.length ? poles[p].top.map(nm).join(", ") : "—"}`);
@@ -545,11 +549,11 @@ function confirmBox() {
 }
 function vSort() {
   const T = t(), k = S.order[S.idx], c = BY_KEY[k];
-  const counts = [0, 1, 2, 3, 4].map(p => inPile(p).length);
-  const btns = [0, 1, 2, 3, 4].map(p => `<button class="pile-btn" type="button" data-act="put" data-v="${p}" ${pileVar(p)}>
-      <span class="lvl" aria-hidden="true">${[0, 1, 2, 3, 4].map(i => `<i class="${i <= p ? "f" : ""}"></i>`).join("")}</span>
+  const counts = PILES.map(p => inPile(p).length);
+  const btns = PILES.map((p, i) => `<button class="pile-btn" type="button" data-act="put" data-v="${p}" ${pileVar(p)}>
+      <span class="lvl" aria-hidden="true">${p === UNSURE ? "<b>?</b>" : [1, 2, 3].map(n => `<i class="${n <= LEVEL[p] ? "f" : ""}"></i>`).join("")}</span>
       <span class="t">${esc(T.piles[p])}</span>
-      <span class="k"><kbd>${p + 1}</kbd></span>
+      <span class="k"><kbd>${i + 1}</kbd></span>
     </button>`).join("");
   return `<div class="stack" style="gap:20px">
     <div class="progress"><div class="meta"><span>${esc(T.progress(S.idx + 1))}</span><span>${S.idx}%</span></div>
@@ -566,7 +570,7 @@ function vSort() {
 }
 function topStatus() {
   const T = t();
-  return `<span class="status ok">${esc(T.topCount(inPile(4).length))}</span>`;
+  return `<span class="status ok">${esc(T.topCount(inPile(TOP).length))}</span>`;
 }
 function vReview() {
   const T = t();
@@ -605,7 +609,7 @@ function vRank() {
 function vResult() {
   const T = t(), top = rankedTop(), { poles } = poleScores();
   const dist = PILES.map(p => [p, inPile(p).length]);
-  const MAXI = 2;
+  const MAXI = 1;
   const poleRow = p => {
     const v = poles[p].index, w = Math.min(Math.abs(v), MAXI) / MAXI * 50;
     const pos = v >= 0 ? `left:50%;width:${w}%` : `left:${50 - w}%;width:${w}%`;
@@ -684,7 +688,7 @@ function render() {
 
 /* ---------- actions ---------- */
 function syncTop() {
-  const inTop = new Set(inPile(4));
+  const inTop = new Set(inPile(TOP));
   S.top = S.top.filter(k => inTop.has(k));
   for (const k of S.order) if (inTop.has(k) && !S.top.includes(k)) S.top.push(k);
 }
@@ -747,7 +751,7 @@ document.addEventListener("click", e => {
     case "show-prompt": sheetKey = null; promptSheet = true; renderSheet(); break;
     case "copy-prompt-sheet": copyPromptSheet(); break;
     case "move": S.piles[sheetKey] = Number(v); sheetKey = null; syncTop(); render(); break;
-    case "to-rank": go(inPile(4).length ? "rank" : "result"); break;
+    case "to-rank": go(inPile(TOP).length ? "rank" : "result"); break;
     case "go": go(v); break;
     case "mv": {
       const top = rankedTop(), i = Number(v), j = i + Number(el.dataset.d);
@@ -770,7 +774,7 @@ document.addEventListener("keydown", e => {
   if ((sheetKey || promptSheet) && e.key === "Escape") { sheetKey = null; promptSheet = false; renderSheet(); return; }
   if (promptSheet) return;
   if (S.step !== "sort" || e.metaKey || e.ctrlKey || e.altKey) return;
-  if (/^[1-5]$/.test(e.key)) { e.preventDefault(); put(Number(e.key) - 1); }
+  if (/^[1-4]$/.test(e.key)) { e.preventDefault(); put(PILES[Number(e.key) - 1]); }
   else if (e.key === "Backspace") { e.preventDefault(); undo(); }
 });
 /* desktop drag-and-drop between piles; touch users move cards with the sheet */

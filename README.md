@@ -6,22 +6,22 @@ Languages: English, Russian, Hungarian. Everything runs in the browser, and the 
 
 ## How it works
 
-1. **Sort.** All 100 cards go into five piles: Most important, Very important, Important, Somewhat important, Not important. Cards are shown in random order.
-2. **Review.** The person checks the piles and moves cards. Pile sizes are not limited.
-3. **Rank.** The person ranks all cards in the Most important pile.
+1. **Sort.** All 100 cards go into four decks: Very important, Important, Unsure, Not important. Cards are shown in random order.
+2. **Review.** The person checks the decks and moves cards. Deck sizes are not limited.
+3. **Rank.** The person ranks all cards in the Very important deck.
 4. **Copy.** There are three copy options:
    - the sort with the prompt, ready to paste;
    - the sort only, as a plain list;
    - the prompt only, without the person's data. The prompt is also available at any time from the Prompt button in the header.
 
-This follows the 2011 update by the card sort's authors (5 piles, then ranking the top pile), without their suggested limit of 5–10 top values.
+The "Unsure" deck is not a point on the importance scale. It marks values the person has no settled position on, and the prompt asks the model to interpret it as a separate signal.
 
 ## Schwartz pole indices
 
 The page computes four indices for the higher-order poles of the refined Schwartz value theory (2012): Openness to change, Conservation, Self-enhancement and Self-transcendence. The method:
 
-- pile score from 0 (Not important) to 4 (Most important);
-- pole index = mean score of the pole's cards minus the person's mean score over all 100 cards;
+- deck score: Not important 0, Important 1, Very important 2; Unsure cards get no score and are left out of the indices;
+- pole index = mean score of the pole's cards minus the person's mean score over all scored cards;
 - border values are split equally between two poles;
 - cards with an ambiguous mapping count with weight 0.5;
 - cards outside the Schwartz model (23 of 100) are not counted.
