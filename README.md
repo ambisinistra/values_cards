@@ -1,6 +1,6 @@
 # PsychoMirror
 
-A one-page tool for the **Personal Values Card Sort**. A person sorts 100 value cards, ranks their top values, and copies the result with an analysis prompt into the AI chat they use (ChatGPT, Claude, Gemini and others). The chat model then writes a personal values profile.
+A one-page tool for the **Personal Values Card Sort**. A person sorts 100 value cards, ranks their top values, and copies the result with an analysis prompt into Claude (Opus recommended). Claude then writes a professional psychological profile: value structure, personality characteristics, behavioural patterns, conflict zones and risks, resources, and hypotheses to test in an interview. The prompt asks for direct, evidence-based conclusions with a confidence level for each, and no softening or flattery.
 
 Languages: English, Russian, Hungarian. Everything runs in the browser, and the page sends no data anywhere.
 
@@ -12,7 +12,7 @@ Languages: English, Russian, Hungarian. Everything runs in the browser, and the 
 4. **Copy.** There are three copy options:
    - the sort with the prompt, ready to paste;
    - the sort only, as a plain list;
-   - the prompt only, without the person's data.
+   - the prompt only, without the person's data. The prompt is also available at any time from the Prompt button in the header.
 
 This follows the procedure of the 2011 update by the card sort's authors: 5 piles, then a ranked top of 5–10 values.
 
