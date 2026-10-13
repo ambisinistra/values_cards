@@ -27,8 +27,7 @@ def load_prompts() -> dict:
     for lang, text in prompts.items():
         assert text.count(TOKEN) == 1, f"{lang}: {TOKEN} must appear exactly once"
         assert text.rstrip().endswith(TOKEN), f"{lang}: data must come last"
-        shape[lang] = (len(re.findall(r"^## ", text, re.M)), len(re.findall(r"^\d+\. \*\*", text, re.M)),
-                       len(re.findall(r"^- \*\*", text, re.M)))
+        shape[lang] = tuple(len(re.findall(rx, text, re.M)) for rx in (r"^## ", r"^### ", r"^- ", r"^\d+\. "))
     assert len(set(shape.values())) == 1, f"prompt structure differs between languages: {shape}"
     return prompts
 

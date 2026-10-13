@@ -1,42 +1,77 @@
-# Pszichológiai profil a Personal Values Card Sort eredménye alapján
+# Feladat: Az értékprofil pszichológiai elemzése
 
-## Szerep
-
-Pszichológiai értékelésben tapasztalt tanácsadó szakpszichológus vagy. A Personal Values Card Sort módszerrel (W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011), Shalom Schwartz alapértékekről szóló elméletével (a 2012-es finomított modellel) és az önmeghatározás-elmélettel (E. Deci, R. Ryan) dolgozol. A feladatod őszinte, szakmai pszichológiai profilt készíteni. Ez értékelő eszköz, nem támogató beszélgetés.
+Az értékek 4 kupac szerinti megoszlása alapján készíts szakmai pszichológiai elemzést a személyiségprofilról.
 
 ## Kiinduló adatok
 
-A válaszadó önállóan szétválogatott 100 értékkártyát. Minden kártyán egy rövid név és egy meghatározás áll. A válaszadó elsősorban a meghatározás alapján döntött, ezért a kártyákat a meghatározásuk szerint értelmezd, ne csak a nevük alapján.
+A válaszadó 100 értéket (Personal Values Card Sort, W. R. Miller és mtsai, 2011) osztott szét 4 kupacba fontosság szerint: „Nagyon fontos”, „Fontos”, „Bizonytalan”, „Nem fontos”. A „Nagyon fontos” kupac kártyái rangsorolva is vannak: az 1-es a legfontosabb. Minden értékhez rövid meghatározás tartozik, és a válaszadó ez alapján döntött.
 
-A menete:
-1. Mind a 100 kártya négy kupacba került: „Nagyon fontos”, „Fontos”, „Bizonytalan”, „Nem fontos”.
-2. A válaszadó a „Nagyon fontos” kupac összes kártyáját rangsorolta: az 1-es a legfontosabb. A kupacok mérete nem volt korlátozva.
+A válogatás teljes adatai az üzenet végén találhatók: a rangsorolt legfontosabb értékek, mind a négy kupac a meghatározásokkal, valamint a Schwartz-modell négy pólusának programmal számított indexei (a módszer leírása az adatok között szerepel).
 
-Az üzenet végén találod a válogatás adatait: a rangsorolt legfontosabb értékeket, mind a négy kupacot a meghatározásokkal, valamint a Schwartz-modell négy pólusának indexeit. Az indexeket program számolta ki, a módszer leírása az adatok között szerepel. Ne számold újra őket, és ne változtasd meg a kártyák elméleti besorolását. A „Nem fontos” kupac ugyanolyan teljes értékű adat, mint a legfontosabb értékek: az elutasított értékek ugyanannyit elárulnak az emberről, mint a választottak. A „Bizonytalan” kupac nem a skála közepe, hanem külön jelzés: olyan értékek, amelyekkel kapcsolatban a válaszadónak nincs kialakult álláspontja. Ezek a kártyák nem számítanak bele a Schwartz-indexekbe, értelmezd őket külön.
+## Az elemzés követelményei
 
-## A beszámoló szerkezete
+Készíts átfogó pszichológiai elemzést a következő szempontok szerint:
 
-Írj szakmai pszichológiai beszámolót magyarul, 1200–1800 szóban, pontosan ebben a szerkezetben:
+### 1. Az értékek szerkezete
+- Domináns értékorientációk
+- A prioritások hierarchiája
+- Azonosított értékcsoportok (társas, személyes, anyagi stb.)
 
-1. **A profil összefoglalása.** 5–7 mondat: a fő értékorientáció, a vezető motívumok, a fő kockázatok.
-2. **Az értékek szerkezete.** A domináns értékorientációk és a prioritások hierarchiája. Értékcsoportok: társas, személyes, anyagi, spirituális és egyéb. A négy pólusindex és a két Schwartz-tengely értelmezése: „Nyitottság a változásra ↔ Megőrzés” és „Önérvényesítés ↔ Önmeghaladás”. A 0,2-nél kisebb különbségeket tekintsd jelentéktelennek.
-3. **Személyiségprofil.** Az értékválasztásokban megmutatkozó fő személyiségjellemzők. Motivációs szerkezet: a belső és a külső motiváció aránya, az autonómia, a kompetencia és a kapcsolódás súlya. Énkép és identitás.
-4. **Viselkedési minták és attitűdök.** Valószínű viselkedési stratégiák a munkában, a szoros kapcsolatokban, konfliktusban és nyomás alatt. Viszony a társas interakciókhoz. Az egyéni és a közösségi egyensúlya.
-5. **Konfliktuszónák és kockázatok.** Belső ellentmondások az értékek között. Bizonytalansági zónák: mit jelenthet a „Bizonytalan” kupac tartalma. Valószínű élethelyzeti nehézségek és vakfoltok. Alkalmazkodási kihívások: milyen környezetben és szerepekben lesz valószínűleg nehéz ennek az embernek.
-6. **Erőforrások és erősségek.** A profil építő oldalai, a fejlődési potenciál, a személyiség védőfaktorai.
-7. **Szocializációs háttér.** Lehetséges kulturális és társadalmi hatások az értékek kialakulására. Csak szociokulturális mintázatok, nemre és életkorra vonatkozó következtetések nélkül. Ha ehhez kevés az adat, mondd ki egy-két mondatban.
-8. **Ellenőrizendő hipotézisek.** 4–6 hipotézis ebből a profilból, amelyet érdemes interjúban ellenőrizni. Mindegyikhez egy kérdés, amely ellenőrzi.
+### 2. Személyiségprofil
+- Az értékválasztásokban megnyilvánuló fő személyiségvonások
+- Motivációs szerkezet
+- Az énkép és az identitás sajátosságai
 
-## Követelmények a következtetésekhez
+### 3. Viselkedési minták és attitűdök
+- Feltételezhető viselkedési stratégiák
+- Viszonyulás a társas interakciókhoz
+- Az egyéni és a közösségi egyensúlya
 
-- **Adatokra épülés.** Minden következtetést legalább két konkrét kártya támaszt alá, ezeket zárójelben nevezd meg. Ne csak a választott, hanem az elutasított kártyákat és a kártyák kombinációit is vedd figyelembe.
-- **Kalibrált bizonyosság.** Minden fontos következtetésnél jelöld a bizonyosság szintjét: [magas], [közepes] vagy [alacsony]. Magas, ha több kártya több kupacból is alátámasztja. Ne hígítsd a szöveget minden mondatban kötelező „talán”-nal.
-- **Megfelelési szándék nélkül.** Ne akarj tetszeni a válaszadónak. Ne dicsérj, ne nyugtass, ne tompíts. A gyengeségeket, kockázatokat és ellentmondásokat ugyanolyan egyenesen és konkrétan nevezd meg, mint az erősségeket. Ne állítsd be a hiányosságot erényként.
-- **Közhelyek nélkül.** Ne írj olyat, ami szinte bárkire igaz. Minden jellemzőnek meg kell különböztetnie ezt a válaszadót másoktól.
-- **Szakmai alapok.** Támaszkodj elismert elméletekre: Schwartz, önmeghatározás-elmélet, szükség esetén a Big Five modell. A személyiségjellemzők itt az értékekből következtetettek, nem teszttel mértek; ezt tükrözze a bizonyosság szintje.
-- **A módszer határai.** Ne állíts fel orvosi vagy pszichiátriai diagnózist. Ne találgasd a nemet, az életkort, a nemzetiséget, a vallási hovatartozást, a családi állapotot, a szexuális irányultságot és a politikai nézeteket.
-- **Adatminőség.** Ha a „Nagyon fontos” kupacban több mint 40, a „Bizonytalan” kupacban több mint 30 kártya van, vagy szinte minden kártya egy-két kupacba került, ezt mondd ki a 2. rész elején: a megkülönböztetés gyenge, minden következtetés bizonyossága csökken.
-- **Hangnem.** Szakmai távolságtartás és objektivitás. A válaszadóról harmadik személyben írj, mint egy pszichológiai szakvéleményben.
+### 4. Konfliktus- és feszültségzónák
+- Lehetséges belső ellentmondások az értékek között
+- Lehetséges élethelyzeti nehézségek területei
+- Alkalmazkodási kihívások
+
+### 5. Erőforrások és erősségek
+- A profil építő vonatkozásai
+- Fejlődési potenciál
+- A személyiség védőfaktorai
+
+### 6. Szocializációs háttér (opcionális)
+- Lehetséges kulturális és társadalmi hatások az értékek kialakulására
+- Bizonyos életszakaszokra vagy élethelyzetekre utaló jelek
+- **Fontos**: nem és életkor szerinti közvetlen besorolás nélkül, csak szociokulturális mintázatok leírása
+
+### 7. Szakmai kibontakozás
+- Szakterületek és szerepek, amelyekben a válaszadó értékei a legvalószínűbben érvényesülhetnek: 5–8 konkrét példa, mindegyik indoklással
+- Munkakörnyezet, munkaforma és vezetési stílus, amelyben a válaszadó valószínűleg a leghatékonyabb
+- Környezetek és szerepek, amelyek valószínűleg belső ellenállást váltanak ki
+
+### 8. Kapcsolatok és együttműködés
+- Mi lehet különösen fontos a válaszadónak a szoros kapcsolatokban, a barátságban és a csapatban
+- A feszültség lehetséges forrásai más értékeket valló emberekkel való kapcsolatban
+
+### 9. Ajánlások
+- Gyakorlati ajánlások a fejlődéshez és az erősségek kiaknázásához
+- Módszerek az azonosított feszültségzónák kezelésére
+- 3–5 kérdés az önreflexióhoz
+
+## A válasz formája
+
+Strukturált pszichológiai beszámoló magyarul, szakmai terminológiával. Kezdd a profil rövid összefoglalásával (5–7 mondat). Terjedelem: 1500–2200 szó.
+
+A következtetések legyenek:
+- Az értékválasztások elemzésével alátámasztottak, konkrét értékekre hivatkozva
+- Kiegyensúlyozottak (erősségek + fejlesztendő területek)
+- Etikusak és nem stigmatizálók
+- Elismert pszichológiai elméletekre épülők (például Schwartz alapérték-elmélete, az önmeghatározás-elmélet stb.)
+
+## Korlátozások
+
+- Kerüld a kategorikus állításokat
+- Használj olyan megfogalmazásokat, mint „utalhat arra”, „jellemző rá”, „valószínűleg”
+- Ne állíts fel orvosi diagnózist
+- Őrizd meg a szakmai távolságot és az objektivitást
 
 ## A válogatás adatai
 

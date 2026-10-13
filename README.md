@@ -1,6 +1,6 @@
 # PsychoMirror
 
-A one-page tool for the **Personal Values Card Sort**. A person sorts 100 value cards, ranks their top values, and copies the result with an analysis prompt into Claude (Opus recommended). Claude then writes a professional psychological profile: value structure, personality characteristics, behavioural patterns, conflict zones and risks, resources, and hypotheses to test in an interview. The prompt asks for direct, evidence-based conclusions with a confidence level for each, and no softening or flattery.
+A one-page tool for the **Personal Values Card Sort**. A person sorts 100 value cards, ranks their top values, and copies the result with an analysis prompt into Claude (Opus recommended). Claude then writes a professional psychological profile: value structure, personality profile, behavioural patterns, areas of conflict, resources, socialisation context, suitable professions and work environments, relationships, and practical recommendations.
 
 Languages: English, Russian, Hungarian. Everything runs in the browser, and the page sends no data anywhere.
 
