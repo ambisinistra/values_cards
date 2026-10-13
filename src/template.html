@@ -1,0 +1,745 @@
+<!--HEAD-->
+<title>PsychoMirror</title>
+<meta name="description" content="Personal Values Card Sort: sort 100 value cards and copy the result with an analysis prompt for your AI chat. EN / RU / HU.">
+<style>
+/* Layout: one centred column under a sticky bar; while sorting, the index card is the hero and the five piles sit under it as an ordinal scale. */
+:root {
+  --bg: #ECEFF2;
+  --surface: #FFFFFF;
+  --surface-2: #F5F7F9;
+  --ink: #17202A;
+  --muted: #586474;
+  --line: #D2D9E1;
+  --accent: #1C6A59;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #DDEDE8;
+  --warn: #8F5600;
+  --warn-soft: #F6E8D2;
+  --p0: #A3ADB8; --p1: #93BDB0; --p2: #5DA08D; --p3: #2F8069; --p4: #165A4A;
+  --shadow: 0 1px 2px rgba(23, 32, 42, .06), 0 8px 28px rgba(23, 32, 42, .08);
+  --serif: Georgia, "PT Serif", "Noto Serif", "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10151A; --surface: #182029; --surface-2: #1D2630; --ink: #E4E9EF; --muted: #97A3B2; --line: #2B3540;
+    --accent: #5DC3A6; --accent-ink: #0B1915; --accent-soft: #1C3530; --warn: #E3AA52; --warn-soft: #3A2D18;
+    --p0: #4A5563; --p1: #3C6A5E; --p2: #3E8D77; --p3: #4FB195; --p4: #86DCC3;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10151A; --surface: #182029; --surface-2: #1D2630; --ink: #E4E9EF; --muted: #97A3B2; --line: #2B3540;
+  --accent: #5DC3A6; --accent-ink: #0B1915; --accent-soft: #1C3530; --warn: #E3AA52; --warn-soft: #3A2D18;
+  --p0: #4A5563; --p1: #3C6A5E; --p2: #3E8D77; --p3: #4FB195; --p4: #86DCC3;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--ink); }
+body { font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.bar-in { max-width: 760px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.brand { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 13px; margin-right: auto; background: none; border: 0; padding: 4px 0; cursor: pointer; }
+.brand span { color: var(--accent); }
+.steps { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; font-size: 12px; color: var(--muted); }
+.steps li { padding: 3px 8px; border-radius: 999px; }
+.steps li.on { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
+.steps li.done { color: var(--ink); }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; background: var(--surface); }
+.lang button { border: 0; background: none; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .06em; cursor: pointer; color: var(--muted); }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+main { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 8px; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 6vw, 46px); line-height: 1.1; margin: 0 0 14px; text-wrap: balance; }
+h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 4.4vw, 30px); line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+h3 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; font-weight: 700; }
+.lede { font-size: 18px; color: var(--muted); max-width: 60ch; margin: 0 0 28px; }
+p { margin: 0; }
+.stack { display: grid; gap: 28px; }
+.small { font-size: 13px; color: var(--muted); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 12px 20px; font-weight: 600; cursor: pointer; border: 1px solid var(--line); background: var(--surface); }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn.primary:hover { filter: brightness(1.06); }
+.btn.quiet { background: none; border-color: transparent; color: var(--muted); padding-inline: 10px; }
+.btn.quiet:hover { color: var(--ink); }
+.btn:disabled { opacity: .45; cursor: not-allowed; filter: none; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* index card */
+.card {
+  position: relative; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 28px 28px 30px; border-top: 4px solid var(--accent); min-height: 220px; display: flex; flex-direction: column; gap: 14px;
+}
+.card .no { position: absolute; top: 14px; right: 18px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.card .name { font-size: 14px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); padding-right: 48px; }
+.card .def { font-family: var(--serif); font-size: clamp(24px, 5vw, 32px); line-height: 1.25; text-wrap: balance; }
+.card.example { min-height: 0; max-width: 420px; }
+.card.example .def { font-size: 22px; }
+.card.enter { animation: enter .22s ease-out; }
+@keyframes enter { from { transform: translateY(6px); opacity: .4; } to { transform: none; opacity: 1; } }
+
+.intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.intro-grid > * { min-width: 0; }
+ol.how { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 12px; }
+ol.how li { counter-increment: s; display: grid; grid-template-columns: 28px 1fr; gap: 10px; }
+ol.how li::before { content: counter(s); width: 24px; height: 24px; border-radius: 50%; background: var(--accent-soft); color: var(--ink); font-size: 13px; font-weight: 700; display: grid; place-items: center; margin-top: 1px; }
+.note { border-left: 3px solid var(--line); padding: 4px 0 4px 14px; color: var(--muted); font-size: 14px; max-width: 62ch; }
+
+/* sorting */
+.progress { display: grid; gap: 8px; }
+.progress .meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.track { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.track i { display: block; height: 100%; background: var(--accent); border-radius: inherit; transition: width .2s; }
+.scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.pile-btn {
+  display: grid; gap: 8px; align-content: start; text-align: left; padding: 12px; border-radius: 12px; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); min-height: 92px; transition: transform .08s, border-color .1s;
+}
+.pile-btn:hover { border-color: var(--pc); }
+.pile-btn:active { transform: translateY(1px); }
+.pile-btn .lvl { display: flex; gap: 3px; }
+.pile-btn .lvl i { width: 10px; height: 4px; border-radius: 2px; background: var(--line); }
+.pile-btn .lvl i.f { background: var(--pc); }
+.pile-btn .t { font-weight: 600; font-size: 14px; line-height: 1.25; }
+.pile-btn .k { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pile-btn .k kbd { font: inherit; border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+.counts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: center; }
+
+/* review */
+.piles { display: grid; gap: 14px; }
+.pile { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--line); padding: 14px 16px 16px; }
+.pile.drop { border-color: var(--accent); background: var(--accent-soft); }
+.pile-h { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; background: var(--pc); flex: none; }
+.pile-h b { font-size: 15px; }
+.pile-h .n { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface-2); border-radius: 8px; padding: 5px 9px; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; cursor: pointer; }
+.chip:hover { border-color: var(--pc); }
+.chip[draggable="true"] { cursor: grab; }
+.empty { font-size: 13px; color: var(--muted); }
+.status { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 6px 12px; font-size: 14px; font-weight: 600; }
+.status.ok { background: var(--accent-soft); }
+.status.bad { background: var(--warn-soft); color: var(--warn); }
+.sticky-foot {
+  position: sticky; bottom: 0; padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--bg) 70%, transparent); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between;
+}
+
+/* sheet */
+.scrim { position: fixed; inset: 0; background: rgba(10, 14, 18, .45); z-index: 40; display: grid; place-items: end center; padding: 16px; }
+@media (min-width: 640px) { .scrim { place-items: center; } }
+.sheet { width: min(520px, 100%); background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); padding: 22px; display: grid; gap: 14px; max-height: 90vh; overflow: auto; }
+.sheet .name { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.sheet .def { font-family: var(--serif); font-size: 22px; line-height: 1.3; }
+.move { display: grid; gap: 6px; }
+.move button { display: flex; align-items: center; gap: 10px; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
+.move button:hover { border-color: var(--pc); }
+.move button[aria-current="true"] { background: var(--surface-2); font-weight: 600; }
+.move button .cur { margin-left: auto; font-size: 12px; color: var(--muted); font-weight: 400; }
+
+/* rank */
+ol.rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+ol.rank li { display: grid; grid-template-columns: 36px 1fr auto; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 12px 12px 14px; }
+ol.rank .num { font-family: var(--serif); font-size: 26px; color: var(--accent); font-variant-numeric: tabular-nums; text-align: center; }
+ol.rank .txt { min-width: 0; }
+ol.rank .txt b { display: block; font-size: 13px; letter-spacing: .1em; }
+ol.rank .txt span { font-size: 14px; color: var(--muted); }
+.arrows { display: flex; gap: 4px; }
+.arrows button { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface-2); cursor: pointer; font-size: 16px; line-height: 1; }
+.arrows button:disabled { opacity: .3; cursor: default; }
+
+/* result */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.toplist { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.toplist li { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: baseline; }
+.toplist .num { font-family: var(--serif); color: var(--accent); font-size: 18px; text-align: right; font-variant-numeric: tabular-nums; }
+.toplist b { font-size: 13px; letter-spacing: .08em; }
+.toplist span { color: var(--muted); font-size: 14px; }
+.dist { display: flex; height: 14px; border-radius: 999px; overflow: hidden; gap: 2px; margin-bottom: 10px; }
+.dist i { background: var(--pc); min-width: 2px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums; }
+.poles { display: grid; gap: 12px; }
+.pole { display: grid; grid-template-columns: minmax(0, 11rem) 1fr 3.5rem; gap: 12px; align-items: center; font-size: 14px; }
+.pole .v { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.pole .b { position: relative; height: 10px; background: var(--surface-2); border-radius: 999px; }
+.pole .b::before { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--muted); }
+.pole .b i { position: absolute; top: 0; bottom: 0; background: var(--accent); border-radius: 999px; }
+.pole .b i.neg { background: var(--p0); }
+.copy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.copy-btn { text-align: left; display: grid; gap: 4px; padding: 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
+.copy-btn:hover { border-color: var(--muted); }
+.copy-btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.copy-btn b { font-size: 15px; }
+.copy-btn span { font-size: 13px; opacity: .8; }
+.copy-btn[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--accent) inset; }
+.copy-btn.primary[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink) inset; }
+.toast { min-height: 1.5em; font-size: 14px; font-weight: 600; color: var(--accent); }
+.toast.bad { color: var(--warn); }
+textarea { width: 100%; min-height: 260px; resize: vertical; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--surface-2); color: var(--ink); font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.confirm { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; background: var(--warn-soft); padding: 10px 14px; border-radius: 12px; }
+footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .intro-grid { grid-template-columns: 1fr; }
+  .steps { display: none; }
+  .scale { grid-template-columns: 1fr; }
+  .scale .pile-btn { min-height: 0; grid-template-columns: auto 1fr auto; align-items: center; padding: 12px 14px; }
+  .scale { display: flex; flex-direction: column-reverse; }
+  .counts { display: none; }
+  .copy-grid { grid-template-columns: 1fr; }
+  .pole { grid-template-columns: 1fr 3.5rem; }
+  .pole .b { grid-column: 1 / -1; grid-row: 2; }
+  .card { padding: 24px 20px 24px; min-height: 200px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+<!--BODY-->
+<header class="bar"><div class="bar-in">
+  <button class="brand" type="button" data-act="home">Psycho<span>Mirror</span></button>
+  <ol class="steps" id="steps"></ol>
+  <div class="lang" role="group" aria-label="Language" id="lang"></div>
+</div></header>
+<main id="app" aria-live="polite"></main>
+<footer id="foot"></footer>
+<div id="sheet-root"></div>
+
+<script>
+"use strict";
+const CARDS = /*__CARDS__*/[];
+const PROMPTS = /*__PROMPTS__*/{};
+const BY_KEY = Object.fromEntries(CARDS.map(c => [c.key, c]));
+const PILES = [4, 3, 2, 1, 0];             // display order: most → not important
+const PC = ["--p0", "--p1", "--p2", "--p3", "--p4"];
+const POLES = ["OPENNESS", "CONSERVATION", "SELF_ENHANCEMENT", "SELF_TRANSCENDENCE"];
+const STORE = "psychomirror.v1";
+
+const L = {
+  en: {
+    eyebrow: "Personal Values Card Sort · 100 cards",
+    h1: "What matters most to you",
+    lede: "Sort 100 value cards by how important each one is to you. Then copy the result with a ready-made prompt into the AI chat you use, and get a personal analysis of your values.",
+    example: "Example card",
+    howTitle: "How it works",
+    how: ["Sort the cards into five piles. It takes about 10–15 minutes.", "Check the piles and move any card that feels out of place.", "Choose 5 to 10 most important values and rank them.", "Copy your sort and the analysis prompt."],
+    privacy: "Everything stays in this browser. The page sends nothing anywhere. When you paste your sort into an AI chat, you share it with that service.",
+    start: "Start sorting", resume: "Continue", restart: "Start over",
+    resumeInfo: n => `${n} of 100 cards sorted`,
+    attribution: "Cards: Personal Values Card Sort by W. R. Miller, J. C'de Baca, D. B. Matthews and P. L. Wilbourne, University of New Mexico, 2011. Public domain. Russian and Hungarian versions are adaptations.",
+    nav: ["Sort", "Review", "Rank", "Result"],
+    piles: ["Not important", "Somewhat important", "Important", "Very important", "Most important"],
+    progress: i => `Card ${i} of 100`,
+    back: "← Back", sortHint: "Keys 1–5 work too. 5 is most important.",
+    reviewTitle: "Check your piles",
+    reviewText: "Tap a card to read its definition and move it to another pile. The Most important pile needs 5 to 10 cards.",
+    topOk: n => `Most important: ${n}. Ready to rank.`,
+    topMany: n => `Most important: ${n}. Move ${n - 10} to another pile.`,
+    topFew: n => `Most important: ${n}. Add ${5 - n} more.`,
+    toRank: "Rank top values →", moveTo: "Move to", close: "Close", current: "here now", emptyPile: "No cards",
+    rankTitle: "Rank your most important values",
+    rankText: "Put the value that matters most at number 1. Use the arrows to change the order.",
+    up: "Move up", down: "Move down", toResult: "Show result →", backToReview: "← Back to piles",
+    resultTitle: "Your values map", topTitle: "Your top values", distTitle: "Cards per pile",
+    polesTitle: "Schwartz value poles",
+    polesNote: "Above zero means the pole matters more to you than your average card. Differences under 0.3 are small.",
+    poles: { OPENNESS: "Openness to change", CONSERVATION: "Conservation", SELF_ENHANCEMENT: "Self-enhancement", SELF_TRANSCENDENCE: "Self-transcendence" },
+    copyTitle: "Take it to your AI chat",
+    copyText: "Copy the sort with the prompt, paste it into ChatGPT, Claude, Gemini or another chat, and send it.",
+    copyBoth: "Copy sort + prompt", copyBothSub: "Ready to paste. Recommended.",
+    copyCards: "Copy sort only", copyCardsSub: "A plain list of your cards by pile.",
+    copyPrompt: "Copy prompt only", copyPromptSub: "The analysis instructions without your data.",
+    copied: "Copied to clipboard.", copyFail: "Your browser blocked copying. The text below is selected: press Ctrl+C or ⌘C.",
+    preview: "What gets copied", editPiles: "Edit piles", restartQ: "Delete this sort and start again?", yesRestart: "Yes, start over", cancel: "Cancel",
+    d: {
+      head: "=== VALUES CARD SORT ===",
+      method: "Method: Personal Values Card Sort (Miller et al., 2011), 100 cards",
+      date: "Date", top: "TOP VALUES (1 = most important)", piles: "PILES",
+      poles: "SCHWARTZ POLE INDICES",
+      polesMethod: (p, m) => `Method: pile scores are "${p[0]}" 0, "${p[1]}" 1, "${p[2]}" 2, "${p[3]}" 3, "${p[4]}" 4. Your mean score across all 100 cards: ${m}. Pole index = mean score of the pole's cards minus your overall mean (positive = this pole matters more to you than your average card). Border values are split equally between two poles, cards with an ambiguous mapping count with weight 0.5, cards outside the Schwartz model are not counted.`,
+      cards: "cards",
+      axes: "Axes: Openness to change ↔ Conservation; Self-enhancement ↔ Self-transcendence.",
+      polesTop: p => `CARDS BY POLE IN THE UPPER PILES ("${p[4]}" and "${p[3]}")`,
+      plain: d => `My values sort — Personal Values Card Sort (100 cards), ${d}`,
+      plainTop: "Top values (1 = most important):",
+      placeholder: "[PASTE YOUR SORTING DATA HERE]"
+    }
+  },
+  ru: {
+    eyebrow: "Personal Values Card Sort · 100 карточек",
+    h1: "Что для вас важнее всего",
+    lede: "Разложите 100 карточек ценностей по тому, насколько каждая важна для вас. Потом скопируйте результат вместе с готовым промптом в свой ИИ-чат и получите личный разбор своих ценностей.",
+    example: "Пример карточки",
+    howTitle: "Как это устроено",
+    how: ["Разложите карточки по пяти стопкам. Это займёт 10–15 минут.", "Проверьте стопки и переложите карточки, если что-то лежит не там.", "Выберите от 5 до 10 самых важных ценностей и расставьте их по порядку.", "Скопируйте расклад и промпт для анализа."],
+    privacy: "Всё хранится только в этом браузере, страница ничего никуда не отправляет. Когда вы вставляете расклад в ИИ-чат, вы делитесь им с этим сервисом.",
+    start: "Начать раскладку", resume: "Продолжить", restart: "Начать заново",
+    resumeInfo: n => `Разложено ${n} из 100 карточек`,
+    attribution: "Карточки: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Общественное достояние. Русская и венгерская версии — адаптация.",
+    nav: ["Раскладка", "Проверка", "Топ", "Результат"],
+    piles: ["Не важно", "Немного важно", "Важно", "Очень важно", "Самое важное"],
+    progress: i => `Карточка ${i} из 100`,
+    back: "← Назад", sortHint: "Можно нажимать клавиши 1–5. 5 — самое важное.",
+    reviewTitle: "Проверьте стопки",
+    reviewText: "Нажмите на карточку, чтобы прочитать определение и переложить её. В стопке «Самое важное» должно быть от 5 до 10 карточек.",
+    topOk: n => `Самое важное: ${n}. Можно ранжировать.`,
+    topMany: n => `Самое важное: ${n}. Переложите ${n - 10} в другие стопки.`,
+    topFew: n => `Самое важное: ${n}. Добавьте ещё ${5 - n}.`,
+    toRank: "Ранжировать топ →", moveTo: "Переложить в", close: "Закрыть", current: "сейчас здесь", emptyPile: "Пусто",
+    rankTitle: "Расставьте самые важные ценности по порядку",
+    rankText: "Самая важная — под номером 1. Меняйте порядок стрелками.",
+    up: "Выше", down: "Ниже", toResult: "Показать результат →", backToReview: "← К стопкам",
+    resultTitle: "Ваша карта ценностей", topTitle: "Ваш топ", distTitle: "Карточек в стопках",
+    polesTitle: "Полюса ценностей по Шварцу",
+    polesNote: "Больше нуля — полюс для вас важнее, чем ваша средняя карточка. Разница меньше 0,3 невелика.",
+    poles: { OPENNESS: "Открытость изменениям", CONSERVATION: "Сохранение", SELF_ENHANCEMENT: "Самоутверждение", SELF_TRANSCENDENCE: "Самопреодоление" },
+    copyTitle: "Перенесите в свой ИИ-чат",
+    copyText: "Скопируйте расклад с промптом, вставьте в ChatGPT, Claude, Gemini или другой чат и отправьте.",
+    copyBoth: "Копировать расклад + промпт", copyBothSub: "Готово к вставке. Рекомендуем.",
+    copyCards: "Копировать только расклад", copyCardsSub: "Список ваших карточек по стопкам.",
+    copyPrompt: "Копировать только промпт", copyPromptSub: "Инструкция для анализа без ваших данных.",
+    copied: "Скопировано в буфер обмена.", copyFail: "Браузер не дал скопировать. Текст ниже выделен: нажмите Ctrl+C или ⌘C.",
+    preview: "Что будет скопировано", editPiles: "Изменить стопки", restartQ: "Удалить этот расклад и начать заново?", yesRestart: "Да, начать заново", cancel: "Отмена",
+    d: {
+      head: "=== РАСКЛАД ЦЕННОСТЕЙ ===",
+      method: "Методика: Personal Values Card Sort (Miller et al., 2011), 100 карточек",
+      date: "Дата", top: "ТОП ЦЕННОСТЕЙ (1 — самая важная)", piles: "СТОПКИ",
+      poles: "ИНДЕКСЫ ПОЛЮСОВ ШВАРЦА",
+      polesMethod: (p, m) => `Метод: баллы стопок — «${p[0]}» 0, «${p[1]}» 1, «${p[2]}» 2, «${p[3]}» 3, «${p[4]}» 4. Средний балл по всем 100 карточкам: ${m}. Индекс полюса = средний балл его карточек минус этот общий средний (больше нуля — полюс важнее, чем средняя карточка этого человека). Пограничные ценности делятся между двумя полюсами поровну, карточки с неоднозначной привязкой учитываются с весом 0,5, карточки вне модели Шварца не учитываются.`,
+      cards: "карточек",
+      axes: "Оси: Открытость изменениям ↔ Сохранение; Самоутверждение ↔ Самопреодоление.",
+      polesTop: p => `КАРТОЧКИ ПОЛЮСОВ В ВЕРХНИХ СТОПКАХ («${p[4]}» и «${p[3]}»)`,
+      plain: d => `Мой расклад ценностей — Personal Values Card Sort (100 карточек), ${d}`,
+      plainTop: "Топ (1 — самая важная):",
+      placeholder: "[ВСТАВЬТЕ СЮДА ДАННЫЕ РАСКЛАДА]"
+    }
+  },
+  hu: {
+    eyebrow: "Personal Values Card Sort · 100 kártya",
+    h1: "Mi a legfontosabb neked?",
+    lede: "Válogasd szét a 100 értékkártyát aszerint, mennyire fontosak neked. Utána másold az eredményt egy kész prompttal együtt a saját MI-csevegődbe, és személyes elemzést kapsz az értékeidről.",
+    example: "Példakártya",
+    howTitle: "Hogyan működik",
+    how: ["Válogasd a kártyákat öt kupacba. Körülbelül 10–15 perc.", "Nézd át a kupacokat, és tedd át, ami nem jó helyen van.", "Válassz ki 5–10 legfontosabb értéket, és rangsorold őket.", "Másold ki a válogatást és az elemző promptot."],
+    privacy: "Minden csak ebben a böngészőben marad, az oldal semmit nem küld el. Ha beilleszted a válogatást egy MI-csevegőbe, azzal megosztod az adott szolgáltatással.",
+    start: "Kezdés", resume: "Folytatás", restart: "Újrakezdés",
+    resumeInfo: n => `${n} / 100 kártya kész`,
+    attribution: "Kártyák: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Közkincs. Az orosz és a magyar változat adaptáció.",
+    nav: ["Válogatás", "Átnézés", "Rangsor", "Eredmény"],
+    piles: ["Nem fontos", "Kicsit fontos", "Fontos", "Nagyon fontos", "A legfontosabb"],
+    progress: i => `${i}. kártya / 100`,
+    back: "← Vissza", sortHint: "Az 1–5 billentyűk is működnek. Az 5 a legfontosabb.",
+    reviewTitle: "Nézd át a kupacokat",
+    reviewText: "Koppints egy kártyára, hogy elolvasd a meghatározását, és áttedd egy másik kupacba. „A legfontosabb” kupacban 5–10 kártyának kell lennie.",
+    topOk: n => `A legfontosabb: ${n}. Jöhet a rangsorolás.`,
+    topMany: n => `A legfontosabb: ${n}. Tegyél át ${n - 10} kártyát másik kupacba.`,
+    topFew: n => `A legfontosabb: ${n}. Tegyél hozzá még ${5 - n} kártyát.`,
+    toRank: "Rangsorolás →", moveTo: "Áthelyezés ide", close: "Bezárás", current: "most itt van", emptyPile: "Üres",
+    rankTitle: "Rangsorold a legfontosabb értékeidet",
+    rankText: "A legfontosabb legyen az 1-es. A sorrendet a nyilakkal módosíthatod.",
+    up: "Feljebb", down: "Lejjebb", toResult: "Eredmény →", backToReview: "← Vissza a kupacokhoz",
+    resultTitle: "Az értéktérképed", topTitle: "A legfontosabb értékeid", distTitle: "Kártyák kupaconként",
+    polesTitle: "Schwartz értékpólusai",
+    polesNote: "A nulla fölötti érték azt jelenti, hogy ez a pólus fontosabb neked, mint az átlagos kártyáid. A 0,3 alatti különbség kicsi.",
+    poles: { OPENNESS: "Nyitottság a változásra", CONSERVATION: "Megőrzés", SELF_ENHANCEMENT: "Önérvényesítés", SELF_TRANSCENDENCE: "Önmeghaladás" },
+    copyTitle: "Vidd át az MI-csevegődbe",
+    copyText: "Másold ki a válogatást a prompttal együtt, illeszd be a ChatGPT-be, a Claude-ba, a Geminibe vagy más csevegőbe, és küldd el.",
+    copyBoth: "Válogatás + prompt másolása", copyBothSub: "Beillesztésre kész. Ezt ajánljuk.",
+    copyCards: "Csak a válogatás másolása", copyCardsSub: "A kártyáid listája kupaconként.",
+    copyPrompt: "Csak a prompt másolása", copyPromptSub: "Az elemzési utasítás az adataid nélkül.",
+    copied: "Vágólapra másolva.", copyFail: "A böngésző letiltotta a másolást. Az alábbi szöveg ki van jelölve: nyomd meg a Ctrl+C vagy a ⌘C billentyűt.",
+    preview: "Ez kerül a vágólapra", editPiles: "Kupacok szerkesztése", restartQ: "Törlöd ezt a válogatást, és újrakezded?", yesRestart: "Igen, újrakezdem", cancel: "Mégse",
+    d: {
+      head: "=== ÉRTÉKKÁRTYA-VÁLOGATÁS ===",
+      method: "Módszer: Personal Values Card Sort (Miller és mtsai, 2011), 100 kártya",
+      date: "Dátum", top: "LEGFONTOSABB ÉRTÉKEK (1 = a legfontosabb)", piles: "KUPACOK",
+      poles: "SCHWARTZ-PÓLUSOK INDEXEI",
+      polesMethod: (p, m) => `Módszer: a kupacok pontszáma „${p[0]}” 0, „${p[1]}” 1, „${p[2]}” 2, „${p[3]}” 3, „${p[4]}” 4. Az összes 100 kártya átlagpontszáma: ${m}. Pólusindex = a pólus kártyáinak átlagpontszáma mínusz ez az összesített átlag (nulla fölött = a pólus fontosabb, mint az illető átlagos kártyája). A határértékek egyenlően oszlanak meg két pólus között, a nem egyértelmű besorolású kártyák 0,5-ös súllyal számítanak, a Schwartz-modellen kívüli kártyák nem számítanak.`,
+      cards: "kártya",
+      axes: "Tengelyek: Nyitottság a változásra ↔ Megőrzés; Önérvényesítés ↔ Önmeghaladás.",
+      polesTop: p => `A PÓLUSOK KÁRTYÁI A FELSŐ KUPACOKBAN („${p[4]}” és „${p[3]}”)`,
+      plain: d => `Az értékválogatásom — Personal Values Card Sort (100 kártya), ${d}`,
+      plainTop: "Legfontosabb értékek (1 = a legfontosabb):",
+      placeholder: "[IDE ILLESZD BE A VÁLOGATÁS ADATAIT]"
+    }
+  }
+};
+
+/* ---------- state ---------- */
+function fresh(lang) {
+  const seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
+  return { v: 1, lang, step: "intro", seed, order: shuffled(CARDS.map(c => c.key), seed), idx: 0, piles: {}, hist: [], top: [], date: today() };
+}
+function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+function shuffled(arr, seed) {
+  let a = seed >>> 0;
+  const rnd = () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const out = arr.slice();
+  for (let i = out.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }
+  return out;
+}
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE) || "null");
+    if (s && s.v === 1 && Array.isArray(s.order) && s.order.length === CARDS.length && s.order.every(k => BY_KEY[k])) return s;
+  } catch (e) { /* storage unavailable */ }
+  return null;
+}
+function save() { try { localStorage.setItem(STORE, JSON.stringify(S)); } catch (e) { /* storage unavailable */ } }
+function guessLang() {
+  const n = (navigator.language || "en").slice(0, 2).toLowerCase();
+  return L[n] ? n : "en";
+}
+const saved = load();
+let S = saved || fresh(guessLang());
+if (S.step !== "intro") S.step = "intro";           // always land on the intro, offer to resume
+let sheetKey = null, confirmRestart = false, copyMode = "both", toast = { text: "", bad: false };
+
+const t = () => L[S.lang];
+const sortedCount = () => Object.keys(S.piles).length;
+const inPile = p => S.order.filter(k => S.piles[k] === p);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const nm = k => BY_KEY[k][S.lang][0];
+const df = k => BY_KEY[k][S.lang][1];
+
+/* ---------- scoring (Schwartz higher-order poles) ---------- */
+function poleScores() {
+  const keys = CARDS.map(c => c.key);
+  const mean = keys.reduce((a, k) => a + S.piles[k], 0) / keys.length;
+  const P = Object.fromEntries(POLES.map(p => [p, { w: 0, s: 0, n: 0, top: [] }]));
+  for (const c of CARDS) {
+    if (!c.ho) continue;
+    const parts = c.ho.split("/");
+    const w = (c.conf === "low" ? 0.5 : 1) / parts.length;
+    const score = S.piles[c.key];
+    for (const p of parts) {
+      P[p].w += w; P[p].s += w * score; P[p].n += 1;
+      if (score >= 3) P[p].top.push(c.key);
+    }
+  }
+  const out = {};
+  for (const p of POLES) out[p] = { index: P[p].s / P[p].w - mean, n: P[p].n, top: P[p].top };
+  return { mean, poles: out };
+}
+function num(x, signed) {
+  let s = Math.abs(x).toFixed(2);
+  if (S.lang !== "en") s = s.replace(".", ",");
+  if (!signed) return s;
+  return (x >= 0.005 ? "+" : x <= -0.005 ? "−" : "") + s;
+}
+
+/* ---------- texts to copy ---------- */
+function rankedTop() { return S.top.filter(k => S.piles[k] === 4); }
+function cardLine(k) {
+  const c = BY_KEY[k];
+  const en = S.lang === "en" ? "" : ` (${c.en[0]})`;
+  return `${c[S.lang][0]}${en} — ${c[S.lang][1]}`;
+}
+function dataBlock() {
+  const T = t(), D = T.d, { mean, poles } = poleScores();
+  const lines = [D.head, D.method, `${D.date}: ${S.date}`, "", D.top];
+  rankedTop().forEach((k, i) => lines.push(`${i + 1}. ${cardLine(k)}`));
+  lines.push("", D.piles);
+  for (const p of PILES) {
+    const ks = inPile(p);
+    lines.push("", `[${T.piles[p]} — ${ks.length}]`);
+    ks.forEach(k => lines.push(`- ${cardLine(k)}`));
+  }
+  lines.push("", D.poles, D.polesMethod(T.piles, num(mean)));
+  for (const p of POLES) lines.push(`- ${T.poles[p]}: ${num(poles[p].index, true)} (${D.cards}: ${poles[p].n})`);
+  lines.push(D.axes, "", D.polesTop(T.piles));
+  for (const p of POLES) lines.push(`- ${T.poles[p]}: ${poles[p].top.length ? poles[p].top.map(nm).join(", ") : "—"}`);
+  return lines.join("\n");
+}
+function plainSort() {
+  const T = t(), D = T.d;
+  const lines = [D.plain(S.date), "", D.plainTop];
+  rankedTop().forEach((k, i) => lines.push(`${i + 1}. ${nm(k)}`));
+  for (const p of PILES) { const ks = inPile(p); lines.push("", `${T.piles[p]} (${ks.length}): ${ks.map(nm).join(", ")}`); }
+  return lines.join("\n");
+}
+function promptWith(data) { return PROMPTS[S.lang].replace("{{LAYOUT}}", data); }
+function copyText(mode) {
+  if (mode === "cards") return plainSort();
+  if (mode === "prompt") return promptWith(t().d.placeholder);
+  return promptWith(dataBlock());
+}
+
+/* ---------- rendering ---------- */
+const app = document.getElementById("app");
+function stepIndex() { return { sort: 0, review: 1, rank: 2, result: 3 }[S.step] ?? -1; }
+function renderChrome() {
+  const T = t();
+  document.documentElement.lang = S.lang;
+  document.getElementById("lang").innerHTML = ["en", "ru", "hu"].map(l =>
+    `<button type="button" data-act="lang" data-v="${l}" aria-pressed="${l === S.lang}">${l.toUpperCase()}</button>`).join("");
+  const si = stepIndex();
+  document.getElementById("steps").innerHTML = T.nav.map((n, i) =>
+    `<li class="${i === si ? "on" : i < si ? "done" : ""}"${i === si ? ' aria-current="step"' : ""}>${esc(n)}</li>`).join("");
+  document.getElementById("foot").textContent = T.attribution;
+}
+function pileVar(p) { return `style="--pc: var(${PC[p]})"`; }
+
+function vIntro() {
+  const T = t(), n = sortedCount(), ex = "CURIOSITY";
+  const resume = n > 0;
+  return `<div class="stack">
+    <div>
+      <p class="eyebrow">${esc(T.eyebrow)}</p>
+      <h1>${esc(T.h1)}</h1>
+      <p class="lede">${esc(T.lede)}</p>
+      <div class="row">
+        ${resume ? `<button class="btn primary" type="button" data-act="resume">${esc(T.resume)}</button>
+          <span class="small">${esc(T.resumeInfo(n))}</span>
+          <button class="btn quiet" type="button" data-act="ask-restart">${esc(T.restart)}</button>`
+        : `<button class="btn primary" type="button" data-act="start">${esc(T.start)}</button>`}
+      </div>
+      ${confirmRestart ? confirmBox() : ""}
+    </div>
+    <div class="intro-grid">
+      <div class="stack" style="gap:10px">
+        <h3>${esc(T.example)}</h3>
+        <div class="card example"><span class="no">№ ${BY_KEY[ex].id}</span><div class="name">${esc(nm(ex))}</div><div class="def">${esc(df(ex))}</div></div>
+      </div>
+      <div>
+        <h3>${esc(T.howTitle)}</h3>
+        <ol class="how">${T.how.map(s => `<li><span>${esc(s)}</span></li>`).join("")}</ol>
+      </div>
+    </div>
+    <p class="note">${esc(T.privacy)}</p>
+  </div>`;
+}
+function confirmBox() {
+  const T = t();
+  return `<div class="confirm" style="margin-top:14px"><span>${esc(T.restartQ)}</span>
+    <button class="btn" type="button" data-act="restart">${esc(T.yesRestart)}</button>
+    <button class="btn quiet" type="button" data-act="cancel-restart">${esc(T.cancel)}</button></div>`;
+}
+function vSort() {
+  const T = t(), k = S.order[S.idx], c = BY_KEY[k];
+  const counts = [0, 1, 2, 3, 4].map(p => inPile(p).length);
+  const btns = [0, 1, 2, 3, 4].map(p => `<button class="pile-btn" type="button" data-act="put" data-v="${p}" ${pileVar(p)}>
+      <span class="lvl" aria-hidden="true">${[0, 1, 2, 3, 4].map(i => `<i class="${i <= p ? "f" : ""}"></i>`).join("")}</span>
+      <span class="t">${esc(T.piles[p])}</span>
+      <span class="k"><kbd>${p + 1}</kbd></span>
+    </button>`).join("");
+  return `<div class="stack" style="gap:20px">
+    <div class="progress"><div class="meta"><span>${esc(T.progress(S.idx + 1))}</span><span>${S.idx}%</span></div>
+      <div class="track"><i style="width:${S.idx}%"></i></div></div>
+    <article class="card enter" aria-live="polite"><span class="no">№ ${c.id}</span>
+      <div class="name">${esc(nm(k))}</div><div class="def">${esc(df(k))}</div></article>
+    <div class="scale" role="group" aria-label="${esc(T.nav[0])}">${btns}</div>
+    <div class="counts" aria-hidden="true">${counts.map((n, p) => `<span>${n}</span>`).join("")}</div>
+    <div class="row" style="justify-content:space-between">
+      <button class="btn quiet" type="button" data-act="undo" ${S.hist.length ? "" : "disabled"}>${esc(T.back)}</button>
+      <span class="small">${esc(T.sortHint)}</span>
+    </div>
+  </div>`;
+}
+function topStatus() {
+  const T = t(), n = inPile(4).length;
+  if (n > 10) return `<span class="status bad">${esc(T.topMany(n))}</span>`;
+  if (n < 5) return `<span class="status bad">${esc(T.topFew(n))}</span>`;
+  return `<span class="status ok">${esc(T.topOk(n))}</span>`;
+}
+function vReview() {
+  const T = t(), n = inPile(4).length, ok = n >= 5 && n <= 10;
+  const piles = PILES.map(p => {
+    const ks = inPile(p);
+    return `<section class="pile" data-pile="${p}" ${pileVar(p)}>
+      <div class="pile-h"><span class="sw"></span><b>${esc(T.piles[p])}</b><span class="n">${ks.length}</span></div>
+      <div class="chips">${ks.length ? ks.map(k => `<button class="chip" type="button" draggable="true" data-act="open" data-v="${k}" title="${esc(df(k))}" ${pileVar(p)}>${esc(nm(k))}</button>`).join("") : `<span class="empty">${esc(T.emptyPile)}</span>`}</div>
+    </section>`;
+  }).join("");
+  return `<div class="stack" style="gap:18px">
+    <div><h2>${esc(T.reviewTitle)}</h2><p class="small" style="font-size:15px;max-width:62ch">${esc(T.reviewText)}</p></div>
+    <div class="piles">${piles}</div>
+    <div class="sticky-foot">${topStatus()}
+      <button class="btn primary" type="button" data-act="to-rank" ${ok ? "" : "disabled"}>${esc(T.toRank)}</button></div>
+  </div>`;
+}
+function vRank() {
+  const T = t(), top = rankedTop();
+  return `<div class="stack" style="gap:18px">
+    <div><h2>${esc(T.rankTitle)}</h2><p class="small" style="font-size:15px">${esc(T.rankText)}</p></div>
+    <ol class="rank">${top.map((k, i) => `<li>
+      <span class="num">${i + 1}</span>
+      <span class="txt"><b>${esc(nm(k))}</b><span>${esc(df(k))}</span></span>
+      <span class="arrows">
+        <button type="button" data-act="mv" data-v="${i}" data-d="-1" aria-label="${esc(T.up)}: ${esc(nm(k))}" ${i === 0 ? "disabled" : ""}>↑</button>
+        <button type="button" data-act="mv" data-v="${i}" data-d="1" aria-label="${esc(T.down)}: ${esc(nm(k))}" ${i === top.length - 1 ? "disabled" : ""}>↓</button>
+      </span></li>`).join("")}</ol>
+    <div class="row" style="justify-content:space-between">
+      <button class="btn quiet" type="button" data-act="go" data-v="review">${esc(T.backToReview)}</button>
+      <button class="btn primary" type="button" data-act="go" data-v="result">${esc(T.toResult)}</button>
+    </div>
+  </div>`;
+}
+function vResult() {
+  const T = t(), top = rankedTop(), { poles } = poleScores();
+  const dist = PILES.map(p => [p, inPile(p).length]);
+  const MAXI = 2;
+  const poleRow = p => {
+    const v = poles[p].index, w = Math.min(Math.abs(v), MAXI) / MAXI * 50;
+    const pos = v >= 0 ? `left:50%;width:${w}%` : `left:${50 - w}%;width:${w}%`;
+    return `<div class="pole"><span>${esc(T.poles[p])}</span><span class="b"><i class="${v < 0 ? "neg" : ""}" style="${pos}"></i></span><span class="v">${num(v, true)}</span></div>`;
+  };
+  const cbtn = (mode, title, sub, primary) =>
+    `<button class="copy-btn${primary ? " primary" : ""}" type="button" data-act="copy" data-v="${mode}" aria-pressed="${copyMode === mode}"><b>${esc(title)}</b><span>${esc(sub)}</span></button>`;
+  return `<div class="stack">
+    <div><p class="eyebrow">${esc(S.date)}</p><h2>${esc(T.resultTitle)}</h2></div>
+    <section class="panel"><h3>${esc(T.copyTitle)}</h3>
+      <p style="margin-bottom:14px;max-width:62ch">${esc(T.copyText)}</p>
+      <div class="copy-grid">
+        ${cbtn("both", T.copyBoth, T.copyBothSub, true)}
+        ${cbtn("cards", T.copyCards, T.copyCardsSub)}
+        ${cbtn("prompt", T.copyPrompt, T.copyPromptSub)}
+      </div>
+      <p class="toast${toast.bad ? " bad" : ""}" role="status">${esc(toast.text)}</p>
+      <label class="small" for="out">${esc(T.preview)}</label>
+      <textarea id="out" readonly>${esc(copyText(copyMode))}</textarea>
+      <p class="note" style="margin-top:12px">${esc(T.privacy)}</p>
+    </section>
+    <div class="intro-grid">
+      <section class="panel"><h3>${esc(T.topTitle)}</h3>
+        <ol class="toplist">${top.map((k, i) => `<li><span class="num">${i + 1}</span><span><b>${esc(nm(k))}</b><br><span>${esc(df(k))}</span></span></li>`).join("")}</ol>
+      </section>
+      <div class="stack" style="gap:20px">
+        <section class="panel"><h3>${esc(T.distTitle)}</h3>
+          <div class="dist">${dist.filter(([, n]) => n).map(([p, n]) => `<i style="--pc: var(${PC[p]});flex:${n}" title="${esc(T.piles[p])}: ${n}"></i>`).join("")}</div>
+          <div class="legend">${dist.map(([p, n]) => `<span><i class="sw" ${pileVar(p)}></i>${esc(T.piles[p])} · ${n}</span>`).join("")}</div>
+        </section>
+        <section class="panel"><h3>${esc(T.polesTitle)}</h3>
+          <div class="poles">${POLES.map(poleRow).join("")}</div>
+          <p class="small" style="margin-top:12px">${esc(T.polesNote)}</p>
+        </section>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn" type="button" data-act="go" data-v="review">${esc(T.editPiles)}</button>
+      <button class="btn quiet" type="button" data-act="ask-restart">${esc(T.restart)}</button>
+    </div>
+    ${confirmRestart ? confirmBox() : ""}
+  </div>`;
+}
+function renderSheet() {
+  const root = document.getElementById("sheet-root");
+  if (!sheetKey) { root.innerHTML = ""; return; }
+  const T = t(), cur = S.piles[sheetKey];
+  root.innerHTML = `<div class="scrim" data-act="close-sheet"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-n">
+    <div class="name" id="sh-n">${esc(nm(sheetKey))}</div><div class="def">${esc(df(sheetKey))}</div>
+    <h3 style="margin:4px 0 0">${esc(T.moveTo)}</h3>
+    <div class="move">${PILES.map(p => `<button type="button" data-act="move" data-v="${p}" ${pileVar(p)} aria-current="${p === cur}"><i class="sw"></i>${esc(T.piles[p])}${p === cur ? `<span class="cur">${esc(T.current)}</span>` : ""}</button>`).join("")}</div>
+    <button class="btn" type="button" data-act="close-sheet">${esc(T.close)}</button>
+  </div></div>`;
+  root.querySelector(`.move button[aria-current="true"]`)?.focus();
+}
+function render() {
+  renderChrome();
+  app.innerHTML = { intro: vIntro, sort: vSort, review: vReview, rank: vRank, result: vResult }[S.step]();
+  renderSheet();
+  save();
+}
+
+/* ---------- actions ---------- */
+function syncTop() {
+  const inTop = new Set(inPile(4));
+  S.top = S.top.filter(k => inTop.has(k));
+  for (const k of S.order) if (inTop.has(k) && !S.top.includes(k)) S.top.push(k);
+}
+function put(p) {
+  const k = S.order[S.idx];
+  S.piles[k] = p; S.hist.push(k); S.idx += 1;
+  if (S.idx >= S.order.length) { S.step = "review"; window.scrollTo(0, 0); }
+  render();
+}
+function undo() {
+  const k = S.hist.pop();
+  if (!k) return;
+  delete S.piles[k]; S.idx = S.order.indexOf(k);
+  render();
+}
+function go(step) {
+  if (step === "rank" || step === "result") syncTop();
+  S.step = step; toast = { text: "", bad: false }; confirmRestart = false;
+  render(); window.scrollTo(0, 0);
+}
+function resumeStep() {
+  if (sortedCount() < CARDS.length) { S.idx = S.order.findIndex(k => S.piles[k] === undefined); return "sort"; }
+  const n = inPile(4).length;
+  return n >= 5 && n <= 10 && S.top.length ? "result" : "review";
+}
+async function copy(mode) {
+  copyMode = mode;
+  const text = copyText(mode);
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; } catch (e) { ok = false; }
+  toast = ok ? { text: t().copied, bad: false } : { text: t().copyFail, bad: true };
+  render();
+  if (!ok) { const ta = document.getElementById("out"); ta.focus(); ta.select(); }
+}
+
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]");
+  if (!el) return;
+  const a = el.dataset.act, v = el.dataset.v;
+  if (a === "close-sheet" && el.classList.contains("scrim") && e.target !== el) return;
+  switch (a) {
+    case "lang": S.lang = v; render(); break;
+    case "home": S.step = "intro"; confirmRestart = false; render(); break;
+    case "start": S.step = "sort"; render(); break;
+    case "resume": go(resumeStep()); break;
+    case "ask-restart": confirmRestart = true; render(); break;
+    case "cancel-restart": confirmRestart = false; render(); break;
+    case "restart": { const lang = S.lang; S = fresh(lang); S.step = "sort"; confirmRestart = false; copyMode = "both"; render(); break; }
+    case "put": put(Number(v)); break;
+    case "undo": undo(); break;
+    case "open": sheetKey = v; renderSheet(); break;
+    case "close-sheet": sheetKey = null; renderSheet(); break;
+    case "move": S.piles[sheetKey] = Number(v); sheetKey = null; syncTop(); render(); break;
+    case "to-rank": go("rank"); break;
+    case "go": go(v); break;
+    case "mv": {
+      const top = rankedTop(), i = Number(v), j = i + Number(el.dataset.d);
+      if (j < 0 || j >= top.length) break;
+      [top[i], top[j]] = [top[j], top[i]]; S.top = top; render();
+      app.querySelectorAll(`[data-act="mv"][data-v="${j}"]`)[Number(el.dataset.d) < 0 ? 0 : 1]?.focus();
+      break;
+    }
+    case "copy": copy(v); break;
+  }
+});
+document.addEventListener("keydown", e => {
+  if (sheetKey && e.key === "Escape") { sheetKey = null; renderSheet(); return; }
+  if (S.step !== "sort" || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (/^[1-5]$/.test(e.key)) { e.preventDefault(); put(Number(e.key) - 1); }
+  else if (e.key === "Backspace") { e.preventDefault(); undo(); }
+});
+/* desktop drag-and-drop between piles; touch users move cards with the sheet */
+document.addEventListener("dragstart", e => { const c = e.target.closest(".chip"); if (c) e.dataTransfer.setData("text/plain", c.dataset.v); });
+document.addEventListener("dragover", e => { const p = e.target.closest(".pile"); if (p) { e.preventDefault(); p.classList.add("drop"); } });
+document.addEventListener("dragleave", e => { const p = e.target.closest(".pile"); if (p && !p.contains(e.relatedTarget)) p.classList.remove("drop"); });
+document.addEventListener("drop", e => {
+  const p = e.target.closest(".pile"); if (!p) return;
+  e.preventDefault();
+  const k = e.dataTransfer.getData("text/plain");
+  if (BY_KEY[k]) { S.piles[k] = Number(p.dataset.pile); syncTop(); render(); }
+});
+
+render();
+</script>
