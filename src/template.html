@@ -54,9 +54,10 @@ button { font: inherit; color: inherit; }
 .brand { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 13px; margin-right: auto; background: none; border: 0; padding: 4px 0; cursor: pointer; }
 .brand span { color: var(--accent); }
 .steps { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; font-size: 12px; color: var(--muted); }
-.steps li { padding: 3px 8px; border-radius: 999px; }
-.steps li.on { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
-.steps li.done { color: var(--ink); }
+.steps button { border: 0; background: none; font: inherit; color: inherit; padding: 3px 8px; border-radius: 999px; cursor: pointer; }
+.steps button:hover:not(:disabled) { color: var(--ink); background: var(--surface-2); }
+.steps button:disabled { opacity: .45; cursor: default; }
+.steps li.on button { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
 main a, .sheet a { color: var(--accent); font-weight: 600; text-underline-offset: 3px; }
 .prompt-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
 .prompt-btn:hover { border-color: var(--muted); }
@@ -89,10 +90,11 @@ p { margin: 0; }
   padding: 28px 28px 30px; border-top: 4px solid var(--accent); min-height: 220px; display: flex; flex-direction: column; gap: 14px;
 }
 .card .no { position: absolute; top: 14px; right: 18px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
-.card .name { font-size: 14px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); padding-right: 48px; }
-.card .def { font-family: var(--serif); font-size: clamp(24px, 5vw, 32px); line-height: 1.25; text-wrap: balance; }
+.card .name { font-size: clamp(28px, 6.5vw, 42px); font-weight: 750; letter-spacing: .03em; line-height: 1.1; text-transform: uppercase; color: var(--ink); padding-right: 48px; overflow-wrap: anywhere; text-wrap: balance; }
+.card .def { font-family: var(--serif); font-size: clamp(17px, 3.4vw, 20px); line-height: 1.4; color: var(--muted); text-wrap: pretty; }
 .card.example { min-height: 0; max-width: 420px; }
-.card.example .def { font-size: 22px; }
+.card.example .name { font-size: 28px; }
+.card.example .def { font-size: 17px; }
 .card.enter { animation: enter .22s ease-out; }
 @keyframes enter { from { transform: translateY(6px); opacity: .4; } to { transform: none; opacity: 1; } }
 
@@ -114,6 +116,7 @@ ol.how li::before { content: counter(s); width: 24px; height: 24px; border-radiu
   background: var(--surface); border: 1px solid var(--line); min-height: 92px; transition: transform .08s, border-color .1s;
 }
 .pile-btn:hover { border-color: var(--pc); }
+.pile-btn[aria-pressed="true"] { border-color: var(--pc); box-shadow: 0 0 0 1px var(--pc) inset; }
 .pile-btn:active { transform: translateY(1px); }
 .pile-btn .lvl { display: flex; gap: 3px; align-items: center; min-height: 12px; }
 .pile-btn .lvl b { font-size: 14px; line-height: 1; color: var(--pc); }
@@ -150,8 +153,8 @@ ol.how li::before { content: counter(s); width: 24px; height: 24px; border-radiu
 @media (min-width: 640px) { .scrim { place-items: center; } }
 .sheet { width: min(520px, 100%); background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); padding: 22px; display: grid; gap: 14px; max-height: 90vh; overflow: auto; }
 .sheet.wide { width: min(760px, 100%); }
-.sheet .name { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
-.sheet .def { font-family: var(--serif); font-size: 22px; line-height: 1.3; }
+.sheet .name { font-size: 26px; font-weight: 750; letter-spacing: .03em; line-height: 1.15; text-transform: uppercase; overflow-wrap: anywhere; }
+.sheet .def { font-family: var(--serif); font-size: 17px; line-height: 1.4; color: var(--muted); }
 .move { display: grid; gap: 6px; }
 .move button { display: flex; align-items: center; gap: 10px; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
 .move button:hover { border-color: var(--pc); }
@@ -174,6 +177,7 @@ ol.rank .txt span { font-size: 14px; color: var(--muted); }
 .toplist { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
 .toplist li { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: baseline; }
 .toplist .num { font-family: var(--serif); color: var(--accent); font-size: 18px; text-align: right; font-variant-numeric: tabular-nums; }
+.toplist.plain li { grid-template-columns: 1fr; }
 .toplist b { font-size: 13px; letter-spacing: .08em; }
 .toplist span { color: var(--muted); font-size: 14px; }
 .dist { display: flex; height: 14px; border-radius: 999px; overflow: hidden; gap: 2px; margin-bottom: 10px; }
@@ -203,7 +207,10 @@ footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px
 
 @media (max-width: 640px) {
   .intro-grid { grid-template-columns: 1fr; }
-  .steps { display: none; }
+  .bar { position: static; }
+  .steps { order: 5; width: 100%; }
+  .steps li { flex: 1; }
+  .steps button { width: 100%; padding: 6px 4px; }
   .scale { grid-template-columns: 1fr; }
   .scale .pile-btn { min-height: 0; grid-template-columns: auto 1fr auto; align-items: center; padding: 12px 14px; }
   .scale { display: flex; flex-direction: column; }
@@ -211,7 +218,7 @@ footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px
   .copy-grid { grid-template-columns: 1fr; }
   .pole { grid-template-columns: 1fr 3.5rem; }
   .pole .b { grid-column: 1 / -1; grid-row: 2; }
-  .card { padding: 24px 20px 24px; min-height: 200px; }
+  .card { padding: 24px 20px 24px; min-height: 180px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
@@ -246,23 +253,21 @@ const L = {
     lede: "Sort 100 value cards by how important each one is to you. Then copy the result with a ready-made prompt into Claude and get a professional psychological profile.",
     example: "Example card",
     howTitle: "How it works",
-    how: ["Sort the cards into four decks. It takes about 10–15 minutes.", "Check the decks and move any card that feels out of place.", "Rank the values in your Very important deck.", "Copy your sort and the analysis prompt."],
+    how: ["Sort the cards into four decks. It takes about 10–15 minutes.", "Check the decks and move any card that feels out of place.", "Copy your sort and the analysis prompt."],
     privacy: "Everything stays in this browser. The page sends nothing anywhere. When you paste your sort into Claude, you share it with Anthropic.",
     start: "Start sorting", resume: "Continue", restart: "Start over",
     resumeInfo: n => `${n} of 100 cards sorted`,
     attribution: "Cards: Personal Values Card Sort by W. R. Miller, J. C'de Baca, D. B. Matthews and P. L. Wilbourne, University of New Mexico, 2011. Public domain. Russian and Hungarian versions are adaptations.",
-    nav: ["Sort", "Review", "Rank", "Result"],
+    nav: ["Sort", "Review", "Result"],
     piles: ["Not important", "Unsure", "Important", "Very important"],
     progress: i => `Card ${i} of 100`,
     back: "← Back", sortHint: "Keys 1–4 work too, in the order of the buttons.",
     reviewTitle: "Check your decks",
     reviewText: "Tap a card to read its definition and move it to another deck.",
-    topCount: n => `Very important: ${n}`, toTop: "Move to top",
-    toRank: "Rank top values →", moveTo: "Move to", close: "Close", current: "here now", emptyPile: "No cards",
-    rankTitle: "Rank your most important values",
-    rankText: "Put the value that matters most at number 1. Use the arrows to change the order.",
-    up: "Move up", down: "Move down", toResult: "Show result →", backToReview: "← Back to decks",
-    resultTitle: "Your values map", topTitle: "Your top values", distTitle: "Cards per deck",
+    topCount: n => `Very important: ${n}`,
+    moveTo: "Move to", close: "Close", current: "here now", emptyPile: "No cards",
+    toResult: "Show result →", toReview: "Go to review →",
+    resultTitle: "Your values map", distTitle: "Cards per deck",
     polesTitle: "Schwartz value poles",
     polesNote: "Above zero means the pole matters more to you than your average card. Differences under 0.2 are small. Unsure cards are not counted.",
     poles: { OPENNESS: "Openness to change", CONSERVATION: "Conservation", SELF_ENHANCEMENT: "Self-enhancement", SELF_TRANSCENDENCE: "Self-transcendence" },
@@ -280,14 +285,13 @@ const L = {
     d: {
       head: "=== VALUES CARD SORT ===",
       method: "Method: Personal Values Card Sort (Miller et al., 2011), 100 cards",
-      date: "Date", top: "TOP VALUES (1 = most important)", piles: "DECKS",
+      date: "Date", piles: "DECKS",
       poles: "SCHWARTZ POLE INDICES",
       polesMethod: (p, m, u) => `Method: deck scores are "${p[0]}" 0, "${p[2]}" 1, "${p[3]}" 2. Cards in the "${p[1]}" deck get no score (cards: ${u}). Mean score across the scored cards: ${m}. Pole index = mean score of the pole's cards minus this mean (positive = this pole matters more to the person than their average card). Border values are split equally between two poles, cards with an ambiguous mapping count with weight 0.5, cards outside the Schwartz model are not counted.`,
       cards: "cards",
       axes: "Axes: Openness to change ↔ Conservation; Self-enhancement ↔ Self-transcendence.",
       polesTop: p => `CARDS BY POLE IN THE "${p[3]}" DECK`,
       plain: d => `My values sort — Personal Values Card Sort (100 cards), ${d}`,
-      plainTop: "Top values (1 = most important):",
       placeholder: "[PASTE YOUR SORTING DATA HERE]"
     }
   },
@@ -297,23 +301,21 @@ const L = {
     lede: "Разложите 100 карточек ценностей по тому, насколько каждая важна для вас. Потом скопируйте результат вместе с готовым промптом в Claude и получите профессиональный психологический профиль.",
     example: "Пример карточки",
     howTitle: "Как это устроено",
-    how: ["Разложите карточки по четырём колодам. Это займёт 10–15 минут.", "Проверьте колоды и переложите карточки, если что-то лежит не там.", "Расставьте по порядку ценности из колоды «Очень важно».", "Скопируйте расклад и промпт для анализа."],
+    how: ["Разложите карточки по четырём колодам. Это займёт 10–15 минут.", "Проверьте колоды и переложите карточки, если что-то лежит не там.", "Скопируйте расклад и промпт для анализа."],
     privacy: "Всё хранится только в этом браузере, страница ничего никуда не отправляет. Когда вы вставляете расклад в Claude, вы передаёте его Anthropic.",
     start: "Начать раскладку", resume: "Продолжить", restart: "Начать заново",
     resumeInfo: n => `Разложено ${n} из 100 карточек`,
     attribution: "Карточки: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Общественное достояние. Русская и венгерская версии — адаптация.",
-    nav: ["Раскладка", "Проверка", "Топ", "Результат"],
+    nav: ["Раскладка", "Проверка", "Результат"],
     piles: ["Не важно", "Сложно сказать", "Важно", "Очень важно"],
     progress: i => `Карточка ${i} из 100`,
     back: "← Назад", sortHint: "Можно нажимать клавиши 1–4 — в порядке кнопок.",
     reviewTitle: "Проверьте колоды",
     reviewText: "Нажмите на карточку, чтобы прочитать определение и переложить её.",
-    topCount: n => `Очень важно: ${n}`, toTop: "В начало",
-    toRank: "Ранжировать топ →", moveTo: "Переложить в", close: "Закрыть", current: "сейчас здесь", emptyPile: "Пусто",
-    rankTitle: "Расставьте самые важные ценности по порядку",
-    rankText: "Самая важная — под номером 1. Меняйте порядок стрелками.",
-    up: "Выше", down: "Ниже", toResult: "Показать результат →", backToReview: "← К колодам",
-    resultTitle: "Ваша карта ценностей", topTitle: "Ваш топ", distTitle: "Карточек в колодах",
+    topCount: n => `Очень важно: ${n}`,
+    moveTo: "Переложить в", close: "Закрыть", current: "сейчас здесь", emptyPile: "Пусто",
+    toResult: "Показать результат →", toReview: "К проверке →",
+    resultTitle: "Ваша карта ценностей", distTitle: "Карточек в колодах",
     polesTitle: "Полюса ценностей по Шварцу",
     polesNote: "Больше нуля — полюс для вас важнее, чем ваша средняя карточка. Разница меньше 0,2 невелика. Карточки «Сложно сказать» не учитываются.",
     poles: { OPENNESS: "Открытость изменениям", CONSERVATION: "Сохранение", SELF_ENHANCEMENT: "Самоутверждение", SELF_TRANSCENDENCE: "Самопреодоление" },
@@ -331,14 +333,13 @@ const L = {
     d: {
       head: "=== РАСКЛАД ЦЕННОСТЕЙ ===",
       method: "Методика: Personal Values Card Sort (Miller et al., 2011), 100 карточек",
-      date: "Дата", top: "ТОП ЦЕННОСТЕЙ (1 — самая важная)", piles: "КОЛОДЫ",
+      date: "Дата", piles: "КОЛОДЫ",
       poles: "ИНДЕКСЫ ПОЛЮСОВ ШВАРЦА",
       polesMethod: (p, m, u) => `Метод: баллы колод — «${p[0]}» 0, «${p[2]}» 1, «${p[3]}» 2. Карточки колоды «${p[1]}» баллов не получают (карточек: ${u}). Средний балл по оценённым карточкам: ${m}. Индекс полюса = средний балл его карточек минус этот общий средний (больше нуля — полюс важнее, чем средняя карточка этого человека). Пограничные ценности делятся между двумя полюсами поровну, карточки с неоднозначной привязкой учитываются с весом 0,5, карточки вне модели Шварца не учитываются.`,
       cards: "карточек",
       axes: "Оси: Открытость изменениям ↔ Сохранение; Самоутверждение ↔ Самопреодоление.",
       polesTop: p => `КАРТОЧКИ ПОЛЮСОВ В КОЛОДЕ «${p[3]}»`,
       plain: d => `Мой расклад ценностей — Personal Values Card Sort (100 карточек), ${d}`,
-      plainTop: "Топ (1 — самая важная):",
       placeholder: "[ВСТАВЬТЕ СЮДА ДАННЫЕ РАСКЛАДА]"
     }
   },
@@ -348,23 +349,21 @@ const L = {
     lede: "Válogasd szét a 100 értékkártyát aszerint, mennyire fontosak neked. Utána másold az eredményt egy kész prompttal együtt a Claude-ba, és szakmai pszichológiai profilt kapsz.",
     example: "Példakártya",
     howTitle: "Hogyan működik",
-    how: ["Válogasd a kártyákat négy kupacba. Körülbelül 10–15 perc.", "Nézd át a kupacokat, és tedd át, ami nem jó helyen van.", "Rangsorold a „Nagyon fontos” kupac értékeit.", "Másold ki a válogatást és az elemző promptot."],
+    how: ["Válogasd a kártyákat négy kupacba. Körülbelül 10–15 perc.", "Nézd át a kupacokat, és tedd át, ami nem jó helyen van.", "Másold ki a válogatást és az elemző promptot."],
     privacy: "Minden csak ebben a böngészőben marad, az oldal semmit nem küld el. Ha beilleszted a válogatást a Claude-ba, azzal átadod az Anthropicnak.",
     start: "Kezdés", resume: "Folytatás", restart: "Újrakezdés",
     resumeInfo: n => `${n} / 100 kártya kész`,
     attribution: "Kártyák: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Közkincs. Az orosz és a magyar változat adaptáció.",
-    nav: ["Válogatás", "Átnézés", "Rangsor", "Eredmény"],
+    nav: ["Válogatás", "Átnézés", "Eredmény"],
     piles: ["Nem fontos", "Bizonytalan", "Fontos", "Nagyon fontos"],
     progress: i => `${i}. kártya / 100`,
     back: "← Vissza", sortHint: "Az 1–4 billentyűk is működnek, a gombok sorrendjében.",
     reviewTitle: "Nézd át a kupacokat",
     reviewText: "Koppints egy kártyára, hogy elolvasd a meghatározását, és áttedd egy másik kupacba.",
-    topCount: n => `Nagyon fontos: ${n}`, toTop: "Az elejére",
-    toRank: "Rangsorolás →", moveTo: "Áthelyezés ide", close: "Bezárás", current: "most itt van", emptyPile: "Üres",
-    rankTitle: "Rangsorold a legfontosabb értékeidet",
-    rankText: "A legfontosabb legyen az 1-es. A sorrendet a nyilakkal módosíthatod.",
-    up: "Feljebb", down: "Lejjebb", toResult: "Eredmény →", backToReview: "← Vissza a kupacokhoz",
-    resultTitle: "Az értéktérképed", topTitle: "A legfontosabb értékeid", distTitle: "Kártyák kupaconként",
+    topCount: n => `Nagyon fontos: ${n}`,
+    moveTo: "Áthelyezés ide", close: "Bezárás", current: "most itt van", emptyPile: "Üres",
+    toResult: "Eredmény →", toReview: "Átnézés →",
+    resultTitle: "Az értéktérképed", distTitle: "Kártyák kupaconként",
     polesTitle: "Schwartz értékpólusai",
     polesNote: "A nulla fölötti érték azt jelenti, hogy ez a pólus fontosabb neked, mint az átlagos kártyáid. A 0,2 alatti különbség kicsi. A „Bizonytalan” kártyák nem számítanak.",
     poles: { OPENNESS: "Nyitottság a változásra", CONSERVATION: "Megőrzés", SELF_ENHANCEMENT: "Önérvényesítés", SELF_TRANSCENDENCE: "Önmeghaladás" },
@@ -382,14 +381,13 @@ const L = {
     d: {
       head: "=== ÉRTÉKKÁRTYA-VÁLOGATÁS ===",
       method: "Módszer: Personal Values Card Sort (Miller és mtsai, 2011), 100 kártya",
-      date: "Dátum", top: "LEGFONTOSABB ÉRTÉKEK (1 = a legfontosabb)", piles: "KUPACOK",
+      date: "Dátum", piles: "KUPACOK",
       poles: "SCHWARTZ-PÓLUSOK INDEXEI",
       polesMethod: (p, m, u) => `Módszer: a kupacok pontszáma „${p[0]}” 0, „${p[2]}” 1, „${p[3]}” 2. A „${p[1]}” kupac kártyái nem kapnak pontot (kártyák: ${u}). A pontozott kártyák átlagpontszáma: ${m}. Pólusindex = a pólus kártyáinak átlagpontszáma mínusz ez az összesített átlag (nulla fölött = a pólus fontosabb, mint az illető átlagos kártyája). A határértékek egyenlően oszlanak meg két pólus között, a nem egyértelmű besorolású kártyák 0,5-ös súllyal számítanak, a Schwartz-modellen kívüli kártyák nem számítanak.`,
       cards: "kártya",
       axes: "Tengelyek: Nyitottság a változásra ↔ Megőrzés; Önérvényesítés ↔ Önmeghaladás.",
       polesTop: p => `A PÓLUSOK KÁRTYÁI A „${p[3]}” KUPACBAN`,
       plain: d => `Az értékválogatásom — Personal Values Card Sort (100 kártya), ${d}`,
-      plainTop: "Legfontosabb értékek (1 = a legfontosabb):",
       placeholder: "[IDE ILLESZD BE A VÁLOGATÁS ADATAIT]"
     }
   }
@@ -398,7 +396,7 @@ const L = {
 /* ---------- state ---------- */
 function fresh(lang) {
   const seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-  return { v: 2, lang, step: "intro", seed, order: shuffled(CARDS.map(c => c.key), seed), idx: 0, piles: {}, hist: [], top: [], date: today() };
+  return { v: 2, lang, step: "intro", seed, order: shuffled(CARDS.map(c => c.key), seed), idx: 0, piles: {}, hist: [], date: today() };
 }
 function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
 function shuffled(arr, seed) {
@@ -459,7 +457,6 @@ function num(x, signed) {
 }
 
 /* ---------- texts to copy ---------- */
-function rankedTop() { return S.top.filter(k => S.piles[k] === TOP); }
 function cardLine(k) {
   const c = BY_KEY[k];
   const en = S.lang === "en" ? "" : ` (${c.en[0]})`;
@@ -467,10 +464,7 @@ function cardLine(k) {
 }
 function dataBlock() {
   const T = t(), D = T.d, { mean, poles } = poleScores();
-  const lines = [D.head, D.method, `${D.date}: ${S.date}`, "", D.top];
-  rankedTop().forEach((k, i) => lines.push(`${i + 1}. ${cardLine(k)}`));
-  if (!rankedTop().length) lines.push("—");
-  lines.push("", D.piles);
+  const lines = [D.head, D.method, `${D.date}: ${S.date}`, "", D.piles];
   for (const p of PILES) {
     const ks = inPile(p);
     lines.push("", `[${T.piles[p]} — ${ks.length}]`);
@@ -484,8 +478,7 @@ function dataBlock() {
 }
 function plainSort() {
   const T = t(), D = T.d;
-  const lines = [D.plain(S.date), "", D.plainTop];
-  rankedTop().forEach((k, i) => lines.push(`${i + 1}. ${nm(k)}`));
+  const lines = [D.plain(S.date)];
   for (const p of PILES) { const ks = inPile(p); lines.push("", `${T.piles[p]} (${ks.length}): ${ks.map(nm).join(", ")}`); }
   return lines.join("\n");
 }
@@ -498,15 +491,16 @@ function copyText(mode) {
 
 /* ---------- rendering ---------- */
 const app = document.getElementById("app");
-function stepIndex() { return { sort: 0, review: 1, rank: 2, result: 3 }[S.step] ?? -1; }
+const STEPS = ["sort", "review", "result"];
+function stepIndex() { return STEPS.indexOf(S.step); }
 function renderChrome() {
   const T = t();
   document.documentElement.lang = S.lang;
   document.getElementById("lang").innerHTML = ["en", "ru", "hu"].map(l =>
     `<button type="button" data-act="lang" data-v="${l}" aria-pressed="${l === S.lang}">${l.toUpperCase()}</button>`).join("");
-  const si = stepIndex();
+  const si = stepIndex(), done = sortedCount() === CARDS.length;
   document.getElementById("steps").innerHTML = T.nav.map((n, i) =>
-    `<li class="${i === si ? "on" : i < si ? "done" : ""}"${i === si ? ' aria-current="step"' : ""}>${esc(n)}</li>`).join("");
+    `<li class="${i === si ? "on" : ""}"><button type="button" data-act="nav" data-v="${STEPS[i]}"${i > 0 && !done ? " disabled" : ""}${i === si ? ' aria-current="step"' : ""}>${esc(n)}</button></li>`).join("");
   document.getElementById("foot").textContent = T.attribution;
   document.getElementById("prompt-btn").textContent = T.promptBtn;
 }
@@ -550,7 +544,7 @@ function confirmBox() {
 function vSort() {
   const T = t(), k = S.order[S.idx], c = BY_KEY[k];
   const counts = PILES.map(p => inPile(p).length);
-  const btns = PILES.map((p, i) => `<button class="pile-btn" type="button" data-act="put" data-v="${p}" ${pileVar(p)}>
+  const btns = PILES.map((p, i) => `<button class="pile-btn" type="button" data-act="put" data-v="${p}" aria-pressed="${S.piles[k] === p}" ${pileVar(p)}>
       <span class="lvl" aria-hidden="true">${p === UNSURE ? "<b>?</b>" : [1, 2, 3].map(n => `<i class="${n <= LEVEL[p] ? "f" : ""}"></i>`).join("")}</span>
       <span class="t">${esc(T.piles[p])}</span>
       <span class="k"><kbd>${i + 1}</kbd></span>
@@ -565,6 +559,7 @@ function vSort() {
     <div class="row" style="justify-content:space-between">
       <button class="btn quiet" type="button" data-act="undo" ${S.hist.length ? "" : "disabled"}>${esc(T.back)}</button>
       <span class="small">${esc(T.sortHint)}</span>
+      ${sortedCount() === CARDS.length ? `<button class="btn" type="button" data-act="go" data-v="review">${esc(T.toReview)}</button>` : ""}
     </div>
   </div>`;
 }
@@ -585,29 +580,11 @@ function vReview() {
     <div><h2>${esc(T.reviewTitle)}</h2><p class="small" style="font-size:15px;max-width:62ch">${esc(T.reviewText)}</p></div>
     <div class="piles">${piles}</div>
     <div class="sticky-foot">${topStatus()}
-      <button class="btn primary" type="button" data-act="to-rank">${esc(T.toRank)}</button></div>
-  </div>`;
-}
-function vRank() {
-  const T = t(), top = rankedTop();
-  return `<div class="stack" style="gap:18px">
-    <div><h2>${esc(T.rankTitle)}</h2><p class="small" style="font-size:15px">${esc(T.rankText)}</p></div>
-    <ol class="rank">${top.map((k, i) => `<li>
-      <span class="num">${i + 1}</span>
-      <span class="txt"><b>${esc(nm(k))}</b><span>${esc(df(k))}</span></span>
-      <span class="arrows">
-        <button type="button" data-act="mv-top" data-v="${i}" aria-label="${esc(T.toTop)}: ${esc(nm(k))}" title="${esc(T.toTop)}" ${i === 0 ? "disabled" : ""}>⤒</button>
-        <button type="button" data-act="mv" data-v="${i}" data-d="-1" aria-label="${esc(T.up)}: ${esc(nm(k))}" ${i === 0 ? "disabled" : ""}>↑</button>
-        <button type="button" data-act="mv" data-v="${i}" data-d="1" aria-label="${esc(T.down)}: ${esc(nm(k))}" ${i === top.length - 1 ? "disabled" : ""}>↓</button>
-      </span></li>`).join("")}</ol>
-    <div class="row" style="justify-content:space-between">
-      <button class="btn quiet" type="button" data-act="go" data-v="review">${esc(T.backToReview)}</button>
-      <button class="btn primary" type="button" data-act="go" data-v="result">${esc(T.toResult)}</button>
-    </div>
+      <button class="btn primary" type="button" data-act="go" data-v="result">${esc(T.toResult)}</button></div>
   </div>`;
 }
 function vResult() {
-  const T = t(), top = rankedTop(), { poles } = poleScores();
+  const T = t(), top = inPile(TOP), { poles } = poleScores();
   const dist = PILES.map(p => [p, inPile(p).length]);
   const MAXI = 1;
   const poleRow = p => {
@@ -632,8 +609,8 @@ function vResult() {
       <p class="note" style="margin-top:12px">${esc(T.privacy)}</p>
     </section>
     <div class="intro-grid">
-      <section class="panel"><h3>${esc(T.topTitle)}</h3>
-        <ol class="toplist">${top.map((k, i) => `<li><span class="num">${i + 1}</span><span><b>${esc(nm(k))}</b><br><span>${esc(df(k))}</span></span></li>`).join("")}</ol>
+      <section class="panel"><h3>${esc(T.piles[TOP])} · ${top.length}</h3>
+        <ul class="toplist plain">${top.length ? top.map(k => `<li><span><b>${esc(nm(k))}</b><br><span>${esc(df(k))}</span></span></li>`).join("") : `<li><span class="empty">${esc(T.emptyPile)}</span></li>`}</ul>
       </section>
       <div class="stack" style="gap:20px">
         <section class="panel"><h3>${esc(T.distTitle)}</h3>
@@ -681,37 +658,33 @@ function renderSheet() {
 }
 function render() {
   renderChrome();
-  app.innerHTML = { intro: vIntro, sort: vSort, review: vReview, rank: vRank, result: vResult }[S.step]();
+  app.innerHTML = { intro: vIntro, sort: vSort, review: vReview, result: vResult }[S.step]();
   renderSheet();
   save();
 }
 
 /* ---------- actions ---------- */
-function syncTop() {
-  const inTop = new Set(inPile(TOP));
-  S.top = S.top.filter(k => inTop.has(k));
-  for (const k of S.order) if (inTop.has(k) && !S.top.includes(k)) S.top.push(k);
-}
 function put(p) {
   const k = S.order[S.idx];
-  S.piles[k] = p; S.hist.push(k); S.idx += 1;
+  S.hist.push([k, S.piles[k]]); S.piles[k] = p; S.idx += 1;
   if (S.idx >= S.order.length) { S.step = "review"; window.scrollTo(0, 0); }
   render();
 }
 function undo() {
-  const k = S.hist.pop();
-  if (!k) return;
-  delete S.piles[k]; S.idx = S.order.indexOf(k);
+  const h = S.hist.pop();
+  if (h === undefined) return;
+  const [k, prev] = Array.isArray(h) ? h : [h, undefined];
+  if (prev === undefined) delete S.piles[k]; else S.piles[k] = prev;
+  S.idx = S.order.indexOf(k);
   render();
 }
 function go(step) {
-  if (step === "rank" || step === "result") syncTop();
   S.step = step; toast = { text: "", bad: false }; confirmRestart = false;
   render(); window.scrollTo(0, 0);
 }
 function resumeStep() {
   if (sortedCount() < CARDS.length) { S.idx = S.order.findIndex(k => S.piles[k] === undefined); return "sort"; }
-  return S.top.length ? "result" : "review";
+  return "review";
 }
 async function copy(mode) {
   copyMode = mode;
@@ -750,23 +723,11 @@ document.addEventListener("click", e => {
     case "close-sheet": sheetKey = null; promptSheet = false; sheetToast = { text: "", bad: false }; renderSheet(); break;
     case "show-prompt": sheetKey = null; promptSheet = true; renderSheet(); break;
     case "copy-prompt-sheet": copyPromptSheet(); break;
-    case "move": S.piles[sheetKey] = Number(v); sheetKey = null; syncTop(); render(); break;
-    case "to-rank": go(inPile(TOP).length ? "rank" : "result"); break;
+    case "move": S.piles[sheetKey] = Number(v); sheetKey = null; render(); break;
+    case "nav":
+      if (v === "sort" && S.idx >= S.order.length) { S.idx = 0; S.hist = []; }
+      go(v); break;
     case "go": go(v); break;
-    case "mv": {
-      const top = rankedTop(), i = Number(v), j = i + Number(el.dataset.d);
-      if (j < 0 || j >= top.length) break;
-      [top[i], top[j]] = [top[j], top[i]]; S.top = top; render();
-      app.querySelectorAll(`[data-act="mv"][data-v="${j}"]`)[Number(el.dataset.d) < 0 ? 0 : 1]?.focus();
-      break;
-    }
-    case "mv-top": {
-      const top = rankedTop(), i = Number(v);
-      if (i <= 0) break;
-      top.unshift(top.splice(i, 1)[0]); S.top = top; render();
-      app.querySelector('[data-act="mv"][data-v="0"]')?.focus();
-      break;
-    }
     case "copy": copy(v); break;
   }
 });
@@ -785,7 +746,7 @@ document.addEventListener("drop", e => {
   const p = e.target.closest(".pile"); if (!p) return;
   e.preventDefault();
   const k = e.dataTransfer.getData("text/plain");
-  if (BY_KEY[k]) { S.piles[k] = Number(p.dataset.pile); syncTop(); render(); }
+  if (BY_KEY[k]) { S.piles[k] = Number(p.dataset.pile); render(); }
 });
 
 render();

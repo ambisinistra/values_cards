@@ -4,9 +4,9 @@ Based on the provided distribution of values across 4 decks, compile a professio
 
 ## Source Data
 
-The respondent distributed 100 values (Personal Values Card Sort, W. R. Miller et al., 2011) into 4 decks by importance: "Very important", "Important", "Unsure", "Not important". The cards in the "Very important" deck are also ranked: 1 is the most important. Each value has a short definition, and the respondent sorted by that definition.
+The respondent distributed 100 values (Personal Values Card Sort, W. R. Miller et al., 2011) into 4 decks by importance: "Very important", "Important", "Unsure", "Not important". Each value has a name and a short clarifying definition; the respondent sorted mainly by the name.
 
-The full sorting data is at the end of this message: the ranked top values, all four decks with definitions, and index scores for the four poles of the Schwartz model, calculated by software (the method is described in the data).
+The full sorting data is at the end of this message: all four decks with definitions, and index scores for the four poles of the Schwartz model, calculated by software (the method is described in the data).
 
 ## Analysis Requirements
 

@@ -4,9 +4,9 @@ Az értékek 4 kupac szerinti megoszlása alapján készíts szakmai pszichológ
 
 ## Kiinduló adatok
 
-A válaszadó 100 értéket (Personal Values Card Sort, W. R. Miller és mtsai, 2011) osztott szét 4 kupacba fontosság szerint: „Nagyon fontos”, „Fontos”, „Bizonytalan”, „Nem fontos”. A „Nagyon fontos” kupac kártyái rangsorolva is vannak: az 1-es a legfontosabb. Minden értékhez rövid meghatározás tartozik, és a válaszadó ez alapján döntött.
+A válaszadó 100 értéket (Personal Values Card Sort, W. R. Miller és mtsai, 2011) osztott szét 4 kupacba fontosság szerint: „Nagyon fontos”, „Fontos”, „Bizonytalan”, „Nem fontos”. Minden értéknek van neve és rövid, pontosító meghatározása; a válaszadó elsősorban a név alapján döntött.
 
-A válogatás teljes adatai az üzenet végén találhatók: a rangsorolt legfontosabb értékek, mind a négy kupac a meghatározásokkal, valamint a Schwartz-modell négy pólusának programmal számított indexei (a módszer leírása az adatok között szerepel).
+A válogatás teljes adatai az üzenet végén találhatók: mind a négy kupac a meghatározásokkal, valamint a Schwartz-modell négy pólusának programmal számított indexei (a módszer leírása az adatok között szerepel).
 
 ## Az elemzés követelményei
 

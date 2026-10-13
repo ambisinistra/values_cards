@@ -58,9 +58,10 @@ button { font: inherit; color: inherit; }
 .brand { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 13px; margin-right: auto; background: none; border: 0; padding: 4px 0; cursor: pointer; }
 .brand span { color: var(--accent); }
 .steps { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; font-size: 12px; color: var(--muted); }
-.steps li { padding: 3px 8px; border-radius: 999px; }
-.steps li.on { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
-.steps li.done { color: var(--ink); }
+.steps button { border: 0; background: none; font: inherit; color: inherit; padding: 3px 8px; border-radius: 999px; cursor: pointer; }
+.steps button:hover:not(:disabled) { color: var(--ink); background: var(--surface-2); }
+.steps button:disabled { opacity: .45; cursor: default; }
+.steps li.on button { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
 main a, .sheet a { color: var(--accent); font-weight: 600; text-underline-offset: 3px; }
 .prompt-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
 .prompt-btn:hover { border-color: var(--muted); }
@@ -93,10 +94,11 @@ p { margin: 0; }
   padding: 28px 28px 30px; border-top: 4px solid var(--accent); min-height: 220px; display: flex; flex-direction: column; gap: 14px;
 }
 .card .no { position: absolute; top: 14px; right: 18px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
-.card .name { font-size: 14px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); padding-right: 48px; }
-.card .def { font-family: var(--serif); font-size: clamp(24px, 5vw, 32px); line-height: 1.25; text-wrap: balance; }
+.card .name { font-size: clamp(28px, 6.5vw, 42px); font-weight: 750; letter-spacing: .03em; line-height: 1.1; text-transform: uppercase; color: var(--ink); padding-right: 48px; overflow-wrap: anywhere; text-wrap: balance; }
+.card .def { font-family: var(--serif); font-size: clamp(17px, 3.4vw, 20px); line-height: 1.4; color: var(--muted); text-wrap: pretty; }
 .card.example { min-height: 0; max-width: 420px; }
-.card.example .def { font-size: 22px; }
+.card.example .name { font-size: 28px; }
+.card.example .def { font-size: 17px; }
 .card.enter { animation: enter .22s ease-out; }
 @keyframes enter { from { transform: translateY(6px); opacity: .4; } to { transform: none; opacity: 1; } }
 
@@ -118,6 +120,7 @@ ol.how li::before { content: counter(s); width: 24px; height: 24px; border-radiu
   background: var(--surface); border: 1px solid var(--line); min-height: 92px; transition: transform .08s, border-color .1s;
 }
 .pile-btn:hover { border-color: var(--pc); }
+.pile-btn[aria-pressed="true"] { border-color: var(--pc); box-shadow: 0 0 0 1px var(--pc) inset; }
 .pile-btn:active { transform: translateY(1px); }
 .pile-btn .lvl { display: flex; gap: 3px; align-items: center; min-height: 12px; }
 .pile-btn .lvl b { font-size: 14px; line-height: 1; color: var(--pc); }
@@ -154,8 +157,8 @@ ol.how li::before { content: counter(s); width: 24px; height: 24px; border-radiu
 @media (min-width: 640px) { .scrim { place-items: center; } }
 .sheet { width: min(520px, 100%); background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); padding: 22px; display: grid; gap: 14px; max-height: 90vh; overflow: auto; }
 .sheet.wide { width: min(760px, 100%); }
-.sheet .name { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
-.sheet .def { font-family: var(--serif); font-size: 22px; line-height: 1.3; }
+.sheet .name { font-size: 26px; font-weight: 750; letter-spacing: .03em; line-height: 1.15; text-transform: uppercase; overflow-wrap: anywhere; }
+.sheet .def { font-family: var(--serif); font-size: 17px; line-height: 1.4; color: var(--muted); }
 .move { display: grid; gap: 6px; }
 .move button { display: flex; align-items: center; gap: 10px; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
 .move button:hover { border-color: var(--pc); }
@@ -178,6 +181,7 @@ ol.rank .txt span { font-size: 14px; color: var(--muted); }
 .toplist { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
 .toplist li { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: baseline; }
 .toplist .num { font-family: var(--serif); color: var(--accent); font-size: 18px; text-align: right; font-variant-numeric: tabular-nums; }
+.toplist.plain li { grid-template-columns: 1fr; }
 .toplist b { font-size: 13px; letter-spacing: .08em; }
 .toplist span { color: var(--muted); font-size: 14px; }
 .dist { display: flex; height: 14px; border-radius: 999px; overflow: hidden; gap: 2px; margin-bottom: 10px; }
@@ -207,7 +211,10 @@ footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px
 
 @media (max-width: 640px) {
   .intro-grid { grid-template-columns: 1fr; }
-  .steps { display: none; }
+  .bar { position: static; }
+  .steps { order: 5; width: 100%; }
+  .steps li { flex: 1; }
+  .steps button { width: 100%; padding: 6px 4px; }
   .scale { grid-template-columns: 1fr; }
   .scale .pile-btn { min-height: 0; grid-template-columns: auto 1fr auto; align-items: center; padding: 12px 14px; }
   .scale { display: flex; flex-direction: column; }
@@ -215,7 +222,7 @@ footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px
   .copy-grid { grid-template-columns: 1fr; }
   .pole { grid-template-columns: 1fr 3.5rem; }
   .pole .b { grid-column: 1 / -1; grid-row: 2; }
-  .card { padding: 24px 20px 24px; min-height: 200px; }
+  .card { padding: 24px 20px 24px; min-height: 180px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
@@ -234,7 +241,7 @@ footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px
 <script>
 "use strict";
 const CARDS = [{"id":1,"key":"ACCEPTANCE","ho":null,"conf":"low","en":["ACCEPTANCE","to be accepted as I am"],"ru":["ПРИНЯТИЕ","чтобы окружающие принимали меня без попыток переделать"],"hu":["ELFOGADÁS","hogy olyannak fogadjanak el, amilyen vagyok"]},{"id":2,"key":"ACCURACY","ho":"OPENNESS","conf":"low","en":["ACCURACY","to be correct in my opinions and beliefs"],"ru":["ТОЧНОСТЬ СУЖДЕНИЙ","придерживаться верных мнений и убеждений"],"hu":["PONTOSSÁG","hogy helyesek legyenek a véleményeim és a meggyőződéseim"]},{"id":3,"key":"ACHIEVEMENT","ho":"SELF_ENHANCEMENT","conf":"high","en":["ACHIEVEMENT","to have important accomplishments"],"ru":["ДОСТИЖЕНИЯ","добиваться значимых результатов"],"hu":["TELJESÍTMÉNY","jelentős eredményeket elérni"]},{"id":4,"key":"ADVENTURE","ho":"OPENNESS","conf":"high","en":["ADVENTURE","to have new and exciting experiences"],"ru":["ПРИКЛЮЧЕНИЯ","получать новые и захватывающие впечатления"],"hu":["KALAND","új és izgalmas élményeket átélni"]},{"id":5,"key":"ART","ho":null,"conf":"low","en":["ART","to appreciate or express myself in art"],"ru":["ИСКУССТВО","ценить искусство или выражать себя через него"],"hu":["MŰVÉSZET","értékelni a művészetet, vagy kifejezni magam általa"]},{"id":6,"key":"ATTRACTIVENESS","ho":"SELF_ENHANCEMENT/CONSERVATION","conf":"low","en":["ATTRACTIVENESS","to be physically attractive"],"ru":["ПРИВЛЕКАТЕЛЬНОСТЬ","иметь привлекательную внешность"],"hu":["VONZERŐ","fizikailag vonzónak lenni"]},{"id":7,"key":"AUTHORITY","ho":"SELF_ENHANCEMENT","conf":"high","en":["AUTHORITY","to be in charge of others"],"ru":["РУКОВОДСТВО","стоять во главе других людей и отвечать за них"],"hu":["IRÁNYÍTÓ SZEREP","mások élén állni"]},{"id":8,"key":"AUTONOMY","ho":"OPENNESS","conf":"high","en":["AUTONOMY","to be self-determined and independent"],"ru":["АВТОНОМИЯ","самостоятельно определять свою жизнь"],"hu":["AUTONÓMIA","önállóan és függetlenül alakítani az életemet"]},{"id":9,"key":"BEAUTY","ho":"SELF_TRANSCENDENCE","conf":"medium","en":["BEAUTY","to appreciate beauty around me"],"ru":["КРАСОТА","замечать и ценить красоту вокруг"],"hu":["SZÉPSÉG","értékelni a körülöttem lévő szépséget"]},{"id":10,"key":"BELONGING","ho":"CONSERVATION","conf":"medium","en":["BELONGING","to have a sense of belonging, being part of"],"ru":["ПРИНАДЛЕЖНОСТЬ","чувствовать себя частью общности"],"hu":["ÖSSZETARTOZÁS","érezni, hogy valahová tartozom, valaminek a része vagyok"]},{"id":11,"key":"CARING","ho":"SELF_TRANSCENDENCE","conf":"high","en":["CARING","to take care of others"],"ru":["ЗАБОТА","заботиться о других"],"hu":["GONDOSKODÁS","gondoskodni másokról"]},{"id":12,"key":"CHALLENGE","ho":"OPENNESS","conf":"medium","en":["CHALLENGE","to take on difficult tasks and problems"],"ru":["ВЫЗОВ","браться за трудные задачи и проблемы"],"hu":["KIHÍVÁS","nehéz feladatokat és problémákat vállalni"]},{"id":13,"key":"COMFORT","ho":"OPENNESS/SELF_ENHANCEMENT","conf":"medium","en":["COMFORT","to have a pleasant and comfortable life"],"ru":["КОМФОРТ","жить приятно и удобно"],"hu":["KÉNYELEM","kellemes és kényelmes életet élni"]},{"id":14,"key":"COMMITMENT","ho":"SELF_TRANSCENDENCE","conf":"medium","en":["COMMITMENT","to make enduring, meaningful commitments"],"ru":["ПРИВЕРЖЕННОСТЬ","брать на себя долгосрочные и значимые обязательства"],"hu":["ELKÖTELEZŐDÉS","tartós, jelentőségteljes elköteleződéseket vállalni"]},{"id":15,"key":"COMPASSION","ho":"SELF_TRANSCENDENCE","conf":"medium","en":["COMPASSION","to feel and act on concern for others"],"ru":["СОСТРАДАНИЕ","сочувствовать другим и действовать исходя из этого"],"hu":["EGYÜTTÉRZÉS","együttérezni másokkal, és ennek megfelelően cselekedni"]},{"id":16,"key":"COMPLEXITY","ho":"OPENNESS","conf":"medium","en":["COMPLEXITY","to embrace the intricacies of life"],"ru":["СЛОЖНОСТЬ","принимать запутанность и многогранность жизни"],"hu":["ÖSSZETETTSÉG","elfogadni az élet bonyolultságát és sokrétűségét"]},{"id":17,"key":"COMPROMISE","ho":"CONSERVATION","conf":"medium","en":["COMPROMISE","to be willing to give and take in reaching agreements"],"ru":["КОМПРОМИСС","уступать и договариваться, чтобы прийти к согласию"],"hu":["KOMPROMISSZUM","kész lenni engedni és kérni a megegyezés érdekében"]},{"id":18,"key":"CONTRIBUTION","ho":"SELF_TRANSCENDENCE","conf":"medium","en":["CONTRIBUTION","to make a lasting contribution in the world"],"ru":["ВКЛАД","внести в мир долговременный вклад"],"hu":["HOZZÁJÁRULÁS","maradandóan hozzájárulni a világhoz"]},{"id":19,"key":"COOPERATION","ho":"SELF_TRANSCENDENCE","conf":"low","en":["COOPERATION","to work collaboratively with others"],"ru":["СОТРУДНИЧЕСТВО","работать сообща с другими"],"hu":["EGYÜTTMŰKÖDÉS","másokkal együttműködve dolgozni"]},{"id":20,"key":"COURAGE","ho":null,"conf":"low","en":["COURAGE","to be brave and strong in the face of adversity"],"ru":["СМЕЛОСТЬ","сохранять мужество и стойкость перед лицом трудностей"],"hu":["BÁTORSÁG","bátornak és erősnek lenni a nehézségekkel szemben"]},{"id":21,"key":"COURTESY","ho":"CONSERVATION","conf":"high","en":["COURTESY","to be considerate and polite toward others"],"ru":["ВЕЖЛИВОСТЬ","проявлять к другим внимание и учтивость"],"hu":["UDVARIASSÁG","figyelmesnek és udvariasnak lenni másokkal"]},{"id":22,"key":"CREATIVITY","ho":"OPENNESS","conf":"high","en":["CREATIVITY","to create new things or ideas"],"ru":["ТВОРЧЕСТВО","создавать новые вещи или идеи"],"hu":["KREATIVITÁS","új dolgokat vagy ötleteket alkotni"]},{"id":23,"key":"CURIOSITY","ho":"OPENNESS","conf":"high","en":["CURIOSITY","to seek out, experience, and learn new things"],"ru":["ЛЮБОЗНАТЕЛЬНОСТЬ","искать, пробовать и узнавать новое"],"hu":["KÍVÁNCSISÁG","új dolgokat keresni, kipróbálni és megismerni"]},{"id":24,"key":"DEPENDABILITY","ho":"SELF_TRANSCENDENCE","conf":"high","en":["DEPENDABILITY","to be reliable and trustworthy"],"ru":["НАДЁЖНОСТЬ","заслуживать доверия, чтобы на меня можно было положиться"],"hu":["MEGBÍZHATÓSÁG","megbízhatónak lenni, akire lehet számítani"]},{"id":25,"key":"DILIGENCE","ho":"SELF_ENHANCEMENT","conf":"medium","en":["DILIGENCE","to be thorough and conscientious in whatever I do"],"ru":["ДОБРОСОВЕСТНОСТЬ","делать любое дело основательно и тщательно"],"hu":["ALAPOSSÁG","bármit csinálok, alaposan és lelkiismeretesen csinálni"]},{"id":26,"key":"DUTY","ho":"CONSERVATION","conf":"medium","en":["DUTY","to carry out my duties and obligations"],"ru":["ДОЛГ","выполнять свои обязанности и обязательства"],"hu":["KÖTELESSÉG","teljesíteni a kötelességeimet és a vállalásaimat"]},{"id":27,"key":"ECOLOGY","ho":"SELF_TRANSCENDENCE","conf":"high","en":["ECOLOGY","to live in harmony with the environment"],"ru":["ЭКОЛОГИЯ","жить в гармонии с природой"],"hu":["ÖKOLÓGIA","harmóniában élni a természettel"]},{"id":28,"key":"EXCITEMENT","ho":"OPENNESS","conf":"high","en":["EXCITEMENT","to have a life full of thrills and stimulation"],"ru":["ОСТРЫЕ ОЩУЩЕНИЯ","жить жизнью, полной ярких переживаний и встрясок"],"hu":["IZGALOM","izgalmakkal és erős élményekkel teli életet élni"]},{"id":29,"key":"FAITHFULNESS","ho":"SELF_TRANSCENDENCE","conf":"high","en":["FAITHFULNESS","to be loyal and true in relationships"],"ru":["ВЕРНОСТЬ","хранить верность и преданность в отношениях"],"hu":["HŰSÉG","hűségesnek és lojálisnak lenni a kapcsolataimban"]},{"id":30,"key":"FAME","ho":"SELF_ENHANCEMENT/CONSERVATION","conf":"medium","en":["FAME","to be known and recognized"],"ru":["СЛАВА","иметь известность и признание"],"hu":["HÍRNÉV","ismertnek és elismertnek lenni"]},{"id":31,"key":"FAMILY","ho":"CONSERVATION","conf":"medium","en":["FAMILY","to have a happy, loving family"],"ru":["СЕМЬЯ","иметь счастливую, любящую семью"],"hu":["CSALÁD","boldog, szerető családban élni"]},{"id":32,"key":"FITNESS","ho":null,"conf":"low","en":["FITNESS","to be physically fit and strong"],"ru":["ФИЗИЧЕСКАЯ ФОРМА","поддерживать силу и хорошую физическую форму"],"hu":["ERŐNLÉT","fizikailag erősnek és jó formában lenni"]},{"id":33,"key":"FLEXIBILITY","ho":null,"conf":"low","en":["FLEXIBILITY","to adjust to new circumstances easily"],"ru":["ГИБКОСТЬ","легко приспосабливаться к новым обстоятельствам"],"hu":["RUGALMASSÁG","könnyen alkalmazkodni az új helyzetekhez"]},{"id":34,"key":"FORGIVENESS","ho":"SELF_TRANSCENDENCE","conf":"high","en":["FORGIVENESS","to be forgiving of others"],"ru":["ПРОЩЕНИЕ","уметь прощать других"],"hu":["MEGBOCSÁTÁS","megbocsátani másoknak"]},{"id":35,"key":"FREEDOM","ho":"OPENNESS","conf":"high","en":["FREEDOM","to be free from undue restrictions and limitations"],"ru":["СВОБОДА","жить без лишних ограничений и запретов"],"hu":["SZABADSÁG","mentesnek lenni a fölösleges korlátozásoktól"]},{"id":36,"key":"FRIENDSHIP","ho":"SELF_TRANSCENDENCE","conf":"high","en":["FRIENDSHIP","to have close, supportive friends"],"ru":["ДРУЖБА","иметь близких друзей, на которых можно опереться"],"hu":["BARÁTSÁG","hogy legyenek közeli barátaim, akikre támaszkodhatok"]},{"id":37,"key":"FUN","ho":"OPENNESS/SELF_ENHANCEMENT","conf":"high","en":["FUN","to play and have fun"],"ru":["ВЕСЕЛЬЕ","играть и веселиться"],"hu":["SZÓRAKOZÁS","játszani és jól szórakozni"]},{"id":38,"key":"GENEROSITY","ho":"SELF_TRANSCENDENCE","conf":"medium","en":["GENEROSITY","to give what I have to others"],"ru":["ЩЕДРОСТЬ","делиться с другими тем, что у меня есть"],"hu":["NAGYLELKŰSÉG","megosztani másokkal azt, amim van"]},{"id":39,"key":"GENUINENESS","ho":"OPENNESS","conf":"low","en":["GENUINENESS","to act in a manner that is true to who I am"],"ru":["ПОДЛИННОСТЬ","поступать в согласии с тем, кто я есть на самом деле"],"hu":["HITELESSÉG","önmagamhoz hűen cselekedni"]},{"id":40,"key":"GODS_WILL","ho":"CONSERVATION","conf":"high","en":["GOD'S WILL","to seek and obey the will of God"],"ru":["БОЖЬЯ ВОЛЯ","искать волю Бога и следовать ей"],"hu":["ISTEN AKARATA","keresni Isten akaratát, és követni azt"]},{"id":41,"key":"GRATITUDE","ho":null,"conf":"low","en":["GRATITUDE","to be thankful and appreciative"],"ru":["БЛАГОДАРНОСТЬ","испытывать и выражать признательность"],"hu":["HÁLA","hálásnak lenni, és kifejezni a megbecsülésemet"]},{"id":42,"key":"GROWTH","ho":"OPENNESS","conf":"low","en":["GROWTH","to keep changing and growing"],"ru":["РОСТ","постоянно меняться и развиваться"],"hu":["FEJLŐDÉS","folyamatosan változni és fejlődni"]},{"id":43,"key":"HEALTH","ho":"CONSERVATION","conf":"high","en":["HEALTH","to be physically well and healthy"],"ru":["ЗДОРОВЬЕ","сохранять здоровье и хорошее самочувствие"],"hu":["EGÉSZSÉG","testileg jól lenni és egészségesnek maradni"]},{"id":44,"key":"HONESTY","ho":"SELF_TRANSCENDENCE","conf":"high","en":["HONESTY","to be honest and truthful"],"ru":["ЧЕСТНОСТЬ","говорить правду и не обманывать"],"hu":["ŐSZINTESÉG","őszintének és igazmondónak lenni"]},{"id":45,"key":"HOPE","ho":null,"conf":"low","en":["HOPE","to maintain a positive and optimistic outlook"],"ru":["НАДЕЖДА","сохранять позитивный и оптимистичный взгляд"],"hu":["REMÉNY","megőrizni a pozitív, derűlátó szemléletet"]},{"id":46,"key":"HUMILITY","ho":"CONSERVATION/SELF_TRANSCENDENCE","conf":"high","en":["HUMILITY","to be modest and unassuming"],"ru":["СКРОМНОСТЬ","держаться скромно и без притязаний"],"hu":["SZERÉNYSÉG","szerénynek lenni, nem tolakodni az előtérbe"]},{"id":47,"key":"HUMOR","ho":null,"conf":"low","en":["HUMOR","to see the humorous side of myself and the world"],"ru":["ЮМОР","видеть смешное в себе и в мире"],"hu":["HUMOR","meglátni a humoros oldalát önmagamnak és a világnak"]},{"id":48,"key":"IMAGINATION","ho":"OPENNESS","conf":"medium","en":["IMAGINATION","to have dreams and see possibilities"],"ru":["ВООБРАЖЕНИЕ","мечтать и видеть возможности"],"hu":["KÉPZELET","álmodni és meglátni a lehetőségeket"]},{"id":49,"key":"INDEPENDENCE","ho":"OPENNESS","conf":"high","en":["INDEPENDENCE","to be free from depending on others"],"ru":["НЕЗАВИСИМОСТЬ","не зависеть от других"],"hu":["FÜGGETLENSÉG","nem függeni másoktól"]},{"id":50,"key":"INDUSTRY","ho":"SELF_ENHANCEMENT","conf":"medium","en":["INDUSTRY","to work hard and well at my life tasks"],"ru":["ТРУДОЛЮБИЕ","усердно и хорошо выполнять свои жизненные задачи"],"hu":["SZORGALOM","keményen és jól dolgozni az életfeladataimon"]},{"id":51,"key":"INNER_PEACE","ho":null,"conf":"low","en":["INNER PEACE","to experience personal peace"],"ru":["ВНУТРЕННИЙ ПОКОЙ","ощущать душевный покой"],"hu":["BELSŐ BÉKE","megélni a lelki békét"]},{"id":52,"key":"INTEGRITY","ho":null,"conf":"low","en":["INTEGRITY","to live my daily life in a way that is consistent with my values"],"ru":["ЦЕЛОСТНОСТЬ","жить каждый день в согласии со своими ценностями"],"hu":["INTEGRITÁS","a mindennapjaimat az értékeimmel összhangban élni"]},{"id":53,"key":"INTELLIGENCE","ho":"SELF_ENHANCEMENT","conf":"medium","en":["INTELLIGENCE","to keep my mind sharp and active"],"ru":["ИНТЕЛЛЕКТ","поддерживать ум острым и активным"],"hu":["SZELLEMI FRISSESSÉG","élesen és aktívan tartani az elmémet"]},{"id":54,"key":"INTIMACY","ho":null,"conf":"low","en":["INTIMACY","to share my innermost experiences with others"],"ru":["БЛИЗОСТЬ","делиться с другими самым сокровенным"],"hu":["INTIMITÁS","megosztani másokkal a legbensőbb élményeimet"]},{"id":55,"key":"JUSTICE","ho":"SELF_TRANSCENDENCE","conf":"high","en":["JUSTICE","to promote fair and equal treatment for all"],"ru":["СПРАВЕДЛИВОСТЬ","добиваться честного и равного отношения ко всем"],"hu":["IGAZSÁGOSSÁG","kiállni mindenki tisztességes és egyenlő kezeléséért"]},{"id":56,"key":"KNOWLEDGE","ho":"OPENNESS","conf":"medium","en":["KNOWLEDGE","to learn and contribute valuable knowledge"],"ru":["ЗНАНИЯ","учиться и приумножать ценные знания"],"hu":["TUDÁS","tanulni, és értékes tudással hozzájárulni"]},{"id":57,"key":"LEADERSHIP","ho":"SELF_ENHANCEMENT","conf":"medium","en":["LEADERSHIP","to inspire and guide others"],"ru":["ЛИДЕРСТВО","вдохновлять и вести за собой других"],"hu":["VEZETÉS","inspirálni és irányítani másokat"]},{"id":58,"key":"LEISURE","ho":"OPENNESS/SELF_ENHANCEMENT","conf":"high","en":["LEISURE","to take time to relax and enjoy"],"ru":["ОТДЫХ","находить время, чтобы расслабиться и насладиться жизнью"],"hu":["PIHENÉS","időt szakítani a kikapcsolódásra és az élvezetekre"]},{"id":59,"key":"LOVED","ho":null,"conf":"low","en":["LOVED","to be loved by those close to me"],"ru":["ПОЛУЧАТЬ ЛЮБОВЬ","чтобы меня любили близкие люди"],"hu":["SZERETVE LENNI","hogy szeressenek azok, akik közel állnak hozzám"]},{"id":60,"key":"LOVING","ho":"SELF_TRANSCENDENCE","conf":"medium","en":["LOVING","to give love to others"],"ru":["ДАРИТЬ ЛЮБОВЬ","отдавать любовь другим"],"hu":["SZERETNI","szeretetet adni másoknak"]},{"id":61,"key":"MASTERY","ho":"SELF_ENHANCEMENT","conf":"high","en":["MASTERY","to be competent in my everyday activities"],"ru":["МАСТЕРСТВО","умело справляться со своими повседневными делами"],"hu":["HOZZÁÉRTÉS","rátermettnek lenni a mindennapi tevékenységeimben"]},{"id":62,"key":"MINDFULNESS","ho":null,"conf":"low","en":["MINDFULNESS","to live conscious and mindful of the present moment"],"ru":["ОСОЗНАННОСТЬ","жить, осознавая настоящий момент"],"hu":["TUDATOS JELENLÉT","tudatosan, a jelen pillanatban élni"]},{"id":63,"key":"MODERATION","ho":"CONSERVATION","conf":"high","en":["MODERATION","to avoid excesses and find a middle ground"],"ru":["УМЕРЕННОСТЬ","избегать крайностей и находить золотую середину"],"hu":["MÉRTÉKLETESSÉG","kerülni a végleteket, és megtalálni az arany középutat"]},{"id":64,"key":"MONOGAMY","ho":null,"conf":"low","en":["MONOGAMY","to have one close, loving relationship"],"ru":["МОНОГАМИЯ","быть в близких любящих отношениях с одним партнёром"],"hu":["MONOGÁMIA","egyetlen közeli, szeretetteljes kapcsolatban élni"]},{"id":65,"key":"MUSIC","ho":null,"conf":"low","en":["MUSIC","to enjoy or express myself in music"],"ru":["МУЗЫКА","наслаждаться музыкой или выражать себя через неё"],"hu":["ZENE","élvezni a zenét, vagy kifejezni magam általa"]},{"id":66,"key":"NON_CONFORMITY","ho":"OPENNESS","conf":"medium","en":["NON-CONFORMITY","to question and challenge authority and norms"],"ru":["НОНКОНФОРМИЗМ","подвергать сомнению авторитеты и нормы"],"hu":["NONKONFORMIZMUS","megkérdőjelezni és kihívni a tekintélyt és a normákat"]},{"id":67,"key":"NOVELTY","ho":"OPENNESS","conf":"high","en":["NOVELTY","to have a life full of change and variety"],"ru":["НОВИЗНА","жить жизнью, полной перемен и разнообразия"],"hu":["ÚJDONSÁG","változásokkal és változatossággal teli életet élni"]},{"id":68,"key":"NURTURANCE","ho":"SELF_TRANSCENDENCE","conf":"high","en":["NURTURANCE","to encourage and support others"],"ru":["ПОДДЕРЖКА","ободрять и поддерживать других"],"hu":["TÁMOGATÁS","bátorítani és támogatni másokat"]},{"id":69,"key":"OPENNESS","ho":"OPENNESS","conf":"medium","en":["OPENNESS","to be open to new experiences, ideas, and options"],"ru":["ОТКРЫТОСТЬ","открываться новому опыту, идеям и возможностям"],"hu":["NYITOTTSÁG","nyitottnak lenni az új élményekre, ötletekre és lehetőségekre"]},{"id":70,"key":"ORDER","ho":"CONSERVATION","conf":"medium","en":["ORDER","to have a life that is well-ordered and organized"],"ru":["ПОРЯДОК","жить упорядоченно и организованно"],"hu":["REND","rendezett és szervezett életet élni"]},{"id":71,"key":"PASSION","ho":null,"conf":"low","en":["PASSION","to have deep feelings about ideas, activities, or people"],"ru":["СТРАСТЬ","испытывать глубокие чувства к идеям, делам или людям"],"hu":["SZENVEDÉLY","mély érzéseket táplálni eszmék, tevékenységek vagy emberek iránt"]},{"id":72,"key":"PATRIOTISM","ho":"CONSERVATION","conf":"medium","en":["PATRIOTISM","to love, serve, and protect my country"],"ru":["ПАТРИОТИЗМ","любить свою страну, служить ей и защищать её"],"hu":["HAZASZERETET","szeretni, szolgálni és védeni a hazámat"]},{"id":73,"key":"PLEASURE","ho":"OPENNESS/SELF_ENHANCEMENT","conf":"high","en":["PLEASURE","to feel good"],"ru":["УДОВОЛЬСТВИЕ","испытывать приятные ощущения"],"hu":["ÉLVEZET","jó érzéseket átélni"]},{"id":74,"key":"POPULARITY","ho":"SELF_ENHANCEMENT/CONSERVATION","conf":"medium","en":["POPULARITY","to be well-liked by many people"],"ru":["ПОПУЛЯРНОСТЬ","нравиться многим людям"],"hu":["NÉPSZERŰSÉG","hogy sokan kedveljenek"]},{"id":75,"key":"POWER","ho":"SELF_ENHANCEMENT","conf":"high","en":["POWER","to have control over others"],"ru":["ВЛАСТЬ","контролировать других людей"],"hu":["HATALOM","irányítást gyakorolni mások felett"]},{"id":76,"key":"PRACTICALITY","ho":null,"conf":"low","en":["PRACTICALITY","to focus on what is practical, prudent, and sensible"],"ru":["ПРАКТИЧНОСТЬ","сосредотачиваться на практичном, разумном и осмотрительном"],"hu":["GYAKORLATIASSÁG","arra összpontosítani, ami gyakorlatias, körültekintő és észszerű"]},{"id":77,"key":"PROTECT","ho":"CONSERVATION","conf":"medium","en":["PROTECT","to protect and keep safe those I love"],"ru":["ЗАЩИТА","защищать и оберегать тех, кого люблю"],"hu":["VÉDELMEZÉS","megvédeni és biztonságban tudni azokat, akiket szeretek"]},{"id":78,"key":"PROVIDE","ho":"CONSERVATION","conf":"low","en":["PROVIDE","to provide for and take care of my family"],"ru":["ОБЕСПЕЧЕНИЕ СЕМЬИ","обеспечивать свою семью и заботиться о ней"],"hu":["A CSALÁD ELTARTÁSA","eltartani a családomat és gondoskodni róla"]},{"id":79,"key":"PURPOSE","ho":null,"conf":"low","en":["PURPOSE","to have meaning and direction in my life"],"ru":["СМЫСЛ","иметь в жизни смысл и направление"],"hu":["ÉLETCÉL","hogy az életemnek értelme és iránya legyen"]},{"id":80,"key":"RATIONALITY","ho":"OPENNESS","conf":"low","en":["RATIONALITY","to be guided by reason, logic, and evidence"],"ru":["РАЦИОНАЛЬНОСТЬ","руководствоваться разумом, логикой и фактами"],"hu":["RACIONALITÁS","az észszerűség, a logika és a tények alapján dönteni"]},{"id":81,"key":"REALISM","ho":null,"conf":"low","en":["REALISM","to see and act realistically and practically"],"ru":["РЕАЛИЗМ","смотреть на вещи реалистично и действовать практично"],"hu":["REALIZMUS","reálisan látni a dolgokat, és gyakorlatiasan cselekedni"]},{"id":82,"key":"RESPONSIBILITY","ho":"SELF_TRANSCENDENCE","conf":"high","en":["RESPONSIBILITY","to make and carry out responsible decisions"],"ru":["ОТВЕТСТВЕННОСТЬ","принимать ответственные решения и выполнять их"],"hu":["FELELŐSSÉG","felelős döntéseket hozni és végrehajtani"]},{"id":83,"key":"RISK","ho":"OPENNESS","conf":"high","en":["RISK","to take risks and chances"],"ru":["РИСК","рисковать и испытывать удачу"],"hu":["KOCKÁZAT","kockázatot vállalni, és élni a lehetőségekkel"]},{"id":84,"key":"ROMANCE","ho":null,"conf":"low","en":["ROMANCE","to have intense, exciting love in my life"],"ru":["РОМАНТИКА","переживать сильную, яркую любовь"],"hu":["ROMANTIKA","intenzív, izgalmas szerelmet megélni"]},{"id":85,"key":"SAFETY","ho":"CONSERVATION","conf":"high","en":["SAFETY","to be safe and secure"],"ru":["БЕЗОПАСНОСТЬ","жить в безопасности и защищённости"],"hu":["BIZTONSÁG","biztonságban és védettségben élni"]},{"id":86,"key":"SELF_ACCEPTANCE","ho":null,"conf":"low","en":["SELF-ACCEPTANCE","to accept myself as I am"],"ru":["САМОПРИНЯТИЕ","принимать себя целиком, со всеми особенностями"],"hu":["ÖNELFOGADÁS","elfogadni magam olyannak, amilyen vagyok"]},{"id":87,"key":"SELF_CONTROL","ho":"CONSERVATION","conf":"medium","en":["SELF-CONTROL","to be disciplined in my own actions"],"ru":["САМОКОНТРОЛЬ","дисциплинированно управлять своими поступками"],"hu":["ÖNFEGYELEM","fegyelmezetten irányítani a tetteimet"]},{"id":88,"key":"SELF_ESTEEM","ho":null,"conf":"low","en":["SELF-ESTEEM","to feel good about myself"],"ru":["САМОУВАЖЕНИЕ","хорошо относиться к себе"],"hu":["ÖNBECSÜLÉS","elégedettnek lenni önmagammal"]},{"id":89,"key":"SELF_KNOWLEDGE","ho":"OPENNESS","conf":"low","en":["SELF-KNOWLEDGE","to have a deep and honest understanding of myself"],"ru":["САМОПОЗНАНИЕ","глубоко и честно понимать себя"],"hu":["ÖNISMERET","mélyen és őszintén ismerni önmagam"]},{"id":90,"key":"SERVICE","ho":"SELF_TRANSCENDENCE","conf":"high","en":["SERVICE","to be helpful and of service to others"],"ru":["СЛУЖЕНИЕ","помогать другим и приносить им пользу"],"hu":["SZOLGÁLAT","segítőkésznek lenni, és mások szolgálatára állni"]},{"id":91,"key":"SEXUALITY","ho":"OPENNESS/SELF_ENHANCEMENT","conf":"medium","en":["SEXUALITY","to have an active and satisfying sex life"],"ru":["СЕКСУАЛЬНОСТЬ","вести активную и приносящую удовлетворение сексуальную жизнь"],"hu":["SZEXUALITÁS","aktív és kielégítő szexuális életet élni"]},{"id":92,"key":"SIMPLICITY","ho":"CONSERVATION","conf":"low","en":["SIMPLICITY","to live life simply, with minimal needs"],"ru":["ПРОСТОТА","жить просто, с минимальными потребностями"],"hu":["EGYSZERŰSÉG","egyszerűen, kevés igénnyel élni"]},{"id":93,"key":"SOLITUDE","ho":"OPENNESS","conf":"low","en":["SOLITUDE","to have time and space where I can be apart from others"],"ru":["УЕДИНЕНИЕ","иметь время и место, чтобы побыть наедине с собой"],"hu":["EGYEDÜLLÉT","időt és teret találni arra, hogy egyedül lehessek"]},{"id":94,"key":"SPIRITUALITY","ho":null,"conf":"low","en":["SPIRITUALITY","to grow and mature spiritually"],"ru":["ДУХОВНОСТЬ","расти и созревать духовно"],"hu":["SPIRITUALITÁS","lelkileg növekedni és érni"]},{"id":95,"key":"STABILITY","ho":"CONSERVATION","conf":"high","en":["STABILITY","to have a life that stays fairly consistent"],"ru":["СТАБИЛЬНОСТЬ","жить достаточно постоянной и предсказуемой жизнью"],"hu":["STABILITÁS","viszonylag állandó, kiszámítható életet élni"]},{"id":96,"key":"TOLERANCE","ho":"SELF_TRANSCENDENCE","conf":"high","en":["TOLERANCE","to accept and respect those who differ from me"],"ru":["ТЕРПИМОСТЬ","принимать и уважать тех, кто отличается от меня"],"hu":["TOLERANCIA","elfogadni és tisztelni azokat, akik különböznek tőlem"]},{"id":97,"key":"TRADITION","ho":"CONSERVATION","conf":"high","en":["TRADITION","to follow respected patterns of the past"],"ru":["ТРАДИЦИИ","следовать уважаемым образцам прошлого"],"hu":["HAGYOMÁNY","követni a múlt tiszteletre méltó mintáit"]},{"id":98,"key":"VIRTUE","ho":"CONSERVATION","conf":"low","en":["VIRTUE","to live a morally pure and excellent life"],"ru":["ДОБРОДЕТЕЛЬ","жить нравственно чистой и достойной жизнью"],"hu":["ERÉNY","erkölcsileg tiszta és kiváló életet élni"]},{"id":99,"key":"WEALTH","ho":"SELF_ENHANCEMENT","conf":"high","en":["WEALTH","to have plenty of money"],"ru":["БОГАТСТВО","иметь много денег"],"hu":["GAZDAGSÁG","sok pénzzel rendelkezni"]},{"id":100,"key":"WORLD_PEACE","ho":"SELF_TRANSCENDENCE","conf":"high","en":["WORLD PEACE","to work to promote peace in the world"],"ru":["МИР НА ЗЕМЛЕ","способствовать миру во всём мире"],"hu":["VILÁGBÉKE","tenni a világbéke előmozdításáért"]}];
-const PROMPTS = {"en":"# Task: Psychological Analysis of a Values Profile\n\nBased on the provided distribution of values across 4 decks, compile a professional psychological analysis of the personality profile.\n\n## Source Data\n\nThe respondent distributed 100 values (Personal Values Card Sort, W. R. Miller et al., 2011) into 4 decks by importance: \"Very important\", \"Important\", \"Unsure\", \"Not important\". The cards in the \"Very important\" deck are also ranked: 1 is the most important. Each value has a short definition, and the respondent sorted by that definition.\n\nThe full sorting data is at the end of this message: the ranked top values, all four decks with definitions, and index scores for the four poles of the Schwartz model, calculated by software (the method is described in the data).\n\n## Analysis Requirements\n\nConduct a comprehensive psychological analysis covering the following aspects:\n\n### 1. Values Structure\n- Dominant value orientations\n- Hierarchy of priorities\n- Identified value clusters (social, personal, material, etc.)\n\n### 2. Personality Profile\n- Key personality traits manifested through value choices\n- Motivational structure\n- Characteristics of self-perception and identity\n\n### 3. Behavioral Patterns and Attitudes\n- Expected behavioral strategies\n- Attitude toward social interactions\n- Balance between individual and collective\n\n### 4. Areas of Conflict and Tension\n- Potential internal contradictions between values\n- Areas of possible life difficulties\n- Adaptation challenges\n\n### 5. Resources and Strengths\n- Constructive aspects of the profile\n- Development potential\n- Personality protective factors\n\n### 6. Socialization Context (optional)\n- Possible cultural and social influences on values formation\n- Signs of certain life stages or contexts\n- **Important**: analysis without direct categorization by gender/age, only description of sociocultural patterns\n\n### 7. Professional Fulfilment\n- Professional fields and roles in which the respondent's values are most likely to find expression: 5–8 specific examples, each with a rationale\n- Work environment, work format and management style in which the respondent is likely to be most effective\n- Environments and roles likely to cause inner resistance\n\n### 8. Relationships and Interaction\n- What is likely to matter most to the respondent in close relationships, friendship and teams\n- Possible sources of tension when interacting with people who hold different values\n\n### 9. Recommendations\n- Practical recommendations for development and for using strengths\n- Ways to work with the identified areas of tension\n- 3–5 questions for self-reflection\n\n## Response Format\n\nA structured psychological report in English using professional terminology. Start with a short profile summary (5–7 sentences). Length: 1500–2200 words.\n\nConclusions should be:\n- Justified through analysis of value choices, with reference to specific values\n- Balanced (strengths + development areas)\n- Ethical and non-stigmatizing\n- Based on recognized psychological theories (e.g., Schwartz's Theory of Basic Values, Self-Determination Theory, etc.)\n\n## Limitations\n\n- Avoid categorical statements\n- Use formulations like \"may indicate\", \"characteristic of\", \"likely\"\n- Do not make medical diagnoses\n- Maintain professional distance and objectivity\n\n## Sorting Data\n\n{{LAYOUT}}\n","ru":"# Задание: Психологический анализ профиля ценностей\n\nНа основе предоставленного распределения ценностей по 4 колодам составьте профессиональный психологический анализ личностного профиля.\n\n## Исходные данные\n\nРеспондент распределил 100 ценностей (методика Personal Values Card Sort, W. R. Miller и соавт., 2011) на 4 колоды по степени важности: «Очень важно», «Важно», «Сложно сказать», «Не важно». Карточки колоды «Очень важно» дополнительно ранжированы: 1 — самая важная. У каждой ценности есть короткое определение, и респондент ориентировался именно на него.\n\nПолные данные расклада приведены в конце сообщения: ранжированный топ, все четыре колоды с определениями и индексы четырёх полюсов модели Шварца, вычисленные программой (метод описан в данных).\n\n## Требования к анализу\n\nПроведите комплексный психологический анализ, включающий следующие аспекты:\n\n### 1. Структура ценностей\n- Доминирующие ценностные ориентации\n- Иерархия приоритетов\n- Выявленные кластеры ценностей (социальные, личностные, материальные и т.д.)\n\n### 2. Личностный профиль\n- Ключевые личностные черты, проявляющиеся через выбор ценностей\n- Мотивационная структура\n- Особенности самовосприятия и идентичности\n\n### 3. Паттерны поведения и установки\n- Предполагаемые поведенческие стратегии\n- Отношение к социальным взаимодействиям\n- Баланс между индивидуальным и коллективным\n\n### 4. Зоны конфликта и напряжения\n- Потенциальные внутренние противоречия между ценностями\n- Области возможных жизненных затруднений\n- Адаптационные вызовы\n\n### 5. Ресурсы и сильные стороны\n- Конструктивные аспекты профиля\n- Потенциал для развития\n- Защитные факторы личности\n\n### 6. Контекст социализации (опционально)\n- Возможные культурные и социальные влияния на формирование ценностей\n- Признаки определённых жизненных этапов или контекстов\n- **Важно**: анализ без прямой категоризации по полу/возрасту, только описание социокультурных паттернов\n\n### 7. Профессиональная реализация\n- Профессиональные сферы и роли, в которых ценности респондента вероятнее всего найдут реализацию: 5–8 конкретных примеров, каждый с обоснованием\n- Рабочая среда, формат работы и стиль руководства, в которых респондент, вероятно, будет наиболее эффективен\n- Среды и роли, которые, вероятно, будут вызывать внутреннее сопротивление\n\n### 8. Отношения и взаимодействие\n- Что, вероятно, особенно важно для респондента в близких отношениях, дружбе и команде\n- Возможные источники напряжения во взаимодействии с людьми с иными ценностями\n\n### 9. Рекомендации\n- Практические рекомендации по развитию и использованию сильных сторон\n- Способы работы с выявленными зонами напряжения\n- 3–5 вопросов для саморефлексии\n\n## Формат ответа\n\nСтруктурированный психологический отчёт на русском языке с использованием профессиональной терминологии. Начните с краткого резюме профиля (5–7 предложений). Объём: 1500–2200 слов.\n\nВыводы должны быть:\n- Обоснованными через анализ ценностных выборов, со ссылкой на конкретные ценности\n- Сбалансированными (сильные стороны + зоны развития)\n- Этичными и не стигматизирующими\n- Опирающимися на признанные психологические теории (например, теория ценностей Шварца, теория самодетерминации и др.)\n\n## Ограничения\n\n- Избегайте категоричных утверждений\n- Используйте формулировки \"может указывать на\", \"характерно для\", \"вероятно\"\n- Не делайте медицинских диагнозов\n- Сохраняйте профессиональную дистанцию и объективность\n\n## Данные расклада\n\n{{LAYOUT}}\n","hu":"# Feladat: Az értékprofil pszichológiai elemzése\n\nAz értékek 4 kupac szerinti megoszlása alapján készíts szakmai pszichológiai elemzést a személyiségprofilról.\n\n## Kiinduló adatok\n\nA válaszadó 100 értéket (Personal Values Card Sort, W. R. Miller és mtsai, 2011) osztott szét 4 kupacba fontosság szerint: „Nagyon fontos”, „Fontos”, „Bizonytalan”, „Nem fontos”. A „Nagyon fontos” kupac kártyái rangsorolva is vannak: az 1-es a legfontosabb. Minden értékhez rövid meghatározás tartozik, és a válaszadó ez alapján döntött.\n\nA válogatás teljes adatai az üzenet végén találhatók: a rangsorolt legfontosabb értékek, mind a négy kupac a meghatározásokkal, valamint a Schwartz-modell négy pólusának programmal számított indexei (a módszer leírása az adatok között szerepel).\n\n## Az elemzés követelményei\n\nKészíts átfogó pszichológiai elemzést a következő szempontok szerint:\n\n### 1. Az értékek szerkezete\n- Domináns értékorientációk\n- A prioritások hierarchiája\n- Azonosított értékcsoportok (társas, személyes, anyagi stb.)\n\n### 2. Személyiségprofil\n- Az értékválasztásokban megnyilvánuló fő személyiségvonások\n- Motivációs szerkezet\n- Az énkép és az identitás sajátosságai\n\n### 3. Viselkedési minták és attitűdök\n- Feltételezhető viselkedési stratégiák\n- Viszonyulás a társas interakciókhoz\n- Az egyéni és a közösségi egyensúlya\n\n### 4. Konfliktus- és feszültségzónák\n- Lehetséges belső ellentmondások az értékek között\n- Lehetséges élethelyzeti nehézségek területei\n- Alkalmazkodási kihívások\n\n### 5. Erőforrások és erősségek\n- A profil építő vonatkozásai\n- Fejlődési potenciál\n- A személyiség védőfaktorai\n\n### 6. Szocializációs háttér (opcionális)\n- Lehetséges kulturális és társadalmi hatások az értékek kialakulására\n- Bizonyos életszakaszokra vagy élethelyzetekre utaló jelek\n- **Fontos**: nem és életkor szerinti közvetlen besorolás nélkül, csak szociokulturális mintázatok leírása\n\n### 7. Szakmai kibontakozás\n- Szakterületek és szerepek, amelyekben a válaszadó értékei a legvalószínűbben érvényesülhetnek: 5–8 konkrét példa, mindegyik indoklással\n- Munkakörnyezet, munkaforma és vezetési stílus, amelyben a válaszadó valószínűleg a leghatékonyabb\n- Környezetek és szerepek, amelyek valószínűleg belső ellenállást váltanak ki\n\n### 8. Kapcsolatok és együttműködés\n- Mi lehet különösen fontos a válaszadónak a szoros kapcsolatokban, a barátságban és a csapatban\n- A feszültség lehetséges forrásai más értékeket valló emberekkel való kapcsolatban\n\n### 9. Ajánlások\n- Gyakorlati ajánlások a fejlődéshez és az erősségek kiaknázásához\n- Módszerek az azonosított feszültségzónák kezelésére\n- 3–5 kérdés az önreflexióhoz\n\n## A válasz formája\n\nStrukturált pszichológiai beszámoló magyarul, szakmai terminológiával. Kezdd a profil rövid összefoglalásával (5–7 mondat). Terjedelem: 1500–2200 szó.\n\nA következtetések legyenek:\n- Az értékválasztások elemzésével alátámasztottak, konkrét értékekre hivatkozva\n- Kiegyensúlyozottak (erősségek + fejlesztendő területek)\n- Etikusak és nem stigmatizálók\n- Elismert pszichológiai elméletekre épülők (például Schwartz alapérték-elmélete, az önmeghatározás-elmélet stb.)\n\n## Korlátozások\n\n- Kerüld a kategorikus állításokat\n- Használj olyan megfogalmazásokat, mint „utalhat arra”, „jellemző rá”, „valószínűleg”\n- Ne állíts fel orvosi diagnózist\n- Őrizd meg a szakmai távolságot és az objektivitást\n\n## A válogatás adatai\n\n{{LAYOUT}}\n"};
+const PROMPTS = {"en":"# Task: Psychological Analysis of a Values Profile\n\nBased on the provided distribution of values across 4 decks, compile a professional psychological analysis of the personality profile.\n\n## Source Data\n\nThe respondent distributed 100 values (Personal Values Card Sort, W. R. Miller et al., 2011) into 4 decks by importance: \"Very important\", \"Important\", \"Unsure\", \"Not important\". Each value has a name and a short clarifying definition; the respondent sorted mainly by the name.\n\nThe full sorting data is at the end of this message: all four decks with definitions, and index scores for the four poles of the Schwartz model, calculated by software (the method is described in the data).\n\n## Analysis Requirements\n\nConduct a comprehensive psychological analysis covering the following aspects:\n\n### 1. Values Structure\n- Dominant value orientations\n- Hierarchy of priorities\n- Identified value clusters (social, personal, material, etc.)\n\n### 2. Personality Profile\n- Key personality traits manifested through value choices\n- Motivational structure\n- Characteristics of self-perception and identity\n\n### 3. Behavioral Patterns and Attitudes\n- Expected behavioral strategies\n- Attitude toward social interactions\n- Balance between individual and collective\n\n### 4. Areas of Conflict and Tension\n- Potential internal contradictions between values\n- Areas of possible life difficulties\n- Adaptation challenges\n\n### 5. Resources and Strengths\n- Constructive aspects of the profile\n- Development potential\n- Personality protective factors\n\n### 6. Socialization Context (optional)\n- Possible cultural and social influences on values formation\n- Signs of certain life stages or contexts\n- **Important**: analysis without direct categorization by gender/age, only description of sociocultural patterns\n\n### 7. Professional Fulfilment\n- Professional fields and roles in which the respondent's values are most likely to find expression: 5–8 specific examples, each with a rationale\n- Work environment, work format and management style in which the respondent is likely to be most effective\n- Environments and roles likely to cause inner resistance\n\n### 8. Relationships and Interaction\n- What is likely to matter most to the respondent in close relationships, friendship and teams\n- Possible sources of tension when interacting with people who hold different values\n\n### 9. Recommendations\n- Practical recommendations for development and for using strengths\n- Ways to work with the identified areas of tension\n- 3–5 questions for self-reflection\n\n## Response Format\n\nA structured psychological report in English using professional terminology. Start with a short profile summary (5–7 sentences). Length: 1500–2200 words.\n\nConclusions should be:\n- Justified through analysis of value choices, with reference to specific values\n- Balanced (strengths + development areas)\n- Ethical and non-stigmatizing\n- Based on recognized psychological theories (e.g., Schwartz's Theory of Basic Values, Self-Determination Theory, etc.)\n\n## Limitations\n\n- Avoid categorical statements\n- Use formulations like \"may indicate\", \"characteristic of\", \"likely\"\n- Do not make medical diagnoses\n- Maintain professional distance and objectivity\n\n## Sorting Data\n\n{{LAYOUT}}\n","ru":"# Задание: Психологический анализ профиля ценностей\n\nНа основе предоставленного распределения ценностей по 4 колодам составьте профессиональный психологический анализ личностного профиля.\n\n## Исходные данные\n\nРеспондент распределил 100 ценностей (методика Personal Values Card Sort, W. R. Miller и соавт., 2011) на 4 колоды по степени важности: «Очень важно», «Важно», «Сложно сказать», «Не важно». У каждой ценности есть название и короткое уточняющее определение; респондент выбирал прежде всего по названию.\n\nПолные данные расклада приведены в конце сообщения: все четыре колоды с определениями и индексы четырёх полюсов модели Шварца, вычисленные программой (метод описан в данных).\n\n## Требования к анализу\n\nПроведите комплексный психологический анализ, включающий следующие аспекты:\n\n### 1. Структура ценностей\n- Доминирующие ценностные ориентации\n- Иерархия приоритетов\n- Выявленные кластеры ценностей (социальные, личностные, материальные и т.д.)\n\n### 2. Личностный профиль\n- Ключевые личностные черты, проявляющиеся через выбор ценностей\n- Мотивационная структура\n- Особенности самовосприятия и идентичности\n\n### 3. Паттерны поведения и установки\n- Предполагаемые поведенческие стратегии\n- Отношение к социальным взаимодействиям\n- Баланс между индивидуальным и коллективным\n\n### 4. Зоны конфликта и напряжения\n- Потенциальные внутренние противоречия между ценностями\n- Области возможных жизненных затруднений\n- Адаптационные вызовы\n\n### 5. Ресурсы и сильные стороны\n- Конструктивные аспекты профиля\n- Потенциал для развития\n- Защитные факторы личности\n\n### 6. Контекст социализации (опционально)\n- Возможные культурные и социальные влияния на формирование ценностей\n- Признаки определённых жизненных этапов или контекстов\n- **Важно**: анализ без прямой категоризации по полу/возрасту, только описание социокультурных паттернов\n\n### 7. Профессиональная реализация\n- Профессиональные сферы и роли, в которых ценности респондента вероятнее всего найдут реализацию: 5–8 конкретных примеров, каждый с обоснованием\n- Рабочая среда, формат работы и стиль руководства, в которых респондент, вероятно, будет наиболее эффективен\n- Среды и роли, которые, вероятно, будут вызывать внутреннее сопротивление\n\n### 8. Отношения и взаимодействие\n- Что, вероятно, особенно важно для респондента в близких отношениях, дружбе и команде\n- Возможные источники напряжения во взаимодействии с людьми с иными ценностями\n\n### 9. Рекомендации\n- Практические рекомендации по развитию и использованию сильных сторон\n- Способы работы с выявленными зонами напряжения\n- 3–5 вопросов для саморефлексии\n\n## Формат ответа\n\nСтруктурированный психологический отчёт на русском языке с использованием профессиональной терминологии. Начните с краткого резюме профиля (5–7 предложений). Объём: 1500–2200 слов.\n\nВыводы должны быть:\n- Обоснованными через анализ ценностных выборов, со ссылкой на конкретные ценности\n- Сбалансированными (сильные стороны + зоны развития)\n- Этичными и не стигматизирующими\n- Опирающимися на признанные психологические теории (например, теория ценностей Шварца, теория самодетерминации и др.)\n\n## Ограничения\n\n- Избегайте категоричных утверждений\n- Используйте формулировки \"может указывать на\", \"характерно для\", \"вероятно\"\n- Не делайте медицинских диагнозов\n- Сохраняйте профессиональную дистанцию и объективность\n\n## Данные расклада\n\n{{LAYOUT}}\n","hu":"# Feladat: Az értékprofil pszichológiai elemzése\n\nAz értékek 4 kupac szerinti megoszlása alapján készíts szakmai pszichológiai elemzést a személyiségprofilról.\n\n## Kiinduló adatok\n\nA válaszadó 100 értéket (Personal Values Card Sort, W. R. Miller és mtsai, 2011) osztott szét 4 kupacba fontosság szerint: „Nagyon fontos”, „Fontos”, „Bizonytalan”, „Nem fontos”. Minden értéknek van neve és rövid, pontosító meghatározása; a válaszadó elsősorban a név alapján döntött.\n\nA válogatás teljes adatai az üzenet végén találhatók: mind a négy kupac a meghatározásokkal, valamint a Schwartz-modell négy pólusának programmal számított indexei (a módszer leírása az adatok között szerepel).\n\n## Az elemzés követelményei\n\nKészíts átfogó pszichológiai elemzést a következő szempontok szerint:\n\n### 1. Az értékek szerkezete\n- Domináns értékorientációk\n- A prioritások hierarchiája\n- Azonosított értékcsoportok (társas, személyes, anyagi stb.)\n\n### 2. Személyiségprofil\n- Az értékválasztásokban megnyilvánuló fő személyiségvonások\n- Motivációs szerkezet\n- Az énkép és az identitás sajátosságai\n\n### 3. Viselkedési minták és attitűdök\n- Feltételezhető viselkedési stratégiák\n- Viszonyulás a társas interakciókhoz\n- Az egyéni és a közösségi egyensúlya\n\n### 4. Konfliktus- és feszültségzónák\n- Lehetséges belső ellentmondások az értékek között\n- Lehetséges élethelyzeti nehézségek területei\n- Alkalmazkodási kihívások\n\n### 5. Erőforrások és erősségek\n- A profil építő vonatkozásai\n- Fejlődési potenciál\n- A személyiség védőfaktorai\n\n### 6. Szocializációs háttér (opcionális)\n- Lehetséges kulturális és társadalmi hatások az értékek kialakulására\n- Bizonyos életszakaszokra vagy élethelyzetekre utaló jelek\n- **Fontos**: nem és életkor szerinti közvetlen besorolás nélkül, csak szociokulturális mintázatok leírása\n\n### 7. Szakmai kibontakozás\n- Szakterületek és szerepek, amelyekben a válaszadó értékei a legvalószínűbben érvényesülhetnek: 5–8 konkrét példa, mindegyik indoklással\n- Munkakörnyezet, munkaforma és vezetési stílus, amelyben a válaszadó valószínűleg a leghatékonyabb\n- Környezetek és szerepek, amelyek valószínűleg belső ellenállást váltanak ki\n\n### 8. Kapcsolatok és együttműködés\n- Mi lehet különösen fontos a válaszadónak a szoros kapcsolatokban, a barátságban és a csapatban\n- A feszültség lehetséges forrásai más értékeket valló emberekkel való kapcsolatban\n\n### 9. Ajánlások\n- Gyakorlati ajánlások a fejlődéshez és az erősségek kiaknázásához\n- Módszerek az azonosított feszültségzónák kezelésére\n- 3–5 kérdés az önreflexióhoz\n\n## A válasz formája\n\nStrukturált pszichológiai beszámoló magyarul, szakmai terminológiával. Kezdd a profil rövid összefoglalásával (5–7 mondat). Terjedelem: 1500–2200 szó.\n\nA következtetések legyenek:\n- Az értékválasztások elemzésével alátámasztottak, konkrét értékekre hivatkozva\n- Kiegyensúlyozottak (erősségek + fejlesztendő területek)\n- Etikusak és nem stigmatizálók\n- Elismert pszichológiai elméletekre épülők (például Schwartz alapérték-elmélete, az önmeghatározás-elmélet stb.)\n\n## Korlátozások\n\n- Kerüld a kategorikus állításokat\n- Használj olyan megfogalmazásokat, mint „utalhat arra”, „jellemző rá”, „valószínűleg”\n- Ne állíts fel orvosi diagnózist\n- Őrizd meg a szakmai távolságot és az objektivitást\n\n## A válogatás adatai\n\n{{LAYOUT}}\n"};
 const BY_KEY = Object.fromEntries(CARDS.map(c => [c.key, c]));
 const PILES = [3, 2, 1, 0];                // display order = deck 1..4: very important, important, unsure, not important
 const TOP = 3, UNSURE = 1;
@@ -251,23 +258,21 @@ const L = {
     lede: "Sort 100 value cards by how important each one is to you. Then copy the result with a ready-made prompt into Claude and get a professional psychological profile.",
     example: "Example card",
     howTitle: "How it works",
-    how: ["Sort the cards into four decks. It takes about 10–15 minutes.", "Check the decks and move any card that feels out of place.", "Rank the values in your Very important deck.", "Copy your sort and the analysis prompt."],
+    how: ["Sort the cards into four decks. It takes about 10–15 minutes.", "Check the decks and move any card that feels out of place.", "Copy your sort and the analysis prompt."],
     privacy: "Everything stays in this browser. The page sends nothing anywhere. When you paste your sort into Claude, you share it with Anthropic.",
     start: "Start sorting", resume: "Continue", restart: "Start over",
     resumeInfo: n => `${n} of 100 cards sorted`,
     attribution: "Cards: Personal Values Card Sort by W. R. Miller, J. C'de Baca, D. B. Matthews and P. L. Wilbourne, University of New Mexico, 2011. Public domain. Russian and Hungarian versions are adaptations.",
-    nav: ["Sort", "Review", "Rank", "Result"],
+    nav: ["Sort", "Review", "Result"],
     piles: ["Not important", "Unsure", "Important", "Very important"],
     progress: i => `Card ${i} of 100`,
     back: "← Back", sortHint: "Keys 1–4 work too, in the order of the buttons.",
     reviewTitle: "Check your decks",
     reviewText: "Tap a card to read its definition and move it to another deck.",
-    topCount: n => `Very important: ${n}`, toTop: "Move to top",
-    toRank: "Rank top values →", moveTo: "Move to", close: "Close", current: "here now", emptyPile: "No cards",
-    rankTitle: "Rank your most important values",
-    rankText: "Put the value that matters most at number 1. Use the arrows to change the order.",
-    up: "Move up", down: "Move down", toResult: "Show result →", backToReview: "← Back to decks",
-    resultTitle: "Your values map", topTitle: "Your top values", distTitle: "Cards per deck",
+    topCount: n => `Very important: ${n}`,
+    moveTo: "Move to", close: "Close", current: "here now", emptyPile: "No cards",
+    toResult: "Show result →", toReview: "Go to review →",
+    resultTitle: "Your values map", distTitle: "Cards per deck",
     polesTitle: "Schwartz value poles",
     polesNote: "Above zero means the pole matters more to you than your average card. Differences under 0.2 are small. Unsure cards are not counted.",
     poles: { OPENNESS: "Openness to change", CONSERVATION: "Conservation", SELF_ENHANCEMENT: "Self-enhancement", SELF_TRANSCENDENCE: "Self-transcendence" },
@@ -285,14 +290,13 @@ const L = {
     d: {
       head: "=== VALUES CARD SORT ===",
       method: "Method: Personal Values Card Sort (Miller et al., 2011), 100 cards",
-      date: "Date", top: "TOP VALUES (1 = most important)", piles: "DECKS",
+      date: "Date", piles: "DECKS",
       poles: "SCHWARTZ POLE INDICES",
       polesMethod: (p, m, u) => `Method: deck scores are "${p[0]}" 0, "${p[2]}" 1, "${p[3]}" 2. Cards in the "${p[1]}" deck get no score (cards: ${u}). Mean score across the scored cards: ${m}. Pole index = mean score of the pole's cards minus this mean (positive = this pole matters more to the person than their average card). Border values are split equally between two poles, cards with an ambiguous mapping count with weight 0.5, cards outside the Schwartz model are not counted.`,
       cards: "cards",
       axes: "Axes: Openness to change ↔ Conservation; Self-enhancement ↔ Self-transcendence.",
       polesTop: p => `CARDS BY POLE IN THE "${p[3]}" DECK`,
       plain: d => `My values sort — Personal Values Card Sort (100 cards), ${d}`,
-      plainTop: "Top values (1 = most important):",
       placeholder: "[PASTE YOUR SORTING DATA HERE]"
     }
   },
@@ -302,23 +306,21 @@ const L = {
     lede: "Разложите 100 карточек ценностей по тому, насколько каждая важна для вас. Потом скопируйте результат вместе с готовым промптом в Claude и получите профессиональный психологический профиль.",
     example: "Пример карточки",
     howTitle: "Как это устроено",
-    how: ["Разложите карточки по четырём колодам. Это займёт 10–15 минут.", "Проверьте колоды и переложите карточки, если что-то лежит не там.", "Расставьте по порядку ценности из колоды «Очень важно».", "Скопируйте расклад и промпт для анализа."],
+    how: ["Разложите карточки по четырём колодам. Это займёт 10–15 минут.", "Проверьте колоды и переложите карточки, если что-то лежит не там.", "Скопируйте расклад и промпт для анализа."],
     privacy: "Всё хранится только в этом браузере, страница ничего никуда не отправляет. Когда вы вставляете расклад в Claude, вы передаёте его Anthropic.",
     start: "Начать раскладку", resume: "Продолжить", restart: "Начать заново",
     resumeInfo: n => `Разложено ${n} из 100 карточек`,
     attribution: "Карточки: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Общественное достояние. Русская и венгерская версии — адаптация.",
-    nav: ["Раскладка", "Проверка", "Топ", "Результат"],
+    nav: ["Раскладка", "Проверка", "Результат"],
     piles: ["Не важно", "Сложно сказать", "Важно", "Очень важно"],
     progress: i => `Карточка ${i} из 100`,
     back: "← Назад", sortHint: "Можно нажимать клавиши 1–4 — в порядке кнопок.",
     reviewTitle: "Проверьте колоды",
     reviewText: "Нажмите на карточку, чтобы прочитать определение и переложить её.",
-    topCount: n => `Очень важно: ${n}`, toTop: "В начало",
-    toRank: "Ранжировать топ →", moveTo: "Переложить в", close: "Закрыть", current: "сейчас здесь", emptyPile: "Пусто",
-    rankTitle: "Расставьте самые важные ценности по порядку",
-    rankText: "Самая важная — под номером 1. Меняйте порядок стрелками.",
-    up: "Выше", down: "Ниже", toResult: "Показать результат →", backToReview: "← К колодам",
-    resultTitle: "Ваша карта ценностей", topTitle: "Ваш топ", distTitle: "Карточек в колодах",
+    topCount: n => `Очень важно: ${n}`,
+    moveTo: "Переложить в", close: "Закрыть", current: "сейчас здесь", emptyPile: "Пусто",
+    toResult: "Показать результат →", toReview: "К проверке →",
+    resultTitle: "Ваша карта ценностей", distTitle: "Карточек в колодах",
     polesTitle: "Полюса ценностей по Шварцу",
     polesNote: "Больше нуля — полюс для вас важнее, чем ваша средняя карточка. Разница меньше 0,2 невелика. Карточки «Сложно сказать» не учитываются.",
     poles: { OPENNESS: "Открытость изменениям", CONSERVATION: "Сохранение", SELF_ENHANCEMENT: "Самоутверждение", SELF_TRANSCENDENCE: "Самопреодоление" },
@@ -336,14 +338,13 @@ const L = {
     d: {
       head: "=== РАСКЛАД ЦЕННОСТЕЙ ===",
       method: "Методика: Personal Values Card Sort (Miller et al., 2011), 100 карточек",
-      date: "Дата", top: "ТОП ЦЕННОСТЕЙ (1 — самая важная)", piles: "КОЛОДЫ",
+      date: "Дата", piles: "КОЛОДЫ",
       poles: "ИНДЕКСЫ ПОЛЮСОВ ШВАРЦА",
       polesMethod: (p, m, u) => `Метод: баллы колод — «${p[0]}» 0, «${p[2]}» 1, «${p[3]}» 2. Карточки колоды «${p[1]}» баллов не получают (карточек: ${u}). Средний балл по оценённым карточкам: ${m}. Индекс полюса = средний балл его карточек минус этот общий средний (больше нуля — полюс важнее, чем средняя карточка этого человека). Пограничные ценности делятся между двумя полюсами поровну, карточки с неоднозначной привязкой учитываются с весом 0,5, карточки вне модели Шварца не учитываются.`,
       cards: "карточек",
       axes: "Оси: Открытость изменениям ↔ Сохранение; Самоутверждение ↔ Самопреодоление.",
       polesTop: p => `КАРТОЧКИ ПОЛЮСОВ В КОЛОДЕ «${p[3]}»`,
       plain: d => `Мой расклад ценностей — Personal Values Card Sort (100 карточек), ${d}`,
-      plainTop: "Топ (1 — самая важная):",
       placeholder: "[ВСТАВЬТЕ СЮДА ДАННЫЕ РАСКЛАДА]"
     }
   },
@@ -353,23 +354,21 @@ const L = {
     lede: "Válogasd szét a 100 értékkártyát aszerint, mennyire fontosak neked. Utána másold az eredményt egy kész prompttal együtt a Claude-ba, és szakmai pszichológiai profilt kapsz.",
     example: "Példakártya",
     howTitle: "Hogyan működik",
-    how: ["Válogasd a kártyákat négy kupacba. Körülbelül 10–15 perc.", "Nézd át a kupacokat, és tedd át, ami nem jó helyen van.", "Rangsorold a „Nagyon fontos” kupac értékeit.", "Másold ki a válogatást és az elemző promptot."],
+    how: ["Válogasd a kártyákat négy kupacba. Körülbelül 10–15 perc.", "Nézd át a kupacokat, és tedd át, ami nem jó helyen van.", "Másold ki a válogatást és az elemző promptot."],
     privacy: "Minden csak ebben a böngészőben marad, az oldal semmit nem küld el. Ha beilleszted a válogatást a Claude-ba, azzal átadod az Anthropicnak.",
     start: "Kezdés", resume: "Folytatás", restart: "Újrakezdés",
     resumeInfo: n => `${n} / 100 kártya kész`,
     attribution: "Kártyák: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Közkincs. Az orosz és a magyar változat adaptáció.",
-    nav: ["Válogatás", "Átnézés", "Rangsor", "Eredmény"],
+    nav: ["Válogatás", "Átnézés", "Eredmény"],
     piles: ["Nem fontos", "Bizonytalan", "Fontos", "Nagyon fontos"],
     progress: i => `${i}. kártya / 100`,
     back: "← Vissza", sortHint: "Az 1–4 billentyűk is működnek, a gombok sorrendjében.",
     reviewTitle: "Nézd át a kupacokat",
     reviewText: "Koppints egy kártyára, hogy elolvasd a meghatározását, és áttedd egy másik kupacba.",
-    topCount: n => `Nagyon fontos: ${n}`, toTop: "Az elejére",
-    toRank: "Rangsorolás →", moveTo: "Áthelyezés ide", close: "Bezárás", current: "most itt van", emptyPile: "Üres",
-    rankTitle: "Rangsorold a legfontosabb értékeidet",
-    rankText: "A legfontosabb legyen az 1-es. A sorrendet a nyilakkal módosíthatod.",
-    up: "Feljebb", down: "Lejjebb", toResult: "Eredmény →", backToReview: "← Vissza a kupacokhoz",
-    resultTitle: "Az értéktérképed", topTitle: "A legfontosabb értékeid", distTitle: "Kártyák kupaconként",
+    topCount: n => `Nagyon fontos: ${n}`,
+    moveTo: "Áthelyezés ide", close: "Bezárás", current: "most itt van", emptyPile: "Üres",
+    toResult: "Eredmény →", toReview: "Átnézés →",
+    resultTitle: "Az értéktérképed", distTitle: "Kártyák kupaconként",
     polesTitle: "Schwartz értékpólusai",
     polesNote: "A nulla fölötti érték azt jelenti, hogy ez a pólus fontosabb neked, mint az átlagos kártyáid. A 0,2 alatti különbség kicsi. A „Bizonytalan” kártyák nem számítanak.",
     poles: { OPENNESS: "Nyitottság a változásra", CONSERVATION: "Megőrzés", SELF_ENHANCEMENT: "Önérvényesítés", SELF_TRANSCENDENCE: "Önmeghaladás" },
@@ -387,14 +386,13 @@ const L = {
     d: {
       head: "=== ÉRTÉKKÁRTYA-VÁLOGATÁS ===",
       method: "Módszer: Personal Values Card Sort (Miller és mtsai, 2011), 100 kártya",
-      date: "Dátum", top: "LEGFONTOSABB ÉRTÉKEK (1 = a legfontosabb)", piles: "KUPACOK",
+      date: "Dátum", piles: "KUPACOK",
       poles: "SCHWARTZ-PÓLUSOK INDEXEI",
       polesMethod: (p, m, u) => `Módszer: a kupacok pontszáma „${p[0]}” 0, „${p[2]}” 1, „${p[3]}” 2. A „${p[1]}” kupac kártyái nem kapnak pontot (kártyák: ${u}). A pontozott kártyák átlagpontszáma: ${m}. Pólusindex = a pólus kártyáinak átlagpontszáma mínusz ez az összesített átlag (nulla fölött = a pólus fontosabb, mint az illető átlagos kártyája). A határértékek egyenlően oszlanak meg két pólus között, a nem egyértelmű besorolású kártyák 0,5-ös súllyal számítanak, a Schwartz-modellen kívüli kártyák nem számítanak.`,
       cards: "kártya",
       axes: "Tengelyek: Nyitottság a változásra ↔ Megőrzés; Önérvényesítés ↔ Önmeghaladás.",
       polesTop: p => `A PÓLUSOK KÁRTYÁI A „${p[3]}” KUPACBAN`,
       plain: d => `Az értékválogatásom — Personal Values Card Sort (100 kártya), ${d}`,
-      plainTop: "Legfontosabb értékek (1 = a legfontosabb):",
       placeholder: "[IDE ILLESZD BE A VÁLOGATÁS ADATAIT]"
     }
   }
@@ -403,7 +401,7 @@ const L = {
 /* ---------- state ---------- */
 function fresh(lang) {
   const seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-  return { v: 2, lang, step: "intro", seed, order: shuffled(CARDS.map(c => c.key), seed), idx: 0, piles: {}, hist: [], top: [], date: today() };
+  return { v: 2, lang, step: "intro", seed, order: shuffled(CARDS.map(c => c.key), seed), idx: 0, piles: {}, hist: [], date: today() };
 }
 function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
 function shuffled(arr, seed) {
@@ -464,7 +462,6 @@ function num(x, signed) {
 }
 
 /* ---------- texts to copy ---------- */
-function rankedTop() { return S.top.filter(k => S.piles[k] === TOP); }
 function cardLine(k) {
   const c = BY_KEY[k];
   const en = S.lang === "en" ? "" : ` (${c.en[0]})`;
@@ -472,10 +469,7 @@ function cardLine(k) {
 }
 function dataBlock() {
   const T = t(), D = T.d, { mean, poles } = poleScores();
-  const lines = [D.head, D.method, `${D.date}: ${S.date}`, "", D.top];
-  rankedTop().forEach((k, i) => lines.push(`${i + 1}. ${cardLine(k)}`));
-  if (!rankedTop().length) lines.push("—");
-  lines.push("", D.piles);
+  const lines = [D.head, D.method, `${D.date}: ${S.date}`, "", D.piles];
   for (const p of PILES) {
     const ks = inPile(p);
     lines.push("", `[${T.piles[p]} — ${ks.length}]`);
@@ -489,8 +483,7 @@ function dataBlock() {
 }
 function plainSort() {
   const T = t(), D = T.d;
-  const lines = [D.plain(S.date), "", D.plainTop];
-  rankedTop().forEach((k, i) => lines.push(`${i + 1}. ${nm(k)}`));
+  const lines = [D.plain(S.date)];
   for (const p of PILES) { const ks = inPile(p); lines.push("", `${T.piles[p]} (${ks.length}): ${ks.map(nm).join(", ")}`); }
   return lines.join("\n");
 }
@@ -503,15 +496,16 @@ function copyText(mode) {
 
 /* ---------- rendering ---------- */
 const app = document.getElementById("app");
-function stepIndex() { return { sort: 0, review: 1, rank: 2, result: 3 }[S.step] ?? -1; }
+const STEPS = ["sort", "review", "result"];
+function stepIndex() { return STEPS.indexOf(S.step); }
 function renderChrome() {
   const T = t();
   document.documentElement.lang = S.lang;
   document.getElementById("lang").innerHTML = ["en", "ru", "hu"].map(l =>
     `<button type="button" data-act="lang" data-v="${l}" aria-pressed="${l === S.lang}">${l.toUpperCase()}</button>`).join("");
-  const si = stepIndex();
+  const si = stepIndex(), done = sortedCount() === CARDS.length;
   document.getElementById("steps").innerHTML = T.nav.map((n, i) =>
-    `<li class="${i === si ? "on" : i < si ? "done" : ""}"${i === si ? ' aria-current="step"' : ""}>${esc(n)}</li>`).join("");
+    `<li class="${i === si ? "on" : ""}"><button type="button" data-act="nav" data-v="${STEPS[i]}"${i > 0 && !done ? " disabled" : ""}${i === si ? ' aria-current="step"' : ""}>${esc(n)}</button></li>`).join("");
   document.getElementById("foot").textContent = T.attribution;
   document.getElementById("prompt-btn").textContent = T.promptBtn;
 }
@@ -555,7 +549,7 @@ function confirmBox() {
 function vSort() {
   const T = t(), k = S.order[S.idx], c = BY_KEY[k];
   const counts = PILES.map(p => inPile(p).length);
-  const btns = PILES.map((p, i) => `<button class="pile-btn" type="button" data-act="put" data-v="${p}" ${pileVar(p)}>
+  const btns = PILES.map((p, i) => `<button class="pile-btn" type="button" data-act="put" data-v="${p}" aria-pressed="${S.piles[k] === p}" ${pileVar(p)}>
       <span class="lvl" aria-hidden="true">${p === UNSURE ? "<b>?</b>" : [1, 2, 3].map(n => `<i class="${n <= LEVEL[p] ? "f" : ""}"></i>`).join("")}</span>
       <span class="t">${esc(T.piles[p])}</span>
       <span class="k"><kbd>${i + 1}</kbd></span>
@@ -570,6 +564,7 @@ function vSort() {
     <div class="row" style="justify-content:space-between">
       <button class="btn quiet" type="button" data-act="undo" ${S.hist.length ? "" : "disabled"}>${esc(T.back)}</button>
       <span class="small">${esc(T.sortHint)}</span>
+      ${sortedCount() === CARDS.length ? `<button class="btn" type="button" data-act="go" data-v="review">${esc(T.toReview)}</button>` : ""}
     </div>
   </div>`;
 }
@@ -590,29 +585,11 @@ function vReview() {
     <div><h2>${esc(T.reviewTitle)}</h2><p class="small" style="font-size:15px;max-width:62ch">${esc(T.reviewText)}</p></div>
     <div class="piles">${piles}</div>
     <div class="sticky-foot">${topStatus()}
-      <button class="btn primary" type="button" data-act="to-rank">${esc(T.toRank)}</button></div>
-  </div>`;
-}
-function vRank() {
-  const T = t(), top = rankedTop();
-  return `<div class="stack" style="gap:18px">
-    <div><h2>${esc(T.rankTitle)}</h2><p class="small" style="font-size:15px">${esc(T.rankText)}</p></div>
-    <ol class="rank">${top.map((k, i) => `<li>
-      <span class="num">${i + 1}</span>
-      <span class="txt"><b>${esc(nm(k))}</b><span>${esc(df(k))}</span></span>
-      <span class="arrows">
-        <button type="button" data-act="mv-top" data-v="${i}" aria-label="${esc(T.toTop)}: ${esc(nm(k))}" title="${esc(T.toTop)}" ${i === 0 ? "disabled" : ""}>⤒</button>
-        <button type="button" data-act="mv" data-v="${i}" data-d="-1" aria-label="${esc(T.up)}: ${esc(nm(k))}" ${i === 0 ? "disabled" : ""}>↑</button>
-        <button type="button" data-act="mv" data-v="${i}" data-d="1" aria-label="${esc(T.down)}: ${esc(nm(k))}" ${i === top.length - 1 ? "disabled" : ""}>↓</button>
-      </span></li>`).join("")}</ol>
-    <div class="row" style="justify-content:space-between">
-      <button class="btn quiet" type="button" data-act="go" data-v="review">${esc(T.backToReview)}</button>
-      <button class="btn primary" type="button" data-act="go" data-v="result">${esc(T.toResult)}</button>
-    </div>
+      <button class="btn primary" type="button" data-act="go" data-v="result">${esc(T.toResult)}</button></div>
   </div>`;
 }
 function vResult() {
-  const T = t(), top = rankedTop(), { poles } = poleScores();
+  const T = t(), top = inPile(TOP), { poles } = poleScores();
   const dist = PILES.map(p => [p, inPile(p).length]);
   const MAXI = 1;
   const poleRow = p => {
@@ -637,8 +614,8 @@ function vResult() {
       <p class="note" style="margin-top:12px">${esc(T.privacy)}</p>
     </section>
     <div class="intro-grid">
-      <section class="panel"><h3>${esc(T.topTitle)}</h3>
-        <ol class="toplist">${top.map((k, i) => `<li><span class="num">${i + 1}</span><span><b>${esc(nm(k))}</b><br><span>${esc(df(k))}</span></span></li>`).join("")}</ol>
+      <section class="panel"><h3>${esc(T.piles[TOP])} · ${top.length}</h3>
+        <ul class="toplist plain">${top.length ? top.map(k => `<li><span><b>${esc(nm(k))}</b><br><span>${esc(df(k))}</span></span></li>`).join("") : `<li><span class="empty">${esc(T.emptyPile)}</span></li>`}</ul>
       </section>
       <div class="stack" style="gap:20px">
         <section class="panel"><h3>${esc(T.distTitle)}</h3>
@@ -686,37 +663,33 @@ function renderSheet() {
 }
 function render() {
   renderChrome();
-  app.innerHTML = { intro: vIntro, sort: vSort, review: vReview, rank: vRank, result: vResult }[S.step]();
+  app.innerHTML = { intro: vIntro, sort: vSort, review: vReview, result: vResult }[S.step]();
   renderSheet();
   save();
 }
 
 /* ---------- actions ---------- */
-function syncTop() {
-  const inTop = new Set(inPile(TOP));
-  S.top = S.top.filter(k => inTop.has(k));
-  for (const k of S.order) if (inTop.has(k) && !S.top.includes(k)) S.top.push(k);
-}
 function put(p) {
   const k = S.order[S.idx];
-  S.piles[k] = p; S.hist.push(k); S.idx += 1;
+  S.hist.push([k, S.piles[k]]); S.piles[k] = p; S.idx += 1;
   if (S.idx >= S.order.length) { S.step = "review"; window.scrollTo(0, 0); }
   render();
 }
 function undo() {
-  const k = S.hist.pop();
-  if (!k) return;
-  delete S.piles[k]; S.idx = S.order.indexOf(k);
+  const h = S.hist.pop();
+  if (h === undefined) return;
+  const [k, prev] = Array.isArray(h) ? h : [h, undefined];
+  if (prev === undefined) delete S.piles[k]; else S.piles[k] = prev;
+  S.idx = S.order.indexOf(k);
   render();
 }
 function go(step) {
-  if (step === "rank" || step === "result") syncTop();
   S.step = step; toast = { text: "", bad: false }; confirmRestart = false;
   render(); window.scrollTo(0, 0);
 }
 function resumeStep() {
   if (sortedCount() < CARDS.length) { S.idx = S.order.findIndex(k => S.piles[k] === undefined); return "sort"; }
-  return S.top.length ? "result" : "review";
+  return "review";
 }
 async function copy(mode) {
   copyMode = mode;
@@ -755,23 +728,11 @@ document.addEventListener("click", e => {
     case "close-sheet": sheetKey = null; promptSheet = false; sheetToast = { text: "", bad: false }; renderSheet(); break;
     case "show-prompt": sheetKey = null; promptSheet = true; renderSheet(); break;
     case "copy-prompt-sheet": copyPromptSheet(); break;
-    case "move": S.piles[sheetKey] = Number(v); sheetKey = null; syncTop(); render(); break;
-    case "to-rank": go(inPile(TOP).length ? "rank" : "result"); break;
+    case "move": S.piles[sheetKey] = Number(v); sheetKey = null; render(); break;
+    case "nav":
+      if (v === "sort" && S.idx >= S.order.length) { S.idx = 0; S.hist = []; }
+      go(v); break;
     case "go": go(v); break;
-    case "mv": {
-      const top = rankedTop(), i = Number(v), j = i + Number(el.dataset.d);
-      if (j < 0 || j >= top.length) break;
-      [top[i], top[j]] = [top[j], top[i]]; S.top = top; render();
-      app.querySelectorAll(`[data-act="mv"][data-v="${j}"]`)[Number(el.dataset.d) < 0 ? 0 : 1]?.focus();
-      break;
-    }
-    case "mv-top": {
-      const top = rankedTop(), i = Number(v);
-      if (i <= 0) break;
-      top.unshift(top.splice(i, 1)[0]); S.top = top; render();
-      app.querySelector('[data-act="mv"][data-v="0"]')?.focus();
-      break;
-    }
     case "copy": copy(v); break;
   }
 });
@@ -790,7 +751,7 @@ document.addEventListener("drop", e => {
   const p = e.target.closest(".pile"); if (!p) return;
   e.preventDefault();
   const k = e.dataTransfer.getData("text/plain");
-  if (BY_KEY[k]) { S.piles[k] = Number(p.dataset.pile); syncTop(); render(); }
+  if (BY_KEY[k]) { S.piles[k] = Number(p.dataset.pile); render(); }
 });
 
 render();

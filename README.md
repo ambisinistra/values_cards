@@ -7,9 +7,8 @@ Languages: English, Russian, Hungarian. Everything runs in the browser, and the 
 ## How it works
 
 1. **Sort.** All 100 cards go into four decks: Very important, Important, Unsure, Not important. Cards are shown in random order.
-2. **Review.** The person checks the decks and moves cards. Deck sizes are not limited.
-3. **Rank.** The person ranks all cards in the Very important deck.
-4. **Copy.** There are three copy options:
+2. **Review.** The person checks the decks and moves cards. Deck sizes are not limited. The steps in the header let the person go back to sorting or review at any time.
+3. **Copy.** There are three copy options:
    - the sort with the prompt, ready to paste;
    - the sort only, as a plain list;
    - the prompt only, without the person's data. The prompt is also available at any time from the Prompt button in the header.
