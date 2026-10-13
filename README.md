@@ -2,7 +2,7 @@
 
 A one-page tool for the **Personal Values Card Sort**. A person sorts 100 value cards, ranks their top values, and copies the result with an analysis prompt into Claude (Opus recommended). Claude then writes a professional psychological profile: value structure, personality profile, behavioural patterns, areas of conflict, resources, socialisation context, suitable professions and work environments, relationships, and practical recommendations.
 
-Languages: English, Russian, Hungarian. Everything runs in the browser, and the page sends no data anywhere.
+Languages: English, Russian, Hungarian, Serbian (Latin script). Everything runs in the browser, and the page sends no data anywhere.
 
 ## How it works
 
@@ -31,8 +31,8 @@ The card-to-value mapping is an expert judgement, not a validated scale. The ind
 
 | Path | What it is |
 |---|---|
-| `value_cards.py` | Single source of the 100 cards: EN text, RU and HU translations, Schwartz mapping, sensitive-card flags. Run it to validate the set and export `value_cards_100.csv`. |
-| `prompts/analysis_{en,ru,hu}.md` | The analysis prompt. `{{LAYOUT}}` marks where the sorting data goes. |
+| `value_cards.py` | Single source of the 100 cards: EN text, RU, HU and SR translations, Schwartz mapping, sensitive-card flags. Run it to validate the set and export `value_cards_100.csv`. |
+| `prompts/analysis_{en,ru,hu,sr}.md` | The analysis prompt. `{{LAYOUT}}` marks where the sorting data goes. |
 | `src/template.html` | Page markup, styles and logic. |
 | `build.py` | Builds `index.html` (for GitHub Pages and for sending as a file) and `dist/artifact.html`. |
 
@@ -46,7 +46,7 @@ python3 build.py
 
 Cards: *Personal Values Card Sort* (update 2011), W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico. The authors place it in the public domain: it "may be copied or adapted without further permission". The English names and definitions are kept verbatim.
 
-The Russian and Hungarian versions are our own adaptations. They have not been checked by back-translation or with native-speaker reviewers yet.
+The Russian, Hungarian and Serbian versions are our own adaptations. They have not been checked by back-translation or with native-speaker reviewers yet.
 
 Code: MIT licence, see `LICENSE`.
 

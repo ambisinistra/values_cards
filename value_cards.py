@@ -9,7 +9,7 @@
   - состав и нумерация 100 карточек, английские названия и определения (verbatim,
     сверено программно с PDF; у BELONGING определение обрывается так же, как в оригинале).
 Что добавлено нами (адаптация, НЕ валидировано):
-  - name_ru / def_ru, name_hu / def_hu — авторский перевод (RU — гендерно-нейтральный);
+  - name_ru / def_ru, name_hu / def_hu, name_sr / def_sr — авторский перевод (RU и SR — гендерно-нейтральные);
     перед полевым использованием нужен обратный перевод и когнитивные интервью.
   - schwartz — привязка к 19 ценностям уточнённой теории Шварца (Schwartz et al., 2012)
     по экспертной оценке; confidence показывает, насколько привязка однозначна.
@@ -358,14 +358,119 @@ _HU = {
     "WORLD_PEACE": ("VILÁGBÉKE", "tenni a világbéke előmozdításáért"),
 }
 
+# Сербский перевод, латиница, экавский (авторский, требует проверки носителем языка). key -> (name_sr, def_sr)
+_SR = {
+    "ACCEPTANCE": ("PRIHVAĆENOST", "da me drugi prihvataju bez pokušaja da me promene"),
+    "ACCURACY": ("TAČNOST", "da moja mišljenja i uverenja budu ispravna"),
+    "ACHIEVEMENT": ("POSTIGNUĆA", "ostvarivati značajne rezultate"),
+    "ADVENTURE": ("AVANTURA", "doživljavati nova i uzbudljiva iskustva"),
+    "ART": ("UMETNOST", "ceniti umetnost ili se izražavati kroz nju"),
+    "ATTRACTIVENESS": ("PRIVLAČNOST", "imati privlačan izgled"),
+    "AUTHORITY": ("RUKOVOĐENJE", "biti na čelu drugih ljudi i odgovarati za njih"),
+    "AUTONOMY": ("AUTONOMIJA", "samostalno određivati svoj život"),
+    "BEAUTY": ("LEPOTA", "primećivati i ceniti lepotu oko sebe"),
+    "BELONGING": ("PRIPADNOST", "osećati se delom zajednice"),
+    "CARING": ("BRIGA", "brinuti o drugima"),
+    "CHALLENGE": ("IZAZOV", "prihvatati teške zadatke i probleme"),
+    "COMFORT": ("UDOBNOST", "živeti prijatno i udobno"),
+    "COMMITMENT": ("POSVEĆENOST", "preuzimati trajne i značajne obaveze"),
+    "COMPASSION": ("SAOSEĆANJE", "saosećati s drugima i postupati u skladu s tim"),
+    "COMPLEXITY": ("SLOŽENOST", "prihvatati zamršenost i višeslojnost života"),
+    "COMPROMISE": ("KOMPROMIS", "popuštati i dogovarati se radi postizanja saglasnosti"),
+    "CONTRIBUTION": ("DOPRINOS", "dati trajan doprinos svetu"),
+    "COOPERATION": ("SARADNJA", "raditi zajedno s drugima"),
+    "COURAGE": ("HRABROST", "zadržati hrabrost i snagu pred nedaćama"),
+    "COURTESY": ("UČTIVOST", "pokazivati pažnju i učtivost prema drugima"),
+    "CREATIVITY": ("KREATIVNOST", "stvarati nove stvari ili ideje"),
+    "CURIOSITY": ("RADOZNALOST", "tragati za novim, isprobavati ga i upoznavati"),
+    "DEPENDABILITY": ("POUZDANOST", "zaslužiti poverenje, da se drugi mogu osloniti na mene"),
+    "DILIGENCE": ("TEMELJNOST", "svaki posao obavljati temeljno i savesno"),
+    "DUTY": ("DUŽNOST", "ispunjavati svoje dužnosti i obaveze"),
+    "ECOLOGY": ("EKOLOGIJA", "živeti u skladu s prirodom"),
+    "EXCITEMENT": ("UZBUĐENJE", "živeti život pun snažnih doživljaja i uzbuđenja"),
+    "FAITHFULNESS": ("VERNOST", "čuvati vernost i odanost u odnosima"),
+    "FAME": ("SLAVA", "uživati slavu i priznanje"),
+    "FAMILY": ("PORODICA", "imati srećnu porodicu punu ljubavi"),
+    "FITNESS": ("FIZIČKA KONDICIJA", "održavati snagu i dobru fizičku formu"),
+    "FLEXIBILITY": ("FLEKSIBILNOST", "lako se prilagođavati novim okolnostima"),
+    "FORGIVENESS": ("PRAŠTANJE", "umeti oprostiti drugima"),
+    "FREEDOM": ("SLOBODA", "živeti bez suvišnih ograničenja i zabrana"),
+    "FRIENDSHIP": ("PRIJATELJSTVO", "imati bliske prijatelje na koje se mogu osloniti"),
+    "FUN": ("ZABAVA", "igrati se i zabavljati"),
+    "GENEROSITY": ("VELIKODUŠNOST", "deliti s drugima ono što imam"),
+    "GENUINENESS": ("AUTENTIČNOST", "postupati u skladu s onim ko zaista jesam"),
+    "GODS_WILL": ("BOŽJA VOLJA", "tražiti Božju volju i slediti je"),
+    "GRATITUDE": ("ZAHVALNOST", "osećati i izražavati zahvalnost"),
+    "GROWTH": ("RAST", "stalno se menjati i razvijati"),
+    "HEALTH": ("ZDRAVLJE", "čuvati zdravlje i dobro se osećati"),
+    "HONESTY": ("POŠTENJE", "govoriti istinu i ne obmanjivati"),
+    "HOPE": ("NADA", "zadržati pozitivan i optimističan pogled"),
+    "HUMILITY": ("SKROMNOST", "ponašati se skromno i bez pretenzija"),
+    "HUMOR": ("HUMOR", "videti smešno u sebi i u svetu"),
+    "IMAGINATION": ("MAŠTA", "sanjati i videti mogućnosti"),
+    "INDEPENDENCE": ("NEZAVISNOST", "ne zavisiti od drugih"),
+    "INDUSTRY": ("VREDNOĆA", "marljivo i dobro obavljati svoje životne zadatke"),
+    "INNER_PEACE": ("UNUTRAŠNJI MIR", "osećati duševni mir"),
+    "INTEGRITY": ("INTEGRITET", "svaki dan živeti u skladu sa svojim vrednostima"),
+    "INTELLIGENCE": ("INTELEKT", "održavati um oštrim i aktivnim"),
+    "INTIMACY": ("BLISKOST", "deliti s drugima ono najintimnije"),
+    "JUSTICE": ("PRAVEDNOST", "zalagati se za pošteno i jednako postupanje prema svima"),
+    "KNOWLEDGE": ("ZNANJE", "učiti i uvećavati vredna znanja"),
+    "LEADERSHIP": ("LIDERSTVO", "inspirisati i voditi druge"),
+    "LEISURE": ("ODMOR", "naći vremena za opuštanje i uživanje"),
+    "LOVED": ("PRIMATI LJUBAV", "da me bliski ljudi vole"),
+    "LOVING": ("DAVATI LJUBAV", "pružati ljubav drugima"),
+    "MASTERY": ("VEŠTINA", "vešto obavljati svoje svakodnevne poslove"),
+    "MINDFULNESS": ("SVESNOST", "živeti svesno sadašnjeg trenutka"),
+    "MODERATION": ("UMERENOST", "izbegavati krajnosti i nalaziti zlatnu sredinu"),
+    "MONOGAMY": ("MONOGAMIJA", "biti u bliskoj vezi punoj ljubavi s jednim partnerom"),
+    "MUSIC": ("MUZIKA", "uživati u muzici ili se izražavati kroz nju"),
+    "NON_CONFORMITY": ("NEKONFORMIZAM", "dovoditi u pitanje autoritete i norme"),
+    "NOVELTY": ("NOVINA", "živeti život pun promena i raznolikosti"),
+    "NURTURANCE": ("PODRŠKA", "ohrabrivati i podržavati druge"),
+    "OPENNESS": ("OTVORENOST", "otvarati se novim iskustvima, idejama i mogućnostima"),
+    "ORDER": ("RED", "živeti uređeno i organizovano"),
+    "PASSION": ("STRAST", "gajiti duboka osećanja prema idejama, aktivnostima ili ljudima"),
+    "PATRIOTISM": ("PATRIOTIZAM", "voleti svoju zemlju, služiti joj i braniti je"),
+    "PLEASURE": ("ZADOVOLJSTVO", "doživljavati prijatne osećaje"),
+    "POPULARITY": ("POPULARNOST", "dopadati se mnogim ljudima"),
+    "POWER": ("MOĆ", "kontrolisati druge ljude"),
+    "PRACTICALITY": ("PRAKTIČNOST", "usmeravati se na ono što je praktično, razborito i razumno"),
+    "PROTECT": ("ZAŠTITA", "štititi i čuvati one koje volim"),
+    "PROVIDE": ("IZDRŽAVANJE PORODICE", "izdržavati svoju porodicu i brinuti o njoj"),
+    "PURPOSE": ("SMISAO", "imati smisao i pravac u životu"),
+    "RATIONALITY": ("RACIONALNOST", "rukovoditi se razumom, logikom i činjenicama"),
+    "REALISM": ("REALIZAM", "realno sagledavati stvari i delovati praktično"),
+    "RESPONSIBILITY": ("ODGOVORNOST", "donositi odgovorne odluke i sprovoditi ih"),
+    "RISK": ("RIZIK", "rizikovati i okušavati sreću"),
+    "ROMANCE": ("ROMANTIKA", "doživljavati snažnu, uzbudljivu ljubav"),
+    "SAFETY": ("SIGURNOST", "živeti bezbedno i zaštićeno"),
+    "SELF_ACCEPTANCE": ("PRIHVATANJE SEBE", "prihvatati sebe u celosti, sa svim osobenostima"),
+    "SELF_CONTROL": ("SAMOKONTROLA", "disciplinovano upravljati svojim postupcima"),
+    "SELF_ESTEEM": ("SAMOPOŠTOVANJE", "imati dobar odnos prema sebi"),
+    "SELF_KNOWLEDGE": ("SAMOSPOZNAJA", "duboko i iskreno razumeti sebe"),
+    "SERVICE": ("SLUŽENJE", "pomagati drugima i biti im od koristi"),
+    "SEXUALITY": ("SEKSUALNOST", "imati aktivan i zadovoljavajući seksualni život"),
+    "SIMPLICITY": ("JEDNOSTAVNOST", "živeti jednostavno, sa minimalnim potrebama"),
+    "SOLITUDE": ("OSAMA", "imati vreme i prostor da budem nasamo sa sobom"),
+    "SPIRITUALITY": ("DUHOVNOST", "duhovno rasti i sazrevati"),
+    "STABILITY": ("STABILNOST", "živeti prilično postojanim i predvidivim životom"),
+    "TOLERANCE": ("TOLERANCIJA", "prihvatati i poštovati one koji se razlikuju od mene"),
+    "TRADITION": ("TRADICIJA", "slediti poštovane obrasce iz prošlosti"),
+    "VIRTUE": ("VRLINA", "živeti moralno čistim i dostojnim životom"),
+    "WEALTH": ("BOGATSTVO", "imati mnogo novca"),
+    "WORLD_PEACE": ("MIR U SVETU", "doprinositi miru u svetu"),
+}
+
 _FIELDS = ("id", "key", "name_en", "def_en", "name_ru", "def_ru",
            "schwartz", "confidence", "sensitive")
-LANGS = ("en", "ru", "hu")
+LANGS = ("en", "ru", "hu", "sr")
 
 CARDS = [dict(zip(_FIELDS, row)) for row in _ROWS]
 for _c in CARDS:
     _c["higher_order"] = SCHWARTZ_19[_c["schwartz"]][2]
     _c["name_hu"], _c["def_hu"] = _HU[_c["key"]]
+    _c["name_sr"], _c["def_sr"] = _SR[_c["key"]]
 
 CARDS_BY_KEY = {c["key"]: c for c in CARDS}
 
@@ -383,6 +488,7 @@ def validate() -> None:
     assert [c["id"] for c in CARDS] == list(range(1, 101)), "ids must be 1..100 in order"
     assert len(CARDS_BY_KEY) == 100, "duplicate keys"
     assert set(_HU) == set(CARDS_BY_KEY), "HU keys mismatch"
+    assert set(_SR) == set(CARDS_BY_KEY), "SR keys mismatch"
     for lang in LANGS:
         names = [c[f"name_{lang}"] for c in CARDS]
         assert len(set(names)) == 100, f"duplicate {lang} names"
@@ -397,7 +503,7 @@ if __name__ == "__main__":
     validate()
     out = Path(__file__).with_name("value_cards_100.csv")
     with out.open("w", newline="", encoding="utf-8-sig") as f:  # utf-8-sig: Excel корректно открывает кириллицу
-        w = csv.DictWriter(f, fieldnames=list(_FIELDS) + ["name_hu", "def_hu", "higher_order"])
+        w = csv.DictWriter(f, fieldnames=list(_FIELDS) + ["name_hu", "def_hu", "name_sr", "def_sr", "higher_order"])
         w.writeheader()
         w.writerows(CARDS)
 

@@ -1,6 +1,6 @@
 <!--HEAD-->
 <title>PsychoMirror</title>
-<meta name="description" content="Personal Values Card Sort: sort 100 value cards and copy the result with an analysis prompt for your AI chat. EN / RU / HU.">
+<meta name="description" content="Personal Values Card Sort: sort 100 value cards and copy the result with a psychological profile prompt for Claude. EN / RU / HU / SR.">
 <style>
 /* Layout: one centred column under a sticky bar; while sorting, the index card is the hero and the five piles sit under it as an ordinal scale. */
 :root {
@@ -257,7 +257,7 @@ const L = {
     privacy: "Everything stays in this browser. The page sends nothing anywhere. When you paste your sort into Claude, you share it with Anthropic.",
     start: "Start sorting", resume: "Continue", restart: "Start over",
     resumeInfo: n => `${n} of 100 cards sorted`,
-    attribution: "Cards: Personal Values Card Sort by W. R. Miller, J. C'de Baca, D. B. Matthews and P. L. Wilbourne, University of New Mexico, 2011. Public domain. Russian and Hungarian versions are adaptations.",
+    attribution: "Cards: Personal Values Card Sort by W. R. Miller, J. C'de Baca, D. B. Matthews and P. L. Wilbourne, University of New Mexico, 2011. Public domain. Russian, Hungarian and Serbian versions are adaptations.",
     nav: ["Sort", "Review", "Result"],
     piles: ["Not important", "Unsure", "Important", "Very important"],
     progress: i => `Card ${i} of 100`,
@@ -305,7 +305,7 @@ const L = {
     privacy: "Всё хранится только в этом браузере, страница ничего никуда не отправляет. Когда вы вставляете расклад в Claude, вы передаёте его Anthropic.",
     start: "Начать раскладку", resume: "Продолжить", restart: "Начать заново",
     resumeInfo: n => `Разложено ${n} из 100 карточек`,
-    attribution: "Карточки: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Общественное достояние. Русская и венгерская версии — адаптация.",
+    attribution: "Карточки: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Общественное достояние. Русская, венгерская и сербская версии — адаптация.",
     nav: ["Раскладка", "Проверка", "Результат"],
     piles: ["Не важно", "Сложно сказать", "Важно", "Очень важно"],
     progress: i => `Карточка ${i} из 100`,
@@ -353,7 +353,7 @@ const L = {
     privacy: "Minden csak ebben a böngészőben marad, az oldal semmit nem küld el. Ha beilleszted a válogatást a Claude-ba, azzal átadod az Anthropicnak.",
     start: "Kezdés", resume: "Folytatás", restart: "Újrakezdés",
     resumeInfo: n => `${n} / 100 kártya kész`,
-    attribution: "Kártyák: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Közkincs. Az orosz és a magyar változat adaptáció.",
+    attribution: "Kártyák: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Közkincs. Az orosz, a magyar és a szerb változat adaptáció.",
     nav: ["Válogatás", "Átnézés", "Eredmény"],
     piles: ["Nem fontos", "Bizonytalan", "Fontos", "Nagyon fontos"],
     progress: i => `${i}. kártya / 100`,
@@ -389,6 +389,54 @@ const L = {
       polesTop: p => `A PÓLUSOK KÁRTYÁI A „${p[3]}” KUPACBAN`,
       plain: d => `Az értékválogatásom — Personal Values Card Sort (100 kártya), ${d}`,
       placeholder: "[IDE ILLESZD BE A VÁLOGATÁS ADATAIT]"
+    }
+  },
+  sr: {
+    eyebrow: "Personal Values Card Sort · 100 kartica",
+    h1: "Šta ti je najvažnije",
+    lede: "Rasporedi 100 kartica s vrednostima prema tome koliko ti je svaka važna. Zatim kopiraj rezultat zajedno sa gotovim promptom u Claude i dobij profesionalni psihološki profil.",
+    example: "Primer kartice",
+    howTitle: "Kako funkcioniše",
+    how: ["Rasporedi kartice u četiri špila. Traje oko 10–15 minuta.", "Proveri špilove i premesti kartice koje nisu na pravom mestu.", "Kopiraj raspored i prompt za analizu."],
+    privacy: "Sve ostaje samo u ovom pregledaču, stranica ništa nikuda ne šalje. Kada raspored nalepiš u Claude, deliš ga sa kompanijom Anthropic.",
+    start: "Započni raspoređivanje", resume: "Nastavi", restart: "Počni iznova",
+    resumeInfo: n => `Raspoređeno ${n} od 100 kartica`,
+    attribution: "Kartice: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Javno dobro. Ruska, mađarska i srpska verzija su adaptacije.",
+    nav: ["Raspoređivanje", "Provera", "Rezultat"],
+    piles: ["Nije važno", "Teško je reći", "Važno", "Veoma važno"],
+    progress: i => `Kartica ${i} od 100`,
+    back: "← Nazad", sortHint: "Možeš koristiti i tastere 1–4, redom kao dugmad.",
+    reviewTitle: "Proveri špilove",
+    reviewText: "Dodirni karticu da pročitaš pojašnjenje i premestiš je u drugi špil.",
+    topCount: n => `Veoma važno: ${n}`,
+    moveTo: "Premesti u", close: "Zatvori", current: "sada ovde", emptyPile: "Prazno",
+    toResult: "Prikaži rezultat →", toReview: "Na proveru →",
+    resultTitle: "Tvoja mapa vrednosti", distTitle: "Kartica po špilovima",
+    polesTitle: "Švarcovi polovi vrednosti",
+    polesNote: "Iznad nule znači da ti je taj pol važniji od tvoje prosečne kartice. Razlika manja od 0,2 je mala. Kartice „Teško je reći“ se ne računaju.",
+    poles: { OPENNESS: "Otvorenost za promene", CONSERVATION: "Očuvanje", SELF_ENHANCEMENT: "Samopotvrđivanje", SELF_TRANSCENDENCE: "Samotranscendencija" },
+    copyTitle: "Dobij profil u Claude-u",
+    copyText: "Kopiraj raspored sa promptom, nalepi ga u novi razgovor u Claude-u i pošalji. Preporučujemo Opus, najmoćniji Claude model.",
+    openClaude: "Otvori Claude ↗",
+    promptBtn: "Prompt", promptTitle: "Prompt za analizu",
+    promptText: "Uputstvo po kojem Claude sastavlja profil. Ovde ga možeš kopirati zasebno, a posle raspoređivanja zajedno sa svojim podacima.",
+    copyPromptBtn: "Kopiraj prompt",
+    copyBoth: "Kopiraj raspored + prompt", copyBothSub: "Spremno za lepljenje. Preporučujemo.",
+    copyCards: "Kopiraj samo raspored", copyCardsSub: "Spisak tvojih kartica po špilovima.",
+    copyPrompt: "Kopiraj samo prompt", copyPromptSub: "Uputstvo za analizu bez tvojih podataka.",
+    copied: "Kopirano u privremenu memoriju.", copyFail: "Pregledač je blokirao kopiranje. Tekst ispod je označen: pritisni Ctrl+C ili ⌘C.",
+    preview: "Šta će biti kopirano", editPiles: "Izmeni špilove", restartQ: "Obrisati ovaj raspored i početi iznova?", yesRestart: "Da, počni iznova", cancel: "Otkaži",
+    d: {
+      head: "=== RASPORED VREDNOSTI ===",
+      method: "Metodika: Personal Values Card Sort (Miller i sar., 2011), 100 kartica",
+      date: "Datum", piles: "ŠPILOVI",
+      poles: "INDEKSI ŠVARCOVIH POLOVA",
+      polesMethod: (p, m, u) => `Metod: bodovi špilova — „${p[0]}“ 0, „${p[2]}“ 1, „${p[3]}“ 2. Kartice iz špila „${p[1]}“ ne dobijaju bodove (kartica: ${u}). Prosečan broj bodova ocenjenih kartica: ${m}. Indeks pola = prosečan broj bodova kartica tog pola minus ovaj prosek (iznad nule — pol je važniji od prosečne kartice ove osobe). Granične vrednosti se ravnomerno dele između dva pola, kartice sa nejasnim razvrstavanjem računaju se sa težinom 0,5, kartice van Švarcovog modela se ne računaju.`,
+      cards: "kartica",
+      axes: "Ose: Otvorenost za promene ↔ Očuvanje; Samopotvrđivanje ↔ Samotranscendencija.",
+      polesTop: p => `KARTICE POLOVA U ŠPILU „${p[3]}“`,
+      plain: d => `Moj raspored vrednosti — Personal Values Card Sort (100 kartica), ${d}`,
+      placeholder: "[OVDE NALEPI PODATKE RASPOREDA]"
     }
   }
 };
@@ -496,7 +544,7 @@ function stepIndex() { return STEPS.indexOf(S.step); }
 function renderChrome() {
   const T = t();
   document.documentElement.lang = S.lang;
-  document.getElementById("lang").innerHTML = ["en", "ru", "hu"].map(l =>
+  document.getElementById("lang").innerHTML = ["en", "ru", "hu", "sr"].map(l =>
     `<button type="button" data-act="lang" data-v="${l}" aria-pressed="${l === S.lang}">${l.toUpperCase()}</button>`).join("");
   const si = stepIndex(), done = sortedCount() === CARDS.length;
   document.getElementById("steps").innerHTML = T.nav.map((n, i) =>
