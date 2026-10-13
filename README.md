@@ -7,14 +7,14 @@ Languages: English, Russian, Hungarian. Everything runs in the browser, and the 
 ## How it works
 
 1. **Sort.** All 100 cards go into five piles: Most important, Very important, Important, Somewhat important, Not important. Cards are shown in random order.
-2. **Review.** The person checks the piles and moves cards. The Most important pile must hold 5 to 10 cards.
-3. **Rank.** The person ranks the Most important cards.
+2. **Review.** The person checks the piles and moves cards. Pile sizes are not limited.
+3. **Rank.** The person ranks all cards in the Most important pile.
 4. **Copy.** There are three copy options:
    - the sort with the prompt, ready to paste;
    - the sort only, as a plain list;
    - the prompt only, without the person's data. The prompt is also available at any time from the Prompt button in the header.
 
-This follows the procedure of the 2011 update by the card sort's authors: 5 piles, then a ranked top of 5–10 values.
+This follows the 2011 update by the card sort's authors (5 piles, then ranking the top pile), without their suggested limit of 5–10 top values.
 
 ## Schwartz pole indices
 

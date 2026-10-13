@@ -10,7 +10,7 @@ A válaszadó önállóan szétválogatott 100 értékkártyát. Minden kártyá
 
 A menete:
 1. Mind a 100 kártya öt kupacba került: „A legfontosabb”, „Nagyon fontos”, „Fontos”, „Kicsit fontos”, „Nem fontos”.
-2. „A legfontosabb” kupacból a válaszadó 5–10 kártyát kiválasztott és rangsorolt: az 1-es a legfontosabb.
+2. A válaszadó „A legfontosabb” kupac összes kártyáját rangsorolta: az 1-es a legfontosabb. A kupacok mérete nem volt korlátozva.
 
 Az üzenet végén találod a válogatás adatait: a rangsorolt legfontosabb értékeket, mind az öt kupacot a meghatározásokkal, valamint a Schwartz-modell négy pólusának indexeit. Az indexeket program számolta ki, a módszer leírása az adatok között szerepel. Ne számold újra őket, és ne változtasd meg a kártyák elméleti besorolását. A „Nem fontos” kupac ugyanolyan teljes értékű adat, mint a legfontosabb értékek: az elutasított értékek ugyanannyit elárulnak az emberről, mint a választottak.
 

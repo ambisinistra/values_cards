@@ -242,7 +242,7 @@ const L = {
     lede: "Sort 100 value cards by how important each one is to you. Then copy the result with a ready-made prompt into Claude and get a professional psychological profile.",
     example: "Example card",
     howTitle: "How it works",
-    how: ["Sort the cards into five piles. It takes about 10–15 minutes.", "Check the piles and move any card that feels out of place.", "Choose 5 to 10 most important values and rank them.", "Copy your sort and the analysis prompt."],
+    how: ["Sort the cards into five piles. It takes about 10–15 minutes.", "Check the piles and move any card that feels out of place.", "Rank the values in your Most important pile.", "Copy your sort and the analysis prompt."],
     privacy: "Everything stays in this browser. The page sends nothing anywhere. When you paste your sort into Claude, you share it with Anthropic.",
     start: "Start sorting", resume: "Continue", restart: "Start over",
     resumeInfo: n => `${n} of 100 cards sorted`,
@@ -252,10 +252,8 @@ const L = {
     progress: i => `Card ${i} of 100`,
     back: "← Back", sortHint: "Keys 1–5 work too. 5 is most important.",
     reviewTitle: "Check your piles",
-    reviewText: "Tap a card to read its definition and move it to another pile. The Most important pile needs 5 to 10 cards.",
-    topOk: n => `Most important: ${n}. Ready to rank.`,
-    topMany: n => `Most important: ${n}. Move ${n - 10} to another pile.`,
-    topFew: n => `Most important: ${n}. Add ${5 - n} more.`,
+    reviewText: "Tap a card to read its definition and move it to another pile.",
+    topCount: n => `Most important: ${n}`, toTop: "Move to top",
     toRank: "Rank top values →", moveTo: "Move to", close: "Close", current: "here now", emptyPile: "No cards",
     rankTitle: "Rank your most important values",
     rankText: "Put the value that matters most at number 1. Use the arrows to change the order.",
@@ -295,7 +293,7 @@ const L = {
     lede: "Разложите 100 карточек ценностей по тому, насколько каждая важна для вас. Потом скопируйте результат вместе с готовым промптом в Claude и получите профессиональный психологический профиль.",
     example: "Пример карточки",
     howTitle: "Как это устроено",
-    how: ["Разложите карточки по пяти стопкам. Это займёт 10–15 минут.", "Проверьте стопки и переложите карточки, если что-то лежит не там.", "Выберите от 5 до 10 самых важных ценностей и расставьте их по порядку.", "Скопируйте расклад и промпт для анализа."],
+    how: ["Разложите карточки по пяти стопкам. Это займёт 10–15 минут.", "Проверьте стопки и переложите карточки, если что-то лежит не там.", "Расставьте по порядку ценности из стопки «Самое важное».", "Скопируйте расклад и промпт для анализа."],
     privacy: "Всё хранится только в этом браузере, страница ничего никуда не отправляет. Когда вы вставляете расклад в Claude, вы передаёте его Anthropic.",
     start: "Начать раскладку", resume: "Продолжить", restart: "Начать заново",
     resumeInfo: n => `Разложено ${n} из 100 карточек`,
@@ -305,10 +303,8 @@ const L = {
     progress: i => `Карточка ${i} из 100`,
     back: "← Назад", sortHint: "Можно нажимать клавиши 1–5. 5 — самое важное.",
     reviewTitle: "Проверьте стопки",
-    reviewText: "Нажмите на карточку, чтобы прочитать определение и переложить её. В стопке «Самое важное» должно быть от 5 до 10 карточек.",
-    topOk: n => `Самое важное: ${n}. Можно ранжировать.`,
-    topMany: n => `Самое важное: ${n}. Переложите ${n - 10} в другие стопки.`,
-    topFew: n => `Самое важное: ${n}. Добавьте ещё ${5 - n}.`,
+    reviewText: "Нажмите на карточку, чтобы прочитать определение и переложить её.",
+    topCount: n => `Самое важное: ${n}`, toTop: "В начало",
     toRank: "Ранжировать топ →", moveTo: "Переложить в", close: "Закрыть", current: "сейчас здесь", emptyPile: "Пусто",
     rankTitle: "Расставьте самые важные ценности по порядку",
     rankText: "Самая важная — под номером 1. Меняйте порядок стрелками.",
@@ -348,7 +344,7 @@ const L = {
     lede: "Válogasd szét a 100 értékkártyát aszerint, mennyire fontosak neked. Utána másold az eredményt egy kész prompttal együtt a Claude-ba, és szakmai pszichológiai profilt kapsz.",
     example: "Példakártya",
     howTitle: "Hogyan működik",
-    how: ["Válogasd a kártyákat öt kupacba. Körülbelül 10–15 perc.", "Nézd át a kupacokat, és tedd át, ami nem jó helyen van.", "Válassz ki 5–10 legfontosabb értéket, és rangsorold őket.", "Másold ki a válogatást és az elemző promptot."],
+    how: ["Válogasd a kártyákat öt kupacba. Körülbelül 10–15 perc.", "Nézd át a kupacokat, és tedd át, ami nem jó helyen van.", "Rangsorold „A legfontosabb” kupac értékeit.", "Másold ki a válogatást és az elemző promptot."],
     privacy: "Minden csak ebben a böngészőben marad, az oldal semmit nem küld el. Ha beilleszted a válogatást a Claude-ba, azzal átadod az Anthropicnak.",
     start: "Kezdés", resume: "Folytatás", restart: "Újrakezdés",
     resumeInfo: n => `${n} / 100 kártya kész`,
@@ -358,10 +354,8 @@ const L = {
     progress: i => `${i}. kártya / 100`,
     back: "← Vissza", sortHint: "Az 1–5 billentyűk is működnek. Az 5 a legfontosabb.",
     reviewTitle: "Nézd át a kupacokat",
-    reviewText: "Koppints egy kártyára, hogy elolvasd a meghatározását, és áttedd egy másik kupacba. „A legfontosabb” kupacban 5–10 kártyának kell lennie.",
-    topOk: n => `A legfontosabb: ${n}. Jöhet a rangsorolás.`,
-    topMany: n => `A legfontosabb: ${n}. Tegyél át ${n - 10} kártyát másik kupacba.`,
-    topFew: n => `A legfontosabb: ${n}. Tegyél hozzá még ${5 - n} kártyát.`,
+    reviewText: "Koppints egy kártyára, hogy elolvasd a meghatározását, és áttedd egy másik kupacba.",
+    topCount: n => `A legfontosabb: ${n}`, toTop: "Az elejére",
     toRank: "Rangsorolás →", moveTo: "Áthelyezés ide", close: "Bezárás", current: "most itt van", emptyPile: "Üres",
     rankTitle: "Rangsorold a legfontosabb értékeidet",
     rankText: "A legfontosabb legyen az 1-es. A sorrendet a nyilakkal módosíthatod.",
@@ -471,6 +465,7 @@ function dataBlock() {
   const T = t(), D = T.d, { mean, poles } = poleScores();
   const lines = [D.head, D.method, `${D.date}: ${S.date}`, "", D.top];
   rankedTop().forEach((k, i) => lines.push(`${i + 1}. ${cardLine(k)}`));
+  if (!rankedTop().length) lines.push("—");
   lines.push("", D.piles);
   for (const p of PILES) {
     const ks = inPile(p);
@@ -570,13 +565,11 @@ function vSort() {
   </div>`;
 }
 function topStatus() {
-  const T = t(), n = inPile(4).length;
-  if (n > 10) return `<span class="status bad">${esc(T.topMany(n))}</span>`;
-  if (n < 5) return `<span class="status bad">${esc(T.topFew(n))}</span>`;
-  return `<span class="status ok">${esc(T.topOk(n))}</span>`;
+  const T = t();
+  return `<span class="status ok">${esc(T.topCount(inPile(4).length))}</span>`;
 }
 function vReview() {
-  const T = t(), n = inPile(4).length, ok = n >= 5 && n <= 10;
+  const T = t();
   const piles = PILES.map(p => {
     const ks = inPile(p);
     return `<section class="pile" data-pile="${p}" ${pileVar(p)}>
@@ -588,7 +581,7 @@ function vReview() {
     <div><h2>${esc(T.reviewTitle)}</h2><p class="small" style="font-size:15px;max-width:62ch">${esc(T.reviewText)}</p></div>
     <div class="piles">${piles}</div>
     <div class="sticky-foot">${topStatus()}
-      <button class="btn primary" type="button" data-act="to-rank" ${ok ? "" : "disabled"}>${esc(T.toRank)}</button></div>
+      <button class="btn primary" type="button" data-act="to-rank">${esc(T.toRank)}</button></div>
   </div>`;
 }
 function vRank() {
@@ -599,6 +592,7 @@ function vRank() {
       <span class="num">${i + 1}</span>
       <span class="txt"><b>${esc(nm(k))}</b><span>${esc(df(k))}</span></span>
       <span class="arrows">
+        <button type="button" data-act="mv-top" data-v="${i}" aria-label="${esc(T.toTop)}: ${esc(nm(k))}" title="${esc(T.toTop)}" ${i === 0 ? "disabled" : ""}>⤒</button>
         <button type="button" data-act="mv" data-v="${i}" data-d="-1" aria-label="${esc(T.up)}: ${esc(nm(k))}" ${i === 0 ? "disabled" : ""}>↑</button>
         <button type="button" data-act="mv" data-v="${i}" data-d="1" aria-label="${esc(T.down)}: ${esc(nm(k))}" ${i === top.length - 1 ? "disabled" : ""}>↓</button>
       </span></li>`).join("")}</ol>
@@ -713,8 +707,7 @@ function go(step) {
 }
 function resumeStep() {
   if (sortedCount() < CARDS.length) { S.idx = S.order.findIndex(k => S.piles[k] === undefined); return "sort"; }
-  const n = inPile(4).length;
-  return n >= 5 && n <= 10 && S.top.length ? "result" : "review";
+  return S.top.length ? "result" : "review";
 }
 async function copy(mode) {
   copyMode = mode;
@@ -754,13 +747,20 @@ document.addEventListener("click", e => {
     case "show-prompt": sheetKey = null; promptSheet = true; renderSheet(); break;
     case "copy-prompt-sheet": copyPromptSheet(); break;
     case "move": S.piles[sheetKey] = Number(v); sheetKey = null; syncTop(); render(); break;
-    case "to-rank": go("rank"); break;
+    case "to-rank": go(inPile(4).length ? "rank" : "result"); break;
     case "go": go(v); break;
     case "mv": {
       const top = rankedTop(), i = Number(v), j = i + Number(el.dataset.d);
       if (j < 0 || j >= top.length) break;
       [top[i], top[j]] = [top[j], top[i]]; S.top = top; render();
       app.querySelectorAll(`[data-act="mv"][data-v="${j}"]`)[Number(el.dataset.d) < 0 ? 0 : 1]?.focus();
+      break;
+    }
+    case "mv-top": {
+      const top = rankedTop(), i = Number(v);
+      if (i <= 0) break;
+      top.unshift(top.splice(i, 1)[0]); S.top = top; render();
+      app.querySelector('[data-act="mv"][data-v="0"]')?.focus();
       break;
     }
     case "copy": copy(v); break;

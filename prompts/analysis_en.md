@@ -10,7 +10,7 @@ The respondent sorted 100 value cards on their own. Each card has a short name a
 
 Procedure:
 1. All 100 cards were sorted into five piles: "Most important", "Very important", "Important", "Somewhat important", "Not important".
-2. From the "Most important" pile, the respondent chose 5 to 10 cards and ranked them: 1 is the most important.
+2. The respondent ranked all cards in the "Most important" pile: 1 is the most important. Pile sizes were not limited.
 
 The sorting data is at the end of this message: the ranked top values, all five piles with definitions, and index scores for the four poles of the Schwartz model. The indices were calculated by software, and the method is described in the data. Do not recalculate them and do not change how cards are mapped to the theory. The "Not important" pile is as much real data as the top values: rejected values say as much about a person as chosen ones.
 
