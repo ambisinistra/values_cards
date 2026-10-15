@@ -86,11 +86,12 @@ p { margin: 0; }
 /* index card */
 .card {
   position: relative; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
-  padding: 28px 28px 30px; border-top: 4px solid var(--accent); min-height: 220px; display: flex; flex-direction: column; gap: 14px;
+  padding: 38px 28px 30px; border-top: 4px solid var(--accent); min-height: 220px; min-width: 0; display: flex; flex-direction: column; gap: 14px;
 }
 .card .no { position: absolute; top: 14px; right: 18px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
-.card .name { font-size: clamp(28px, 6.5vw, 42px); font-weight: 750; letter-spacing: .03em; line-height: 1.1; text-transform: uppercase; color: var(--ink); padding-right: 48px; overflow-wrap: anywhere; text-wrap: balance; }
+.card .name { font-size: clamp(28px, 6.5vw, 42px); font-weight: 750; letter-spacing: .03em; line-height: 1.1; text-transform: uppercase; color: var(--ink); overflow-wrap: normal; hyphens: manual; text-wrap: balance; }
 .card .def { font-family: var(--serif); font-size: clamp(17px, 3.4vw, 20px); line-height: 1.4; color: var(--muted); text-wrap: pretty; }
+.nw { white-space: nowrap; }
 .card.example { min-height: 0; max-width: 420px; }
 .card.example .name { font-size: 28px; }
 .card.example .def { font-size: 17px; }
@@ -152,7 +153,7 @@ ol.how li::before { content: counter(s); width: 24px; height: 24px; border-radiu
 @media (min-width: 640px) { .scrim { place-items: center; } }
 .sheet { width: min(520px, 100%); background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); padding: 22px; display: grid; gap: 14px; max-height: 90vh; overflow: auto; }
 .sheet.wide { width: min(760px, 100%); }
-.sheet .name { font-size: 26px; font-weight: 750; letter-spacing: .03em; line-height: 1.15; text-transform: uppercase; overflow-wrap: anywhere; }
+.sheet .name { min-width: 0; font-size: 26px; font-weight: 750; letter-spacing: .03em; line-height: 1.15; text-transform: uppercase; overflow-wrap: normal; hyphens: manual; }
 .sheet .def { font-family: var(--serif); font-size: 17px; line-height: 1.4; color: var(--muted); }
 .move { display: grid; gap: 6px; }
 .move button { display: flex; align-items: center; gap: 10px; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
@@ -217,7 +218,7 @@ footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px
   .copy-grid { grid-template-columns: 1fr; }
   .pole { grid-template-columns: 1fr 3.5rem; }
   .pole .b { grid-column: 1 / -1; grid-row: 2; }
-  .card { padding: 24px 20px 24px; min-height: 180px; }
+  .card { padding: 36px 20px 24px; min-height: 180px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
@@ -474,6 +475,8 @@ const sortedCount = () => Object.keys(S.piles).length;
 const inPile = p => S.order.filter(k => S.piles[k] === p);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const nm = k => BY_KEY[k][S.lang][0];
+/* escaped name for markup; hyphenated compounds (SELF-ACCEPTANCE) stay on one line */
+const nmH = k => esc(nm(k)).replace(/\S+-\S+/g, w => `<span class="nw">${w}</span>`);
 const df = k => BY_KEY[k][S.lang][1];
 
 /* ---------- scoring (Schwartz higher-order poles) ---------- */
@@ -571,7 +574,7 @@ function vIntro() {
     <div class="intro-grid">
       <div class="stack" style="gap:10px">
         <h3>${esc(T.example)}</h3>
-        <div class="card example"><span class="no">№ ${BY_KEY[ex].id}</span><div class="name">${esc(nm(ex))}</div><div class="def">${esc(df(ex))}</div></div>
+        <div class="card example"><span class="no">№ ${BY_KEY[ex].id}</span><div class="name">${nmH(ex)}</div><div class="def">${esc(df(ex))}</div></div>
       </div>
       <div>
         <h3>${esc(T.howTitle)}</h3>
@@ -599,7 +602,7 @@ function vSort() {
     <div class="progress"><div class="meta"><span>${esc(T.progress(S.idx + 1))}</span><span>${S.idx}%</span></div>
       <div class="track"><i style="width:${S.idx}%"></i></div></div>
     <article class="card enter" aria-live="polite"><span class="no">№ ${c.id}</span>
-      <div class="name">${esc(nm(k))}</div><div class="def">${esc(df(k))}</div></article>
+      <div class="name">${nmH(k)}</div><div class="def">${esc(df(k))}</div></article>
     <div class="scale" role="group" aria-label="${esc(T.nav[0])}">${btns}</div>
     <div class="counts" aria-hidden="true">${counts.map((n, p) => `<span>${n}</span>`).join("")}</div>
     <div class="row" style="justify-content:space-between">
@@ -619,7 +622,7 @@ function vReview() {
     const ks = inPile(p);
     return `<section class="pile" data-pile="${p}" ${pileVar(p)}>
       <div class="pile-h"><span class="sw"></span><b>${esc(T.piles[p])}</b><span class="n">${ks.length}</span></div>
-      <div class="chips">${ks.length ? ks.map(k => `<button class="chip" type="button" draggable="true" data-act="open" data-v="${k}" title="${esc(df(k))}" ${pileVar(p)}>${esc(nm(k))}</button>`).join("") : `<span class="empty">${esc(T.emptyPile)}</span>`}</div>
+      <div class="chips">${ks.length ? ks.map(k => `<button class="chip" type="button" draggable="true" data-act="open" data-v="${k}" title="${esc(df(k))}" ${pileVar(p)}>${nmH(k)}</button>`).join("") : `<span class="empty">${esc(T.emptyPile)}</span>`}</div>
     </section>`;
   }).join("");
   return `<div class="stack" style="gap:18px">
@@ -656,7 +659,7 @@ function vResult() {
     </section>
     <div class="intro-grid">
       <section class="panel"><h3>${esc(T.piles[TOP])} · ${top.length}</h3>
-        <ul class="toplist plain">${top.length ? top.map(k => `<li><span><b>${esc(nm(k))}</b><br><span>${esc(df(k))}</span></span></li>`).join("") : `<li><span class="empty">${esc(T.emptyPile)}</span></li>`}</ul>
+        <ul class="toplist plain">${top.length ? top.map(k => `<li><span><b>${nmH(k)}</b><br><span>${esc(df(k))}</span></span></li>`).join("") : `<li><span class="empty">${esc(T.emptyPile)}</span></li>`}</ul>
       </section>
       <div class="stack" style="gap:20px">
         <section class="panel"><h3>${esc(T.distTitle)}</h3>
@@ -695,17 +698,33 @@ function renderSheet() {
   if (!sheetKey) { root.innerHTML = ""; return; }
   const T = t(), cur = S.piles[sheetKey];
   root.innerHTML = `<div class="scrim" data-act="close-sheet"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-n">
-    <div class="name" id="sh-n">${esc(nm(sheetKey))}</div><div class="def">${esc(df(sheetKey))}</div>
+    <div class="name" id="sh-n">${nmH(sheetKey)}</div><div class="def">${esc(df(sheetKey))}</div>
     <h3 style="margin:4px 0 0">${esc(T.moveTo)}</h3>
     <div class="move">${PILES.map(p => `<button type="button" data-act="move" data-v="${p}" ${pileVar(p)} aria-current="${p === cur}"><i class="sw"></i>${esc(T.piles[p])}${p === cur ? `<span class="cur">${esc(T.current)}</span>` : ""}</button>`).join("")}</div>
     <button class="btn" type="button" data-act="close-sheet">${esc(T.close)}</button>
   </div></div>`;
   root.querySelector(`.move button[aria-current="true"]`)?.focus();
+  fitNames();
+}
+/* card titles never break inside a word: shrink the font until the longest word fits on one line */
+/* measure the text boxes: scrollWidth misses text spilling into the element's padding */
+function overflows(el) {
+  const range = document.createRange(); range.selectNodeContents(el);
+  const edge = el.getBoundingClientRect().right - parseFloat(getComputedStyle(el).paddingRight);
+  return [...range.getClientRects()].some(r => r.right > edge + 0.5);
+}
+function fitNames() {
+  document.querySelectorAll(".card .name, .sheet .name").forEach(el => {
+    el.style.fontSize = "";
+    let size = parseFloat(getComputedStyle(el).fontSize);
+    while (overflows(el) && size > 12) { size -= 1; el.style.fontSize = size + "px"; }
+  });
 }
 function render() {
   renderChrome();
   app.innerHTML = { intro: vIntro, sort: vSort, review: vReview, result: vResult }[S.step]();
   renderSheet();
+  fitNames();
   save();
 }
 
@@ -796,4 +815,6 @@ document.addEventListener("drop", e => {
 });
 
 render();
+window.addEventListener("resize", fitNames);
+document.fonts?.ready.then(fitNames);
 </script>
