@@ -1,7 +1,7 @@
 <title>PsychoMirror</title>
 <meta name="description" content="Personal Values Card Sort: sort 100 value cards and copy the result with a psychological profile prompt for Claude. EN / RU / HU / SR.">
 <style>
-/* Layout: one centred column under a sticky bar; while sorting, the index card is the hero and the five piles sit under it as an ordinal scale. */
+/* Layout: one centred column under a sticky bar; while sorting, the column widens into a game board: four decks on top, the dealt hand below. */
 :root {
   --bg: #ECEFF2;
   --surface: #FFFFFF;
@@ -105,27 +105,62 @@ ol.how li { counter-increment: s; display: grid; grid-template-columns: 28px 1fr
 ol.how li::before { content: counter(s); width: 24px; height: 24px; border-radius: 50%; background: var(--accent-soft); color: var(--ink); font-size: 13px; font-weight: 700; display: grid; place-items: center; margin-top: 1px; }
 .note { border-left: 3px solid var(--line); padding: 4px 0 4px 14px; color: var(--muted); font-size: 14px; max-width: 62ch; }
 
-/* sorting */
+/* sorting: a game board of four decks above the hand of five dealt cards */
+body.wide .bar-in, body.wide main, body.wide footer { max-width: 1040px; }
 .progress { display: grid; gap: 8px; }
 .progress .meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .track { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
 .track i { display: block; height: 100%; background: var(--accent); border-radius: inherit; transition: width .2s; }
-.scale { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.pile-btn {
-  display: grid; gap: 8px; align-content: start; text-align: left; padding: 12px; border-radius: 12px; cursor: pointer;
-  background: var(--surface); border: 1px solid var(--line); min-height: 92px; transition: transform .08s, border-color .1s;
+.lvl { display: flex; gap: 3px; align-items: center; min-height: 12px; }
+.lvl b { font-size: 14px; line-height: 1; color: var(--pc); }
+.lvl i { width: 10px; height: 4px; border-radius: 2px; background: var(--line); }
+.lvl i.f { background: var(--pc); }
+.board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.slot { display: grid; gap: 8px; align-content: start; }
+.slot-h { display: flex; align-items: center; gap: 8px; min-height: 20px; }
+.slot-h .t { font-weight: 600; font-size: 14px; line-height: 1.2; max-width: 100%; overflow-wrap: anywhere; }
+.slot-h kbd { margin-left: auto; font: 11px/1.4 var(--sans); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; font-variant-numeric: tabular-nums; }
+.deck {
+  position: relative; display: grid; place-items: center; width: 100%; height: 150px; padding: 0; border-radius: 12px;
+  border: 1.5px dashed var(--line); background: none; cursor: pointer; transition: transform .1s, border-color .1s, background-color .1s;
 }
-.pile-btn:hover { border-color: var(--pc); }
-.pile-btn[aria-pressed="true"] { border-color: var(--pc); box-shadow: 0 0 0 1px var(--pc) inset; }
-.pile-btn:active { transform: translateY(1px); }
-.pile-btn .lvl { display: flex; gap: 3px; align-items: center; min-height: 12px; }
-.pile-btn .lvl b { font-size: 14px; line-height: 1; color: var(--pc); }
-.pile-btn .lvl i { width: 10px; height: 4px; border-radius: 2px; background: var(--line); }
-.pile-btn .lvl i.f { background: var(--pc); }
-.pile-btn .t { font-weight: 600; font-size: 14px; line-height: 1.25; }
-.pile-btn .k { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.pile-btn .k kbd { font: inherit; border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
-.counts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: center; }
+.deck:hover, .deck.over { border-color: var(--pc); }
+.deck.over { background: color-mix(in srgb, var(--pc) 16%, transparent); transform: scale(1.03); }
+.deck .hint .lvl { transform: scale(1.6); opacity: .8; }
+.deck.has { border-style: solid; border-color: transparent; }
+.deck.has:hover, .deck.has.over { border-color: var(--pc); }
+.deck .cnt { position: absolute; right: 9px; bottom: 6px; z-index: 1; font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; pointer-events: none; }
+.top-card {
+  display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; padding: 12px 10px 22px; text-align: center;
+  background: var(--surface); border-radius: 11px; border-top: 4px solid var(--pc); box-shadow: var(--shadow);
+  cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.top-card .name { font-size: 13px; font-weight: 750; letter-spacing: .03em; line-height: 1.15; text-transform: uppercase; }
+.deck.d1 .top-card { box-shadow: 3px 3px 0 -1px var(--surface), 3px 3px 0 0 var(--line), var(--shadow); }
+.deck.d2 .top-card { box-shadow: 3px 3px 0 -1px var(--surface), 3px 3px 0 0 var(--line), 6px 6px 0 -1px var(--surface), 6px 6px 0 0 var(--line), var(--shadow); }
+.deck.land .top-card { animation: land .25s ease-out; }
+@keyframes land { from { transform: translateY(-14px) scale(1.06); opacity: .5; } to { transform: none; opacity: 1; } }
+.hand {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; padding: 20px 16px 22px; min-height: 230px;
+  border-radius: var(--radius); background: var(--surface-2); border: 1.5px dashed transparent; transition: border-color .1s;
+}
+.hand.over { border-color: var(--accent); }
+.hand .done { grid-column: 1 / -1; display: grid; gap: 12px; place-items: center; align-content: center; text-align: center; color: var(--muted); }
+.hcard {
+  display: flex; flex-direction: column; gap: 10px; min-height: 190px; padding: 14px 12px 16px; text-align: left; border: 0;
+  background: var(--surface); border-radius: 12px; border-top: 4px solid var(--accent); box-shadow: var(--shadow);
+  cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+  transform: rotate(var(--r, 0deg)); transition: transform .15s, box-shadow .15s;
+}
+.hcard:hover { transform: translateY(-6px) rotate(var(--r, 0deg)); }
+.hcard[aria-pressed="true"] { transform: translateY(-12px); box-shadow: 0 0 0 2px var(--accent), var(--shadow); }
+.hcard .no { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.hcard .name { font-size: 14px; font-weight: 750; letter-spacing: .02em; line-height: 1.15; text-transform: uppercase; }
+.hcard .def { font-family: var(--serif); font-size: 14px; line-height: 1.35; color: var(--muted); text-wrap: pretty; }
+.hcard.deal { animation: deal .32s ease-out backwards; animation-delay: calc(var(--i, 0) * 60ms); }
+@keyframes deal { from { transform: translateY(28px); opacity: 0; } }
+.lifted { opacity: .25; }
+.ghost { position: fixed; z-index: 60; margin: 0; pointer-events: none; transition: none; box-shadow: 0 18px 44px rgba(10, 14, 18, .28); }
 
 /* review */
 .piles { display: grid; gap: 14px; }
@@ -211,10 +246,19 @@ footer { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; font-size: 12px
   .steps { order: 5; width: 100%; }
   .steps li { flex: 1; }
   .steps button { width: 100%; padding: 6px 4px; }
-  .scale { grid-template-columns: 1fr; }
-  .scale .pile-btn { min-height: 0; grid-template-columns: auto 1fr auto; align-items: center; padding: 12px 14px; }
-  .scale { display: flex; flex-direction: column; }
-  .counts { display: none; }
+  .board { gap: 6px; }
+  .slot { gap: 6px; }
+  .slot-h { flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 4px; min-height: 44px; }
+  .slot-h .t { font-size: 12px; }
+  .slot-h kbd { display: none; }
+  .deck { height: 104px; }
+  .deck .hint .lvl { transform: none; }
+  .top-card { padding: 8px 5px 18px; }
+  .top-card .name { font-size: 10.5px; letter-spacing: .01em; }
+  .hand { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 12px; min-height: 0; }
+  .hcard { min-height: 0; padding: 12px 10px 14px; gap: 6px; }
+  .hcard .name { font-size: 13px; }
+  .hcard .def { font-size: 13px; }
   .copy-grid { grid-template-columns: 1fr; }
   .pole { grid-template-columns: 1fr 3.5rem; }
   .pole .b { grid-column: 1 / -1; grid-row: 2; }
@@ -243,6 +287,8 @@ const SCORE = { 0: 0, 2: 1, 3: 2 };        // "unsure" has no score
 const LEVEL = { 0: 1, 2: 2, 3: 3 };
 const PC = ["--p0", "--pu", "--p2", "--p4"];
 const POLES = ["OPENNESS", "CONSERVATION", "SELF_ENHANCEMENT", "SELF_TRANSCENDENCE"];
+const HAND = 5, ROUNDS = 20;               // cards are dealt in rounds of five
+const ROT = [-3, -1.5, 0, 1.5, 3];         // fan of the hand, degrees
 const STORE = "psychomirror.v2";
 
 const L = {
@@ -259,8 +305,9 @@ const L = {
     attribution: "Cards: Personal Values Card Sort by W. R. Miller, J. C'de Baca, D. B. Matthews and P. L. Wilbourne, University of New Mexico, 2011. Public domain. Russian, Hungarian and Serbian versions are adaptations.",
     nav: ["Sort", "Review", "Result"],
     piles: ["Not important", "Unsure", "Important", "Very important"],
-    progress: i => `Card ${i} of 100`,
-    back: "← Back", sortHint: "Keys 1–4 work too, in the order of the buttons.",
+    progress: n => `${n} of 100 sorted`, round: r => `Round ${r} of 20`, hand: "Your hand",
+    back: "← Back", sortHint: "Drag a card onto a deck, or tap a card and then a deck. Keys 1–4 place the selected card.",
+    toHand: "Back to hand", allPlaced: "All 100 cards are on the decks.",
     reviewTitle: "Check your decks",
     reviewText: "Tap a card to read its definition and move it to another deck.",
     topCount: n => `Very important: ${n}`,
@@ -307,8 +354,9 @@ const L = {
     attribution: "Карточки: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Общественное достояние. Русская, венгерская и сербская версии — адаптация.",
     nav: ["Раскладка", "Проверка", "Результат"],
     piles: ["Не важно", "Сложно сказать", "Важно", "Очень важно"],
-    progress: i => `Карточка ${i} из 100`,
-    back: "← Назад", sortHint: "Можно нажимать клавиши 1–4 — в порядке кнопок.",
+    progress: n => `Разложено ${n} из 100`, round: r => `Раунд ${r} из 20`, hand: "Ваши карточки",
+    back: "← Назад", sortHint: "Перетащите карточку на колоду или нажмите на карточку, а затем на колоду. Клавиши 1–4 кладут выбранную карточку.",
+    toHand: "Вернуть в руку", allPlaced: "Все 100 карточек разложены по колодам.",
     reviewTitle: "Проверьте колоды",
     reviewText: "Нажмите на карточку, чтобы прочитать определение и переложить её.",
     topCount: n => `Очень важно: ${n}`,
@@ -355,8 +403,9 @@ const L = {
     attribution: "Kártyák: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Közkincs. Az orosz, a magyar és a szerb változat adaptáció.",
     nav: ["Válogatás", "Átnézés", "Eredmény"],
     piles: ["Nem fontos", "Bizonytalan", "Fontos", "Nagyon fontos"],
-    progress: i => `${i}. kártya / 100`,
-    back: "← Vissza", sortHint: "Az 1–4 billentyűk is működnek, a gombok sorrendjében.",
+    progress: n => `${n} / 100 kész`, round: r => `${r}. kör / 20`, hand: "A kezedben",
+    back: "← Vissza", sortHint: "Húzz egy kártyát egy kupacra, vagy koppints a kártyára, majd a kupacra. Az 1–4 billentyűk a kijelölt kártyát teszik le.",
+    toHand: "Vissza a kézbe", allPlaced: "Mind a 100 kártya a kupacokban van.",
     reviewTitle: "Nézd át a kupacokat",
     reviewText: "Koppints egy kártyára, hogy elolvasd a meghatározását, és áttedd egy másik kupacba.",
     topCount: n => `Nagyon fontos: ${n}`,
@@ -403,8 +452,9 @@ const L = {
     attribution: "Kartice: Personal Values Card Sort, W. R. Miller, J. C'de Baca, D. B. Matthews, P. L. Wilbourne, University of New Mexico, 2011. Javno dobro. Ruska, mađarska i srpska verzija su adaptacije.",
     nav: ["Raspoređivanje", "Provera", "Rezultat"],
     piles: ["Nije važno", "Teško je reći", "Važno", "Veoma važno"],
-    progress: i => `Kartica ${i} od 100`,
-    back: "← Nazad", sortHint: "Možeš koristiti i tastere 1–4, redom kao dugmad.",
+    progress: n => `Raspoređeno ${n} od 100`, round: r => `Runda ${r} od 20`, hand: "U ruci",
+    back: "← Nazad", sortHint: "Prevuci karticu na špil ili dodirni karticu, pa špil. Tasteri 1–4 stavljaju izabranu karticu.",
+    toHand: "Vrati u ruku", allPlaced: "Svih 100 kartica je u špilovima.",
     reviewTitle: "Proveri špilove",
     reviewText: "Dodirni karticu da pročitaš pojašnjenje i premestiš je u drugi špil.",
     topCount: n => `Veoma važno: ${n}`,
@@ -443,7 +493,7 @@ const L = {
 /* ---------- state ---------- */
 function fresh(lang) {
   const seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-  return { v: 2, lang, step: "intro", seed, order: shuffled(CARDS.map(c => c.key), seed), idx: 0, piles: {}, hist: [], date: today() };
+  return { v: 3, lang, step: "intro", seed, order: shuffled(CARDS.map(c => c.key), seed), piles: {}, hand: [], placed: [], hist: [], date: today() };
 }
 function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
 function shuffled(arr, seed) {
@@ -456,7 +506,13 @@ function shuffled(arr, seed) {
 function load() {
   try {
     const s = JSON.parse(localStorage.getItem(STORE) || "null");
-    if (s && s.v === 2 && Array.isArray(s.order) && s.order.length === CARDS.length && s.order.every(k => BY_KEY[k])) return s;
+    if (s && (s.v === 2 || s.v === 3) && Array.isArray(s.order) && s.order.length === CARDS.length && s.order.every(k => BY_KEY[k])) {
+      if (s.v === 2) {                               // one-card-at-a-time sort: keep the piles, deal the rest as a hand
+        Object.assign(s, { v: 3, hand: [], hist: [], placed: s.order.filter(k => s.piles[k] !== undefined) });
+        delete s.idx;
+      }
+      if (Array.isArray(s.hand) && Array.isArray(s.placed) && s.hand.every(k => BY_KEY[k] && s.piles[k] === undefined)) return s;
+    }
   } catch (e) { /* storage unavailable */ }
   return null;
 }
@@ -468,11 +524,17 @@ function guessLang() {
 const saved = load();
 let S = saved || fresh(guessLang());
 if (S.step !== "intro") S.step = "intro";           // always land on the intro, offer to resume
+let sel = null, landed = null, dealAnim = false, pileSheet = null;
 let sheetKey = null, promptSheet = false, sheetToast = { text: "", bad: false }, confirmRestart = false, copyMode = "both", toast = { text: "", bad: false };
 
 const t = () => L[S.lang];
 const sortedCount = () => Object.keys(S.piles).length;
 const inPile = p => S.order.filter(k => S.piles[k] === p);
+const undealt = () => S.order.filter(k => S.piles[k] === undefined && !S.hand.includes(k));
+function topOf(p) {
+  for (let i = S.placed.length - 1; i >= 0; i--) if (S.piles[S.placed[i]] === p) return S.placed[i];
+  return inPile(p).pop() || null;
+}
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const nm = k => BY_KEY[k][S.lang][0];
 /* escaped name for markup; hyphenated compounds (SELF-ACCEPTANCE) stay on one line */
@@ -590,25 +652,35 @@ function confirmBox() {
     <button class="btn" type="button" data-act="restart">${esc(T.yesRestart)}</button>
     <button class="btn quiet" type="button" data-act="cancel-restart">${esc(T.cancel)}</button></div>`;
 }
+const lvl = p => `<span class="lvl" aria-hidden="true">${p === UNSURE ? "<b>?</b>" : [1, 2, 3].map(n => `<i class="${n <= LEVEL[p] ? "f" : ""}"></i>`).join("")}</span>`;
 function vSort() {
-  const T = t(), k = S.order[S.idx], c = BY_KEY[k];
-  const counts = PILES.map(p => inPile(p).length);
-  const btns = PILES.map((p, i) => `<button class="pile-btn" type="button" data-act="put" data-v="${p}" aria-pressed="${S.piles[k] === p}" ${pileVar(p)}>
-      <span class="lvl" aria-hidden="true">${p === UNSURE ? "<b>?</b>" : [1, 2, 3].map(n => `<i class="${n <= LEVEL[p] ? "f" : ""}"></i>`).join("")}</span>
-      <span class="t">${esc(T.piles[p])}</span>
-      <span class="k"><kbd>${i + 1}</kbd></span>
+  const T = t(), n = sortedCount(), round = Math.max(1, Math.ceil((CARDS.length - undealt().length) / HAND));
+  if (sel && !S.hand.includes(sel)) sel = null;
+  const slots = PILES.map((p, i) => {
+    const ks = inPile(p), top = topOf(p);
+    return `<div class="slot" ${pileVar(p)}>
+      <div class="slot-h">${lvl(p)}<span class="t">${esc(T.piles[p])}</span><kbd>${i + 1}</kbd></div>
+      <button class="deck${top ? ` has d${Math.min(ks.length - 1, 2)}` : ""}${landed === p ? " land" : ""}" type="button" data-act="deck" data-v="${p}" data-drop="${p}" aria-label="${esc(T.piles[p])}: ${ks.length}">
+        ${top ? `<span class="top-card" data-drag="pile" data-k="${top}"><span class="name">${nmH(top)}</span></span>` : `<span class="hint">${lvl(p)}</span>`}
+        <span class="cnt">${ks.length}</span>
+      </button>
+    </div>`;
+  }).join("");
+  const hand = S.hand.map((k, i) => `<button class="hcard${dealAnim ? " deal" : ""}" type="button" data-act="pick" data-v="${k}" data-drag="hand" data-k="${k}" aria-pressed="${sel === k}" style="--r:${ROT[i % ROT.length]}deg;--i:${i}">
+      <span class="no">№ ${BY_KEY[k].id}</span><span class="name">${nmH(k)}</span><span class="def">${esc(df(k))}</span>
     </button>`).join("");
+  const done = n === CARDS.length;
   return `<div class="stack" style="gap:20px">
-    <div class="progress"><div class="meta"><span>${esc(T.progress(S.idx + 1))}</span><span>${S.idx}%</span></div>
-      <div class="track"><i style="width:${S.idx}%"></i></div></div>
-    <article class="card enter" aria-live="polite"><span class="no">№ ${c.id}</span>
-      <div class="name">${nmH(k)}</div><div class="def">${esc(df(k))}</div></article>
-    <div class="scale" role="group" aria-label="${esc(T.nav[0])}">${btns}</div>
-    <div class="counts" aria-hidden="true">${counts.map((n, p) => `<span>${n}</span>`).join("")}</div>
+    <div class="progress"><div class="meta"><span>${esc(T.progress(n))}</span><span>${esc(T.round(Math.min(round, ROUNDS)))}</span></div>
+      <div class="track"><i style="width:${n}%"></i></div></div>
+    <div class="board" role="group" aria-label="${esc(T.nav[0])}">${slots}</div>
+    <section><h3>${esc(T.hand)}</h3>
+      <div class="hand" data-drop="hand">${hand || (done ? `<div class="done"><span>${esc(T.allPlaced)}</span>
+        <button class="btn primary" type="button" data-act="go" data-v="review">${esc(T.toReview)}</button></div>` : "")}</div>
+    </section>
     <div class="row" style="justify-content:space-between">
       <button class="btn quiet" type="button" data-act="undo" ${S.hist.length ? "" : "disabled"}>${esc(T.back)}</button>
       <span class="small">${esc(T.sortHint)}</span>
-      ${sortedCount() === CARDS.length ? `<button class="btn" type="button" data-act="go" data-v="review">${esc(T.toReview)}</button>` : ""}
     </div>
   </div>`;
 }
@@ -695,12 +767,23 @@ function renderSheet() {
     root.querySelector("[data-act=copy-prompt-sheet]").focus();
     return;
   }
+  if (pileSheet !== null) {
+    const T = t(), ks = inPile(pileSheet);
+    root.innerHTML = `<div class="scrim" data-act="close-sheet"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ps-t" ${pileVar(pileSheet)}>
+      <div class="pile-h" style="margin:0"><span class="sw"></span><b id="ps-t">${esc(T.piles[pileSheet])}</b><span class="n">${ks.length}</span></div>
+      <div class="chips">${ks.map(k => `<button class="chip" type="button" data-act="open" data-v="${k}" title="${esc(df(k))}">${nmH(k)}</button>`).join("")}</div>
+      <button class="btn" type="button" data-act="close-sheet">${esc(T.close)}</button>
+    </div></div>`;
+    root.querySelector(".sheet > .btn").focus();
+    return;
+  }
   if (!sheetKey) { root.innerHTML = ""; return; }
   const T = t(), cur = S.piles[sheetKey];
   root.innerHTML = `<div class="scrim" data-act="close-sheet"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-n">
     <div class="name" id="sh-n">${nmH(sheetKey)}</div><div class="def">${esc(df(sheetKey))}</div>
     <h3 style="margin:4px 0 0">${esc(T.moveTo)}</h3>
     <div class="move">${PILES.map(p => `<button type="button" data-act="move" data-v="${p}" ${pileVar(p)} aria-current="${p === cur}"><i class="sw"></i>${esc(T.piles[p])}${p === cur ? `<span class="cur">${esc(T.current)}</span>` : ""}</button>`).join("")}</div>
+    ${S.step === "sort" && cur !== undefined ? `<button class="btn" type="button" data-act="to-hand">${esc(T.toHand)}</button>` : ""}
     <button class="btn" type="button" data-act="close-sheet">${esc(T.close)}</button>
   </div></div>`;
   root.querySelector(`.move button[aria-current="true"]`)?.focus();
@@ -719,28 +802,56 @@ function fitNames() {
     let size = parseFloat(getComputedStyle(el).fontSize);
     while (overflows(el) && size > 12) { size -= 1; el.style.fontSize = size + "px"; }
   });
+  /* the small cards of the game board (hand, deck tops) go down in half pixels */
+  document.querySelectorAll(".hcard .name, .top-card .name").forEach(el => {
+    el.style.fontSize = "";
+    let size = parseFloat(getComputedStyle(el).fontSize);
+    while (overflows(el) && size > 7) { size -= 0.5; el.style.fontSize = size + "px"; }
+  });
 }
 function render() {
+  if (S.step === "sort") deal();
+  document.body.classList.toggle("wide", S.step === "sort");
   renderChrome();
   app.innerHTML = { intro: vIntro, sort: vSort, review: vReview, result: vResult }[S.step]();
+  dealAnim = false; landed = null;
   renderSheet();
   fitNames();
   save();
 }
 
 /* ---------- actions ---------- */
-function put(p) {
-  const k = S.order[S.idx];
-  S.hist.push([k, S.piles[k]]); S.piles[k] = p; S.idx += 1;
-  if (S.idx >= S.order.length) { S.step = "review"; window.scrollTo(0, 0); }
+function deal() {
+  if (S.hand.length) return;
+  S.hand = undealt().slice(0, HAND);
+  if (S.hand.length) dealAnim = true;
+}
+/* moves card k to deck `to` or back to the "hand"; every move is undoable */
+function moveCard(k, to) {
+  const from = S.piles[k];
+  if (to === "hand" ? from === undefined : from === to) return false;
+  S.hist.push({ k, p: from === undefined ? null : from, h: S.hand.slice(), i: S.placed.indexOf(k) });
+  if (S.hist.length > 300) S.hist.shift();
+  S.placed = S.placed.filter(x => x !== k);
+  if (to === "hand") { delete S.piles[k]; S.hand.push(k); }
+  else { S.piles[k] = to; S.placed.push(k); S.hand = S.hand.filter(x => x !== k); landed = to; }
+  if (sel === k) sel = null;
+  deal();
+  return true;
+}
+function play(k, to) {
+  const fromHand = S.piles[k] === undefined;
+  if (moveCard(k, to) && S.step === "sort" && fromHand && sortedCount() === CARDS.length) { go("review"); return; }
   render();
 }
 function undo() {
   const h = S.hist.pop();
-  if (h === undefined) return;
-  const [k, prev] = Array.isArray(h) ? h : [h, undefined];
-  if (prev === undefined) delete S.piles[k]; else S.piles[k] = prev;
-  S.idx = S.order.indexOf(k);
+  if (!h) return;
+  if (h.p === null) delete S.piles[h.k]; else S.piles[h.k] = h.p;
+  S.hand = h.h;
+  S.placed = S.placed.filter(x => x !== h.k);
+  if (h.i >= 0) S.placed.splice(h.i, 0, h.k);
+  sel = null;
   render();
 }
 function go(step) {
@@ -748,8 +859,7 @@ function go(step) {
   render(); window.scrollTo(0, 0);
 }
 function resumeStep() {
-  if (sortedCount() < CARDS.length) { S.idx = S.order.findIndex(k => S.piles[k] === undefined); return "sort"; }
-  return "review";
+  return sortedCount() < CARDS.length ? "sort" : "review";
 }
 async function copy(mode) {
   copyMode = mode;
@@ -770,10 +880,14 @@ async function copyPromptSheet() {
 }
 
 document.addEventListener("click", e => {
+  if (Date.now() < noClickUntil) return;                         // the click that follows a drag or a handled tap
   const el = e.target.closest("[data-act]");
   if (!el) return;
+  if (el.dataset.act === "close-sheet" && el.classList.contains("scrim") && e.target !== el) return;
+  act(el);
+});
+function act(el) {
   const a = el.dataset.act, v = el.dataset.v;
-  if (a === "close-sheet" && el.classList.contains("scrim") && e.target !== el) return;
   switch (a) {
     case "lang": S.lang = v; render(); break;
     case "home": S.step = "intro"; confirmRestart = false; render(); break;
@@ -781,28 +895,89 @@ document.addEventListener("click", e => {
     case "resume": go(resumeStep()); break;
     case "ask-restart": confirmRestart = true; render(); break;
     case "cancel-restart": confirmRestart = false; render(); break;
-    case "restart": { const lang = S.lang; S = fresh(lang); S.step = "sort"; confirmRestart = false; copyMode = "both"; render(); break; }
-    case "put": put(Number(v)); break;
+    case "restart": { const lang = S.lang; S = fresh(lang); S.step = "sort"; sel = null; confirmRestart = false; copyMode = "both"; render(); break; }
+    case "pick": sel = sel === v ? null : v; render(); break;
+    case "deck": {
+      const p = Number(v);
+      if (sel) play(sel, p);
+      else if (inPile(p).length) { pileSheet = p; renderSheet(); }
+      break;
+    }
     case "undo": undo(); break;
-    case "open": sheetKey = v; renderSheet(); break;
-    case "close-sheet": sheetKey = null; promptSheet = false; sheetToast = { text: "", bad: false }; renderSheet(); break;
-    case "show-prompt": sheetKey = null; promptSheet = true; renderSheet(); break;
+    case "open": sheetKey = v; pileSheet = null; renderSheet(); break;
+    case "close-sheet": sheetKey = null; pileSheet = null; promptSheet = false; sheetToast = { text: "", bad: false }; renderSheet(); break;
+    case "show-prompt": sheetKey = null; pileSheet = null; promptSheet = true; renderSheet(); break;
     case "copy-prompt-sheet": copyPromptSheet(); break;
-    case "move": S.piles[sheetKey] = Number(v); sheetKey = null; render(); break;
+    case "move": { const k = sheetKey; sheetKey = null; play(k, Number(v)); break; }
+    case "to-hand": { const k = sheetKey; sheetKey = null; play(k, "hand"); break; }
     case "nav":
-      if (v === "sort" && S.idx >= S.order.length) { S.idx = 0; S.hist = []; }
+      if (v === "sort" && sortedCount() === CARDS.length) S.hist = [];
       go(v); break;
     case "go": go(v); break;
     case "copy": copy(v); break;
   }
-});
+}
 document.addEventListener("keydown", e => {
-  if ((sheetKey || promptSheet) && e.key === "Escape") { sheetKey = null; promptSheet = false; renderSheet(); return; }
-  if (promptSheet) return;
-  if (S.step !== "sort" || e.metaKey || e.ctrlKey || e.altKey) return;
-  if (/^[1-4]$/.test(e.key)) { e.preventDefault(); put(PILES[Number(e.key) - 1]); }
+  const open = sheetKey || promptSheet || pileSheet !== null;
+  if (open && e.key === "Escape") { sheetKey = null; pileSheet = null; promptSheet = false; renderSheet(); return; }
+  if (open || S.step !== "sort" || e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = sel || S.hand[0];
+  if (/^[1-4]$/.test(e.key)) { e.preventDefault(); if (k) play(k, PILES[Number(e.key) - 1]); }
   else if (e.key === "Backspace") { e.preventDefault(); undo(); }
+  else if ((e.key === "ArrowLeft" || e.key === "ArrowRight") && S.hand.length) {
+    e.preventDefault();
+    const i = sel ? S.hand.indexOf(sel) : -1, d = e.key === "ArrowRight" ? 1 : -1;
+    sel = S.hand[(i + d + S.hand.length) % S.hand.length]; render();
+  }
 });
+
+/* sort board: pointer drag (mouse, pen, touch) from the hand or a deck's top card onto a deck or back to the hand */
+let drag = null, noClickUntil = 0;
+document.addEventListener("pointerdown", e => {
+  if (S.step !== "sort" || drag || (e.pointerType === "mouse" && e.button !== 0)) return;
+  noClickUntil = 0;
+  const src = e.target.closest("[data-drag]");
+  if (src) drag = { src, k: src.dataset.k, id: e.pointerId, x: e.clientX, y: e.clientY, ghost: null, over: null };
+});
+document.addEventListener("pointermove", e => {
+  if (!drag || e.pointerId !== drag.id) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (!drag.ghost) {
+    if (Math.hypot(dx, dy) < 6) return;
+    const r = drag.src.getBoundingClientRect(), g = drag.src.cloneNode(true);
+    g.classList.remove("deal"); g.classList.add("ghost");
+    g.style.setProperty("--pc", getComputedStyle(drag.src).getPropertyValue("--pc"));
+    Object.assign(g.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+    document.body.appendChild(g);
+    drag.src.classList.add("lifted");
+    drag.ghost = g;
+  }
+  e.preventDefault();
+  drag.ghost.style.transform = `translate(${dx}px, ${dy}px) rotate(3deg) scale(1.04)`;
+  const over = document.elementFromPoint(e.clientX, e.clientY)?.closest("[data-drop]") || null;
+  if (over !== drag.over) { drag.over?.classList.remove("over"); over?.classList.add("over"); drag.over = over; }
+  if (e.clientY < 56) window.scrollBy(0, -12); else if (e.clientY > innerHeight - 56) window.scrollBy(0, 12);
+});
+function endDrag(e, drop) {
+  if (!drag || e.pointerId !== drag.id) return;
+  const d = drag; drag = null;
+  noClickUntil = Date.now() + 600;                               // browsers may or may not send a click after this
+  if (!d.ghost) {                                                // a plain tap on a card: select it, or tap the deck it sits on
+    const el = drop && d.src.isConnected ? d.src.closest("[data-act]") : null;
+    if (el) act(el);
+    return;
+  }
+  d.over?.classList.remove("over");
+  const to = drop && d.over ? d.over.dataset.drop : null;
+  const dest = to === null ? null : to === "hand" ? "hand" : Number(to);
+  const moves = dest !== null && (dest === "hand" ? S.piles[d.k] !== undefined : S.piles[d.k] !== dest);
+  if (moves) { d.ghost.remove(); play(d.k, dest); return; }
+  d.ghost.style.transition = "transform .18s ease-out";          // no target: fly back
+  d.ghost.style.transform = "none";
+  setTimeout(() => { d.ghost.remove(); d.src.classList.remove("lifted"); }, 190);
+}
+document.addEventListener("pointerup", e => endDrag(e, true));
+document.addEventListener("pointercancel", e => endDrag(e, false));
 /* desktop drag-and-drop between piles; touch users move cards with the sheet */
 document.addEventListener("dragstart", e => { const c = e.target.closest(".chip"); if (c) e.dataTransfer.setData("text/plain", c.dataset.v); });
 document.addEventListener("dragover", e => { const p = e.target.closest(".pile"); if (p) { e.preventDefault(); p.classList.add("drop"); } });
@@ -811,7 +986,7 @@ document.addEventListener("drop", e => {
   const p = e.target.closest(".pile"); if (!p) return;
   e.preventDefault();
   const k = e.dataTransfer.getData("text/plain");
-  if (BY_KEY[k]) { S.piles[k] = Number(p.dataset.pile); render(); }
+  if (BY_KEY[k]) play(k, Number(p.dataset.pile));
 });
 
 render();
