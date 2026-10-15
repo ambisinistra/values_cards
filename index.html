@@ -897,19 +897,32 @@ function go(step) {
 function resumeStep() {
   return sortedCount() < CARDS.length ? "sort" : "review";
 }
+/* the Clipboard API exists only on https and localhost; over plain http (a LAN address, a Docker host)
+   fall back to the older copy command, which works there as long as it runs inside the click */
+function legacyCopy(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.setAttribute("readonly", "");
+  ta.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;opacity:0";
+  document.body.appendChild(ta); ta.select();
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+  ta.remove();
+  return ok;
+}
+async function writeClipboard(text) {
+  if (!navigator.clipboard) return legacyCopy(text);
+  try { await navigator.clipboard.writeText(text); return true; } catch (e) { return legacyCopy(text); }
+}
 async function copy(mode) {
   copyMode = mode;
-  const text = copyText(mode);
-  let ok = false;
-  try { await navigator.clipboard.writeText(text); ok = true; } catch (e) { ok = false; }
+  const ok = await writeClipboard(copyText(mode));
   toast = ok ? { text: t().copied, bad: false } : { text: t().copyFail, bad: true };
   render();
   if (!ok) { const ta = document.getElementById("out"); ta.focus(); ta.select(); }
 }
 
 async function copyPromptSheet() {
-  let ok = false;
-  try { await navigator.clipboard.writeText(copyText("prompt")); ok = true; } catch (e) { ok = false; }
+  const ok = await writeClipboard(copyText("prompt"));
   sheetToast = ok ? { text: t().copied, bad: false } : { text: t().copyFail, bad: true };
   renderSheet();
   if (!ok) { const ta = document.getElementById("prompt-out"); ta.focus(); ta.select(); }
