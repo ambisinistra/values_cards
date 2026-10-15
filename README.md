@@ -1,12 +1,17 @@
 # PsychoMirror
 
-A one-page tool for the **Personal Values Card Sort**. A person sorts 100 value cards, ranks their top values, and copies the result with an analysis prompt into Claude (Opus recommended). Claude then writes a professional psychological profile: value structure, personality profile, behavioural patterns, areas of conflict, resources, socialisation context, suitable professions and work environments, relationships, and practical recommendations.
+A one-page tool for the **Personal Values Card Sort**. A person plays through 100 value cards as a card game, dealing them onto four decks, and copies the result with an analysis prompt into Claude (Opus recommended). Claude then writes a professional psychological profile: value structure, personality profile, behavioural patterns, areas of conflict, resources, socialisation context, suitable professions and work environments, relationships, and practical recommendations.
 
 Languages: English, Russian, Hungarian, Serbian (Latin script). Everything runs in the browser, and the page sends no data anywhere.
 
 ## How it works
 
-1. **Sort.** All 100 cards go into four decks: Very important, Important, Unsure, Not important. Cards are shown in random order.
+1. **Sort.** The sort is played as a card game. **Start** deals a hand of 5 random cards to the top of the screen; below it, four decks fill the board: Very important, Important, Unsure, Not important. When the hand is empty the next 5 are dealt, 20 rounds in all.
+   - Drag a card onto a deck with the mouse or a finger, or tap a card and then a deck. Keys 1–4 place the selected card (or the first one), ← and → change the selection, Backspace undoes.
+   - Every card stays visible: the top card of a deck shows its definition, the cards under it show as title strips that get thinner as the deck grows, so the board always fits on the screen.
+   - Drag a deck's top card to another deck or back to the hand. Tap any card on the board to read it, move it or take it back. **Back** undoes any move.
+   - On phones the hand shows titles only (the selected card's definition appears below it) and the decks sit 2 × 2.
+   - Progress is kept in the browser, so the game can be closed and continued later.
 2. **Review.** The person checks the decks and moves cards. Deck sizes are not limited. The steps in the header let the person go back to sorting or review at any time.
 3. **Copy.** There are three copy options:
    - the sort with the prompt, ready to paste;
@@ -35,11 +40,27 @@ The card-to-value mapping is an expert judgement, not a validated scale. The ind
 | `prompts/analysis_{en,ru,hu,sr}.md` | The analysis prompt. `{{LAYOUT}}` marks where the sorting data goes. |
 | `src/template.html` | Page markup, styles and logic. |
 | `build.py` | Builds `index.html` (for GitHub Pages and for sending as a file) and `dist/artifact.html`. |
+| `Dockerfile` | Two stages: `python:3.12-alpine` runs `build.py`, `nginx:1.27-alpine` serves the built `index.html`. |
 
 After editing cards, prompts or the template, run:
 
 ```bash
 python3 build.py
+```
+
+## Running it
+
+The page is one self-contained file: open `index.html` in a browser. Copying to the clipboard can be blocked on `file://` pages (the page then selects the text for Ctrl+C), so a local server is handier:
+
+```bash
+python3 -m http.server 8000      # then open http://localhost:8000
+```
+
+Or with Docker. The image builds the page from the sources and serves it with nginx:
+
+```bash
+docker build -t psychomirror .
+docker run --rm -p 8080:80 psychomirror      # then open http://localhost:8080
 ```
 
 ## Sources and licence
