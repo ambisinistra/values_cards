@@ -41,6 +41,7 @@ The card-to-value mapping is an expert judgement, not a validated scale. The ind
 | `src/template.html` | Page markup, styles and logic. |
 | `build.py` | Builds `index.html` (for GitHub Pages and for sending as a file) and `dist/artifact.html`. |
 | `Dockerfile` | Two stages: `python:3.12-alpine` runs `build.py`, `nginx:1.27-alpine` serves the built `index.html`. |
+| `docker/default.conf.template` | nginx config; listens on `$PORT` (80 by default, set by hosts such as Render). |
 
 After editing cards, prompts or the template, run:
 
@@ -62,6 +63,8 @@ Or with Docker. The image builds the page from the sources and serves it with ng
 docker build -t psychomirror .
 docker run --rm -p 8080:80 psychomirror      # then open http://localhost:8080
 ```
+
+On hosts that pass a `PORT` variable (Render sets 10000), nginx listens on that port instead of 80.
 
 ## Sources and licence
 

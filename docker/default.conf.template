@@ -1,0 +1,11 @@
+# nginx's entrypoint fills in ${PORT} at start (envsubst on /etc/nginx/templates/*.template).
+# Hosts such as Render pass the port to listen on in PORT; the Dockerfile defaults it to 80.
+server {
+    listen ${PORT};
+    server_name _;
+    root /usr/share/nginx/html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
